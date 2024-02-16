@@ -1,0 +1,118 @@
+{
+  "name": "logo_app",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "xhJqFSFooT82RYKVoHA0N5",
+    "node": "46:215",
+    "version": "5154595739",
+    "component-id": "1ecf9b4643e1024d06c1dbdfe75bc85823596ab9"
+  },
+  "default": "LogoApp",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "image",
+        "id": "logoappquickmatch 1"
+      },
+      {
+        "type": "text",
+        "id": "QuickMatch"
+      }
+    ],
+    "modes": {
+      "LogoApp": {
+        "rules": [
+          {
+            "id": "top_level",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
+            "children": [
+              "logoappquickmatch 1",
+              "QuickMatch"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "logoappquickmatch 1",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "34.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "25.0"
+              }
+            },
+            "image-content": "logoappquickmatch_1.png",
+            "scale": "cover"
+          },
+          {
+            "id": "QuickMatch",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "128.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "24.0"
+              }
+            },
+            "font-weight": "600.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "$text-nombreApp",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align-vertical": "center",
+            "text-size": "19.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "text-nombreApp": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "LogoApp",
+      "size": {
+        "width": 162.0,
+        "height": 25.0
+      },
+      "parameters": {
+        "text-nombreApp": "QuickMatch"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

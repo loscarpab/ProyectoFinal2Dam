@@ -1,0 +1,211 @@
+{
+  "name": "intento",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "xhJqFSFooT82RYKVoHA0N5",
+    "node": "36:26",
+    "version": "5147333106",
+    "component-id": "16d8e176bff74a661e857e2b2a810f365b68b5e0"
+  },
+  "default": "Intento",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "Registrarse"
+      },
+      {
+        "type": "group",
+        "id": "IniciarSesion"
+      },
+      {
+        "type": "text",
+        "id": "Registrate"
+      },
+      {
+        "type": "text",
+        "id": "¿Ya tienes cuenta?"
+      },
+      {
+        "type": "text",
+        "id": "Inicia sesión"
+      }
+    ],
+    "modes": {
+      "Intento": {
+        "rules": [
+          {
+            "id": "top_level",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "children": [
+              "Registrarse",
+              "IniciarSesion"
+            ],
+            "item-spacing": "8.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "Registrarse",
+            "padding": {
+              "left": "88.0",
+              "top": "14.0",
+              "right": "88.0",
+              "bottom": "14.0"
+            },
+            "border-radius": "20.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "Registrate"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "128.955223880597",
+              "saturation": "0.5359999999999999",
+              "value": "0.49019607843137253"
+            }
+          },
+          {
+            "id": "IniciarSesion",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "¿Ya tienes cuenta?",
+              "Inicia sesión"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Registrate",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "$text-register",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "20.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          },
+          {
+            "id": "¿Ya tienes cuenta?",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "153.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "22.0"
+              }
+            },
+            "font-weight": "600.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "$text-alreadyRegistered",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-size": "15.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          },
+          {
+            "id": "Inicia sesión",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "103.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "22.0"
+              }
+            },
+            "font-weight": "600.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "128.955223880597",
+              "saturation": "0.5359999999999999",
+              "value": "0.49019607843137253"
+            },
+            "text-content": "$text-login",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-size": "15.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "text-register": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "text-alreadyRegistered": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "text-login": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "Intento",
+      "size": {
+        "width": 283.0,
+        "height": 88.0
+      },
+      "parameters": {
+        "text-register": "Registrate",
+        "text-alreadyRegistered": "¿Ya tienes cuenta?",
+        "text-login": "Inicia sesión"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
