@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "53:95",
-    "version": "5154595739",
+    "version": "5168813699",
     "component-id": "3762f998e8336e5a65de157884542d2d538d69ca"
   },
   "default": "Property 1=normal",
@@ -60,9 +60,9 @@
           {
             "id": "Boton",
             "padding": {
-              "left": "71.0",
+              "left": "41.0",
               "top": "14.0",
-              "right": "71.0",
+              "right": "41.0",
               "bottom": "14.0"
             },
             "border-radius": "20.0",
@@ -108,7 +108,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "140.0"
+                "value": "200.0"
               },
               "height-constraints": {
                 "sizing-mode": "shrink"

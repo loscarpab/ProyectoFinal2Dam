@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1005715061647",
+    "project_id": "proyectofinal-f110d",
+    "storage_bucket": "proyectofinal-f110d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005715061647:android:cc8d733b550ea623ef29fa",
+        "android_client_info": {
+          "package_name": "com.ccormor392.pruebaproyectofinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk3oe4Nuweca9B9zqJLiekMYFHOADWTZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "46:215",
-    "version": "5154595739",
+    "version": "5168813699",
     "component-id": "1ecf9b4643e1024d06c1dbdfe75bc85823596ab9"
   },
   "default": "LogoApp",
@@ -39,8 +39,6 @@
               }
             },
             "arrangement": "row",
-            "main-axis-align": "start",
-            "cross-axis-align": "start",
             "children": [
               "logoappquickmatch 1",
               "QuickMatch"
@@ -52,11 +50,11 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "34.0"
+                "value": "44.0"
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "25.0"
+                "value": "32.0"
               }
             },
             "image-content": "logoappquickmatch_1.png",
@@ -104,8 +102,8 @@
     {
       "design": "LogoApp",
       "size": {
-        "width": 162.0,
-        "height": 25.0
+        "width": 172.0,
+        "height": 32.0
       },
       "parameters": {
         "text-nombreApp": "QuickMatch"

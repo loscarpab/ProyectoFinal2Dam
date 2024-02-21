@@ -3,4 +3,9 @@
     <string name="registrate">Registrate</string>
     <string name="ya_tienes_cuenta">¿Ya tienes cuenta?</string>
     <string name="inicia_sesion">Inicia Sesión</string>
+    <string name="nombre">Nombre</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="email">Email</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="nombre_de_usuario">Nombre de usuario</string>
 </resources>

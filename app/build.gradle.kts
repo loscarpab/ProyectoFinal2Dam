@@ -1,7 +1,9 @@
 plugins {
-    id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.relay") version "0.3.02"
+    id("com.android.application")
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -60,6 +62,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -68,4 +71,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.compose.material:material:1.4.0")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-analytics")
+    // DCS - Servicio de Autenticación
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    // DCS - Base de datos Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.1")
 }
