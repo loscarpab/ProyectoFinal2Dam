@@ -1,0 +1,201 @@
+{
+  "name": "select_image_partido",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "xhJqFSFooT82RYKVoHA0N5",
+    "node": "158:288",
+    "version": "5213102957",
+    "component-id": "52cdb3a3869b045fa61809d3da1a7aabb682714b"
+  },
+  "default": "SelectImagePartido",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "top_level_synth"
+      },
+      {
+        "type": "group",
+        "id": "iconAddPhoto"
+      },
+      {
+        "type": "image",
+        "id": "Rectangle 1"
+      },
+      {
+        "type": "vector",
+        "id": "añadir"
+      },
+      {
+        "type": "vector",
+        "id": "objetivo"
+      },
+      {
+        "type": "vector",
+        "id": "camara"
+      }
+    ],
+    "modes": {
+      "SelectImagePartido": {
+        "rules": [
+          {
+            "id": "top_level",
+            "tap-handler": "$onClickFoto",
+            "is-structured": "false",
+            "children": [
+              "top_level_synth",
+              "iconAddPhoto"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "213.75",
+              "saturation": "0.6153846153846154",
+              "value": "0.10196078431372549"
+            },
+            "clip-content": "false"
+          },
+          {
+            "id": "top_level_synth",
+            "opacity": "100.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "children": [
+              "Rectangle 1"
+            ],
+            "item-spacing": "10.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "iconAddPhoto",
+            "margin": {
+              "left": "160.0",
+              "top": "92.0",
+              "right": "166.0",
+              "bottom": "92.0"
+            },
+            "is-structured": "false",
+            "children": [
+              "añadir",
+              "objetivo",
+              "camara"
+            ]
+          },
+          {
+            "id": "Rectangle 1",
+            "opacity": "0.20000000298023224",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "374.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "232.0"
+              }
+            },
+            "image-content": "$image",
+            "scale": "cover"
+          },
+          {
+            "id": "añadir",
+            "margin": {
+              "top": "2.0",
+              "right": "32.0",
+              "bottom": "30.0"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "a_adir.svg"
+          },
+          {
+            "id": "objetivo",
+            "margin": {
+              "left": "20.0",
+              "top": "22.0",
+              "right": "16.0",
+              "bottom": "14.0"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "objetivo.svg"
+          },
+          {
+            "id": "camara",
+            "margin": {
+              "left": "6.0",
+              "top": "8.0",
+              "right": "2.0",
+              "bottom": "4.0"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "camara.svg"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "onClickFoto": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "image": {
+      "data-type": "image",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "SelectImagePartido",
+      "size": {
+        "width": 374.0,
+        "height": 232.0
+      },
+      "parameters": {
+        "image": "rectangle_1.jpeg"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

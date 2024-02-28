@@ -1,0 +1,162 @@
+{
+  "name": "boton",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "xhJqFSFooT82RYKVoHA0N5",
+    "node": "53:92",
+    "version": "5198216072",
+    "component-id": "b526245d8ddc00a3a77e60734e1e1271c61d6b4d"
+  },
+  "default": "Property 1=normal",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "Registrate"
+      }
+    ],
+    "modes": {
+      "Property 1=normal": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "41.0",
+              "top": "14.0",
+              "right": "41.0",
+              "bottom": "14.0"
+            },
+            "border-radius": "20.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "Registrate"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "128.955223880597",
+              "saturation": "0.5359999999999999",
+              "value": "0.49019607843137253"
+            }
+          },
+          {
+            "id": "Registrate",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "200.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "Registrate",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align-vertical": "center",
+            "text-size": "20.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          }
+        ]
+      },
+      "Property 1=small": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "71.0",
+              "top": "8.0",
+              "right": "71.0",
+              "bottom": "8.0"
+            },
+            "border-radius": "20.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "Registrate"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "128.955223880597",
+              "saturation": "0.5359999999999999",
+              "value": "0.49019607843137253"
+            }
+          },
+          {
+            "id": "Registrate",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "140.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "Registrate",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align-vertical": "center",
+            "text-size": "20.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "Property 1=normal",
+      "size": {
+        "width": 282.0,
+        "height": 58.0
+      }
+    },
+    {
+      "design": "Property 1=small",
+      "size": {
+        "width": 282.0,
+        "height": 46.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

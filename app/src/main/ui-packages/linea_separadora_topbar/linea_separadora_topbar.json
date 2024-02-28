@@ -1,0 +1,96 @@
+{
+  "name": "linea_separadora_topbar",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "xhJqFSFooT82RYKVoHA0N5",
+    "node": "126:130",
+    "version": "5244012521",
+    "component-id": "2317c96ef3dbb0fa4bfbe247df2aa5daf76d68c9"
+  },
+  "default": "linea_separadora_topbar",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Line 1"
+      },
+      {
+        "type": "group",
+        "id": "top_level_synth"
+      }
+    ],
+    "modes": {
+      "linea_separadora_topbar": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": "false",
+            "children": [
+              "Line 1",
+              "top_level_synth"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Line 1",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "-0.5"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "line_1.svg"
+          },
+          {
+            "id": "top_level_synth",
+            "opacity": "100.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink",
+                "min": "375.5"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink",
+                "min": "0.0"
+              }
+            },
+            "arrangement": "row",
+            "clip-content": "false"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "linea_separadora_topbar",
+      "size": {
+        "width": 375.5,
+        "height": 0.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
