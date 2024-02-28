@@ -1,9 +1,13 @@
 plugins {
     id("org.jetbrains.kotlin.android")
+    //Figma
     id("com.google.relay") version "0.3.02"
     id("com.android.application")
+    //Firebase
     id("com.google.gms.google-services")
-
+    //Dagger Hilt
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -33,11 +37,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -70,12 +74,27 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    //figma
     implementation("androidx.compose.material:material:1.4.0")
+    //navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics")
-    // DCS - Servicio de Autenticación
+    //Servicio de Autenticación
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
-    // DCS - Base de datos Firestore
-    implementation("com.google.firebase:firebase-firestore-ktx:24.10.1")
+    //Base de datos Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.2")
+    //Base de datos Storage(guardar imagenes)
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    //Cargar imagenes asincronas
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    //Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+
+}
+//DCS - Dagger Hilt - Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

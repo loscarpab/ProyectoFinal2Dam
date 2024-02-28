@@ -4,16 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ccormor392.pruebaproyectofinal.views.InicioSinRegistro
+import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.InicioSinRegistro
 import com.ccormor392.pruebaproyectofinal.navigation.Routes.*
-import com.ccormor392.pruebaproyectofinal.viewModels.LoginViewModel
-import com.ccormor392.pruebaproyectofinal.views.Inicio
-import com.ccormor392.pruebaproyectofinal.views.InicioSesion
-import com.ccormor392.pruebaproyectofinal.views.RegisteredManager
-import com.ccormor392.pruebaproyectofinal.views.Registro
+import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CreateMatchViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.LoginViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CrearPartido
+import com.ccormor392.pruebaproyectofinal.presentation.inicio.Inicio
+import com.ccormor392.pruebaproyectofinal.presentation.inicio.InicioViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.InicioSesion
+import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.RegisteredManager
+import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.Registro
 
 @Composable
-fun NavManager(loginViewModel: LoginViewModel) {
+fun NavManager(
+    loginViewModel: LoginViewModel,
+    partidoViewModel: CreateMatchViewModel,
+    inicioViewModel: InicioViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination =  RegisteredManager.route){
@@ -21,16 +28,19 @@ fun NavManager(loginViewModel: LoginViewModel) {
             InicioSinRegistro(navController)
         }
         composable(InicioSesion.route){
-            InicioSesion(navController, loginViewModel)
+            InicioSesion(navController, loginViewModel, inicioViewModel)
         }
         composable(Registro.route){
-            Registro(navController, loginViewModel)
+            Registro(navController, loginViewModel,inicioViewModel)
         }
         composable(Inicio.route){
-            Inicio(navController)
+            Inicio(navController, inicioViewModel)
         }
         composable(RegisteredManager.route){
-            RegisteredManager(navController)
+            RegisteredManager(navController, inicioViewModel)
+        }
+        composable(CrearPartido.route){
+            CrearPartido(partidoViewModel, navController)
         }
     }
 }

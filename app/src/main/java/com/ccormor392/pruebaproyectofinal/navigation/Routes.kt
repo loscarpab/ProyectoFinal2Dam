@@ -6,5 +6,6 @@ sealed class Routes(val route:String) {
     object InicioSesion:Routes("InicioSesion")
     object Inicio:Routes("Inicio")
     object RegisteredManager:Routes("RegisteredManager")
+    object CrearPartido:Routes("CrearPartido")
 
 }

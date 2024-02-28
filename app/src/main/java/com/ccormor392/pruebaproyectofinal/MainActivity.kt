@@ -10,12 +10,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.ccormor392.pruebaproyectofinal.navigation.NavManager
 import com.ccormor392.pruebaproyectofinal.ui.theme.PruebaProyectoFinalTheme
-import com.ccormor392.pruebaproyectofinal.viewModels.LoginViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CreateMatchViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.inicio.InicioViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val loginViewModel:LoginViewModel by viewModels()
+        val loginViewModel: LoginViewModel by viewModels()
+        val partidoViewModel: CreateMatchViewModel by viewModels()
+        val inicioViewModel: InicioViewModel by viewModels()
         setContent {
             PruebaProyectoFinalTheme {
                 // A surface container using the 'background' color from the theme
@@ -23,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavManager(loginViewModel)
+                    NavManager(loginViewModel, partidoViewModel, inicioViewModel)
                 }
             }
         }
