@@ -1,13 +1,8 @@
 package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,27 +12,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
+import com.ccormor392.pruebaproyectofinal.navigation.Routes
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
-import com.ccormor392.pruebaproyectofinal.presentation.inicioSesion.MyTextField
+import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
+import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 
+/**
+ * Función componible para crear un nuevo partido.
+ * Esta función permite a los usuarios crear un nuevo partido proporcionando los detalles necesarios.
+ *
+ * @param partidoViewModel ViewModel para gestionar el proceso de creación del partido.
+ * @param navController Controlador de navegación para navegar entre los composables.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostController) {
-    val launcher = rememberLauncherForActivityResult(
-        contract =
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        partidoViewModel.imageUri = uri
+    // Utiliza LaunchedEffect para ejecutar código cuando se lanza este composable
+    LaunchedEffect(Unit) {
+        partidoViewModel.numeroPartidosUsuarioAutenticado()
     }
 
     Scaffold(
@@ -45,91 +46,80 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
             MyTopBar()
         },
         content = {
+            // Área de contenido principal
             Column(
-                Modifier
+                modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 78.dp),
+                    .padding(top = 78.dp)
+                    .background(PurpleGrey40),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
+                // Componentes de texto para título y subtítulo
+                TextoTopScreenLogs(
+                    textTitulo = "Crear partido",
+                    textSubtitulo = "Rellena los datos para crear tu partido",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
-                        .clickable { launcher.launch("image/*")
-                                   },
-                    verticalAlignment = Alignment.CenterVertically,
+                        .padding(top = 24.dp, bottom = 32.dp)
+                )
+
+                // Fila para contener los campos de entrada de los detalles del partido
+                Row(
+                    modifier = Modifier
+                        .height(300.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if (partidoViewModel.imageUri == null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.partidopordefecto),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                            Box {
-                                Image(
-                                    painter = painterResource(id = R.drawable.icon_add_photo),
-                                    contentDescription = null
-                                )
-                            }
-
-                        }
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable { launcher.launch("image/*") },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            AsyncImage(
-                                model = partidoViewModel.imageUri,
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                            Box {
-                                Image(
-                                    painter = painterResource(id = R.drawable.icon_add_photo),
-                                    contentDescription = null
-                                )
-                            }
-
-                        }
+                    // Columna para organizar los campos de entrada verticalmente
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        // Campo de texto para ingresar la ubicación del partido
+                        MyTextField(
+                            value = partidoViewModel.nombreSitio,
+                            onValueChange = { partidoViewModel.changeLugar(it) },
+                            string = "Lugar"
+                        )
+                        // Campo de texto para ingresar la fecha del partido
+                        MyTextField(
+                            value = partidoViewModel.fecha,
+                            onValueChange = { partidoViewModel.changeFecha(it) },
+                            string = "Fecha"
+                        )
+                        // Campo de texto para ingresar la hora del partido
+                        MyTextField(
+                            value = partidoViewModel.hora,
+                            onValueChange = { partidoViewModel.changeHora(it) },
+                            string = "Hora"
+                        )
                     }
                 }
-                MyTextField(
-                    value = partidoViewModel.nombreSitio,
-                    onValueChange = { partidoViewModel.changeLugar(it) },
-                    string = "Lugar"
-                )
-                MyTextField(
-                    value = partidoViewModel.fecha,
-                    onValueChange = { partidoViewModel.changeFecha(it) },
-                    string = partidoViewModel.numeroPartidosUsuarioAutenticado().toString()
-                )
-                MyTextField(
-                    value = partidoViewModel.hora,
-                    onValueChange = { partidoViewModel.changeHora(it) },
-                    string = "Hora"
-                )
+
+                // Botón para crear un nuevo partido
                 BotonMas(
                     textButton = "Crea un partido",
-                    onClickButton = { partidoViewModel.crearPartido() })
+                    onClickButton = {
+                        // Llama a la función para crear el partido y navegar a la pantalla de inicio en caso de éxito
+                        partidoViewModel.crearPartido {
+                            navController.navigate(Routes.Inicio.route)
+                        }
+                    },
+                    modifier = Modifier.padding(top = 64.dp)
+                )
 
+                // Muestra un diálogo de alerta si showAlert es verdadero
+                if (partidoViewModel.showAlert) {
+                    Alert(
+                        title = "Alerta",
+                        message = "Todos los campos deben estar rellenos",
+                        confirmText = "Aceptar",
+                        onConfirmClick = { partidoViewModel.closeAlert() },
+                        onDismissClick = { }
+                    )
+                }
             }
-        })
-
+        }
+    )
 }
-
-
-
-
-
-
-

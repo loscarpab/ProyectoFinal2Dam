@@ -1,32 +1,42 @@
 package com.ccormor392.pruebaproyectofinal.presentation.inicio
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.flow.MutableStateFlow
+/**
+ * ViewModel para la pantalla de inicio.
+ * Esta ViewModel maneja la lógica relacionada con la pantalla de inicio, incluida la obtención de la lista de partidos disponibles
+ * y la asignación de nombres de usuario a cada partido.
+ *
+ * @property listaPartidos Lista de partidos disponibles.
+ * @property listaPartidosConNombreUsuario Lista de partidos con nombre de usuario del creador.
+ */
 @SuppressLint("MutableCollectionMutableState")
 class InicioViewModel : ViewModel() {
-    //Definición de variables y funciones para manejar el inicio de sesión y registro de usuarios.
-
+    // Firebase Firestore
     private val firestore = Firebase.firestore
-    var listaPartidos by mutableStateOf(mutableListOf<Partido>())
-        private set
+
+    // Lista de partidos disponibles
+    private var listaPartidos = MutableStateFlow (mutableListOf<Partido>())
+
+    // Lista de partidos con nombre de usuario del creador
     var listaPartidosConNombreUsuario by mutableStateOf(mutableListOf<Pair<Partido,String>>())
         private set
 
-    fun pedirTodosLosPartidos(onSuccess:()->Unit) {
-        firestore.collection("partidos")
+    /**
+     * Obtiene todos los partidos de Firestore.
+     * Esta función consulta Firestore para obtener la lista de todos los partidos disponibles y luego asigna los nombres de usuario
+     * del creador a cada partido.
+     */
+    fun pedirTodosLosPartidos() {
+        listaPartidos.value = mutableListOf()
+        firestore.collection("Partidos")
             .addSnapshotListener { querySnapshot, error ->
                 if (error != null) {
                     return@addSnapshotListener
@@ -40,21 +50,26 @@ class InicioViewModel : ViewModel() {
                         val hora = document.getString("hora")
                         val idPartido = document.getString("idPartido")
                         val nombreSitio = document.getString("nombreSitio")
-                        val urlImagen = document.getString("urlImagen")
-                        if (creador != null && fecha != null && hora != null && idPartido!=null && nombreSitio!= null && urlImagen!=null) {
-                            val partido = Partido(creador, fecha, hora, idPartido, jugadores, nombreSitio, urlImagen)
+
+                        // Verifica si los campos necesarios no son nulos antes de crear el partido
+                        if (creador != null && fecha != null && hora != null && idPartido!=null && nombreSitio!= null) {
+                            val partido = Partido(creador, fecha, hora, idPartido, jugadores, nombreSitio)
                             documents.add(partido)
                         }
-
                     }
-
                 }
-                listaPartidos = documents
+                listaPartidos.value = documents
                 asignarUsernameCreadorAPartido()
-                onSuccess()
             }
     }
-    fun getNombreUserById(id: String, callback: (String) -> Unit) {
+
+    /**
+     * Obtiene el nombre de usuario dado un ID de usuario.
+     *
+     * @param id ID de usuario.
+     * @param callback Callback para manejar el nombre de usuario obtenido.
+     */
+    private fun getNombreUserById(id: String, callback: (String) -> Unit) {
         firestore.collection("Users").whereEqualTo("userId", id)
             .addSnapshotListener { querySnapshot, error ->
                 if (error != null) {
@@ -69,8 +84,16 @@ class InicioViewModel : ViewModel() {
                 }
             }
     }
-    fun asignarUsernameCreadorAPartido(){
-        for (partido in listaPartidos) {
+
+    /**
+     * Asigna el nombre de usuario del creador a cada partido.
+     * Esta función itera sobre la lista de partidos disponibles y obtiene el nombre de usuario del creador para cada partido,
+     * luego crea una lista de pares de partido y nombre de usuario y la asigna a [listaPartidosConNombreUsuario].
+     */
+    private fun asignarUsernameCreadorAPartido(){
+        listaPartidosConNombreUsuario = mutableListOf()
+        for (partido in listaPartidos.value) {
+            // Obtener el nombre de usuario del creador y añadirlo a la lista de partidos con el nombre de usuario
             getNombreUserById(partido.creador) { nombreUsuario ->
                 listaPartidosConNombreUsuario.add(Pair(partido, nombreUsuario))
             }

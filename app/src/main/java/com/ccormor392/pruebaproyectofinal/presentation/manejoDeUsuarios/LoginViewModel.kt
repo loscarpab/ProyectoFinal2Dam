@@ -1,21 +1,21 @@
-package com.ccormor392.pruebaproyectofinal.presentation.inicioSesion
+package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios
 
 
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ccormor392.pruebaproyectofinal.data.model.UserModel
+import com.ccormor392.pruebaproyectofinal.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 /**
  * ViewModel responsable de gestionar la lógica de autenticación de usuarios.
@@ -27,9 +27,8 @@ import java.lang.Exception
  * @property email Email del usuario, utilizado para el inicio de sesión y registro.
  * @property password Contraseña del usuario, utilizada para el inicio de sesión y registro.
  * @property userName Nombre de usuario, utilizado solo en el proceso de registro.
- * @property selectedTab Índice de la pestaña seleccionada en la UI, utilizado para alternar entre las vistas de inicio de sesión y registro.
  */
-class LoginViewModel: ViewModel() {
+class LoginViewModel : ViewModel() {
     //Definición de variables y funciones para manejar el inicio de sesión y registro de usuarios.
 
     private val auth: FirebaseAuth = Firebase.auth
@@ -43,8 +42,9 @@ class LoginViewModel: ViewModel() {
         private set
     var userName by mutableStateOf("")
         private set
-    var selectedTab by mutableIntStateOf(0)
-        private set
+    private val _usuarioAutenticado = MutableStateFlow(User("", "", ""))
+    val usuarioAutenticado: StateFlow<User> = _usuarioAutenticado
+
 
     /**
      * Intenta iniciar sesión con el email y la contraseña proporcionados.
@@ -53,7 +53,7 @@ class LoginViewModel: ViewModel() {
      *
      * @param onSuccess Acción a ejecutar si el inicio de sesión es exitoso.
      */
-    fun login(onSuccess: () -> Unit){
+    fun login(onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
                 // Utiliza el servicio de autenticación de Firebase para validar al usuario por email y contraseña
@@ -62,11 +62,11 @@ class LoginViewModel: ViewModel() {
                         if (task.isSuccessful) {
                             onSuccess()
                         } else {
-                            Log.d("ERROR EN FIREBASE","Usuario y/o contrasena incorrectos")
+                            Log.d("ERROR EN FIREBASE", "Usuario y/o contrasena incorrectos")
                             showAlert = true
                         }
                     }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("ERROR EN JETPACK", "ERROR: ${e.localizedMessage}")
             }
         }
@@ -79,7 +79,7 @@ class LoginViewModel: ViewModel() {
      *
      * @param onSuccess Acción a ejecutar si el registro es exitoso.
      */
-    fun createUser(onSuccess: () -> Unit){
+    fun createUser(onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
                 //Utiliza el servicio de autenticación de Firebase para registrar al usuario por email y contraseña
@@ -90,11 +90,11 @@ class LoginViewModel: ViewModel() {
                             saveUser(userName)
                             onSuccess()
                         } else {
-                            Log.d("ERROR EN FIREBASE","Error al crear usuario")
+                            Log.d("ERROR EN FIREBASE", "Error al crear usuario")
                             showAlert = true
                         }
                     }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("ERROR CREAR USUARIO", "ERROR: ${e.localizedMessage}")
             }
         }
@@ -105,12 +105,12 @@ class LoginViewModel: ViewModel() {
      *
      * @param username Nombre de usuario a guardar.
      */
-    private fun saveUser(username: String){
+    private fun saveUser(username: String) {
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email
 
         viewModelScope.launch(Dispatchers.IO) {
-            val user = UserModel(
+            val user = User(
                 userId = id.toString(),
                 email = email.toString(),
                 username = username
@@ -118,7 +118,12 @@ class LoginViewModel: ViewModel() {
             //Añade el usuario a la colección "Users" en la base de datos Firestore
             firestore.collection("Users")
                 .add(user)
-                .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
+                .addOnSuccessListener {
+                    Log.d(
+                        "GUARDAR OK",
+                        "Se guardó el usuario correctamente en Firestore"
+                    )
+                }
                 .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
         }
     }
@@ -126,7 +131,7 @@ class LoginViewModel: ViewModel() {
     /**
      * Cierra el diálogo de alerta de error mostrada en la UI.
      */
-    fun closeAlert(){
+    fun closeAlert() {
         showAlert = false
     }
 
@@ -158,11 +163,33 @@ class LoginViewModel: ViewModel() {
     }
 
     /**
-     * Cambia la pestaña seleccionada en la UI.
-     *
-     * @param selectedTab Índice de la nueva pestaña seleccionada.
+     * Cierra la sesión del usuario actual en Firebase Auth.
      */
-    fun changeSelectedTab(selectedTab: Int) {
-        this.selectedTab = selectedTab
+    fun signOut(onSuccess: () -> Unit) {
+        auth.signOut()
+        onSuccess()
+    }
+
+    /**
+     * Recupera los datos del usuario ya autenticado
+     */
+    fun conseguirDatosUsuarioAutenticado() {
+        // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
+        firestore.collection("Users").whereEqualTo("userId", auth.currentUser!!.uid)
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    // Manejar el error aquí si es necesario
+                    return@addSnapshotListener
+                }
+                if (querySnapshot != null) {
+                    for (document in querySnapshot){
+                        val id = document.getString("userId")
+                        val email = document.getString("email")
+                        val username = document.getString("username")
+                        val partidosCreados = document.getLong("partidosCreados")
+                        _usuarioAutenticado.value = User(id!!, email!!, username!!, partidosCreados!!)
+                    }
+                }
+            }
     }
 }
