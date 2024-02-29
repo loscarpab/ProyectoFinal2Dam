@@ -12,6 +12,7 @@ import com.ccormor392.pruebaproyectofinal.navigation.NavManager
 import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CreateMatchViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.inicio.InicioViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidosViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirsePartidoViewModel
 import com.ccormor392.pruebaproyectofinal.ui.theme.PruebaProyectoFinalTheme
 /**
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
         val partidoViewModel: CreateMatchViewModel by viewModels()
         val inicioViewModel: InicioViewModel by viewModels()
         val unirsePartidoViewModel: UnirsePartidoViewModel by viewModels()
+        val misPartidoViewModel: MisPartidosViewModel by viewModels()
 
         setContent {
             PruebaProyectoFinalTheme {
@@ -42,7 +44,8 @@ class MainActivity : ComponentActivity() {
                         loginViewModel,
                         partidoViewModel,
                         inicioViewModel,
-                        unirsePartidoViewModel
+                        unirsePartidoViewModel,
+                        misPartidoViewModel
                     )
                 }
             }

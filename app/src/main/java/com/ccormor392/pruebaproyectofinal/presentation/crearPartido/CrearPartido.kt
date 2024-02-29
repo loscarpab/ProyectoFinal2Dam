@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
@@ -106,7 +107,7 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                             navController.navigate(Routes.Inicio.route)
                         }
                     },
-                    modifier = Modifier.padding(top = 64.dp)
+                    modifier = Modifier.padding(top = 32.dp)
                 )
 
                 // Muestra un diálogo de alerta si showAlert es verdadero
@@ -120,6 +121,8 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                     )
                 }
             }
+        }, bottomBar = {
+            MyBottomBar(navHostController = navController)
         }
     )
 }

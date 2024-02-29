@@ -12,7 +12,8 @@ fun MyBottomBar(navHostController: NavHostController) {
     BottomBar(
         modifier = Modifier.fillMaxWidth(),
         onClickUsuario = { navHostController.navigate(Routes.CerrarSesion.route) },
-        onClickIncio ={navHostController.navigate(Routes.Inicio.route)}
+        onClickIncio ={navHostController.navigate(Routes.Inicio.route)},
+        onClickPartidos = {navHostController.navigate(Routes.MisPartidos.route)}
     )
 }
 

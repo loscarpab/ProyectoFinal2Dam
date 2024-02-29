@@ -22,6 +22,7 @@ import androidx.navigation.NavHostController
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.botonmas.Property1
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
@@ -68,7 +69,7 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                 // Contenido central de la pantalla
                 Row(
                     modifier = Modifier
-                        .height(300.dp) // Altura fija
+                        .height(200.dp) // Altura fija
                         .fillMaxWidth(), // Ancho completo
                     horizontalArrangement = Arrangement.Center // Alineación horizontal al centro
                 ) {
@@ -102,9 +103,13 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                             navController.navigate(Routes.InicioSinRegistro.route) // Navegar a la pantalla de inicio sin registro
                         }
                     },
-                    modifier = Modifier.padding(top = 64.dp).width(200.dp) // Añade un espacio superior y establece el ancho del botón
+                    modifier = Modifier
+                        .padding(top = 64.dp)
+                        .width(200.dp) // Añade un espacio superior y establece el ancho del botón
                 )
             }
+        }, bottomBar = {
+            MyBottomBar(navHostController = navController)
         }
     )
 }

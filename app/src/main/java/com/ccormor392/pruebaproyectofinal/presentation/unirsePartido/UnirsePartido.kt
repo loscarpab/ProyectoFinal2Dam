@@ -25,6 +25,7 @@ import com.ccormor392.pruebaproyectofinal.lineaseparadoratopbar.LineaSeparadoraT
 import com.ccormor392.pruebaproyectofinal.logoapp.poppins
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyScaffoldContent
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.ccormor392.pruebaproyectofinal.usuarioitem.UsuarioItem
@@ -90,7 +91,7 @@ fun UnirsePartido(
             // Botón para unirse al partido
             Box(modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 64.dp), contentAlignment = Alignment.BottomCenter){
+                .padding(bottom = 100.dp), contentAlignment = Alignment.BottomCenter){
                 BotonMas(textButton = "Unirse al partido", onClickButton = {unirsePartidoViewModel.unirseAPartido{
                     navHostController.navigate(Routes.Inicio.route)
                 } })
@@ -105,7 +106,7 @@ fun UnirsePartido(
             }
         },
         bottomBar = {
-            // Barra inferior
+           MyBottomBar(navHostController = navHostController)
         }
     )
 }

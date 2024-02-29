@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "115:89",
-    "version": "5244012521",
+    "version": "5248943025",
     "component-id": "3d25b61dc15e4c24dba26b917fe660af48545ef2"
   },
   "default": "variante=Blanco",
@@ -55,6 +55,14 @@
       {
         "type": "group",
         "id": "info_partido"
+      },
+      {
+        "type": "group",
+        "id": "mdi:delete"
+      },
+      {
+        "type": "vector",
+        "id": "Vector"
       }
     ],
     "modes": {
@@ -861,6 +869,163 @@
             "typeface": "Poppins"
           }
         ]
+      },
+      "variante=variante6": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "16.0",
+              "top": "12.0",
+              "right": "16.0",
+              "bottom": "12.0"
+            },
+            "border-radius": "12.0",
+            "tap-handler": "$onClickCard",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "info_partido",
+              "mdi:delete"
+            ],
+            "item-spacing": "96.0",
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "212.0",
+              "saturation": "0.6",
+              "value": "0.09803921568627451"
+            },
+            "clip-content": "false"
+          },
+          {
+            "id": "info_partido",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "cross-axis-align": "start",
+            "children": [
+              "nombre_lugar",
+              "fechahora_lugar"
+            ],
+            "item-spacing": "2.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "mdi:delete",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "24.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "24.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "Vector"
+            ]
+          },
+          {
+            "id": "nombre_lugar",
+            "font-weight": "600.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "$text_lugar",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          },
+          {
+            "id": "fechahora_lugar",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "fecha",
+              "hora"
+            ],
+            "item-spacing": "20.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "fecha",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "$text_fecha",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          },
+          {
+            "id": "hora",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "$text_hora",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.5",
+            "typeface": "Poppins"
+          },
+          {
+            "id": "Vector",
+            "margin": {
+              "left": "5.0",
+              "top": "3.0",
+              "right": "5.0",
+              "bottom": "3.0"
+            },
+            "tap-handler": "$onClickDelete",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "vector.svg"
+          }
+        ]
       }
     }
   },
@@ -887,6 +1052,11 @@
     },
     "text_usuario": {
       "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "onClickDelete": {
+      "data-type": "void-callback",
       "required": false,
       "description": ""
     }
@@ -936,6 +1106,19 @@
       "size": {
         "width": 165.0,
         "height": 184.0
+      },
+      "parameters": {
+        "text_lugar": "Pabellón Centro Histórico",
+        "text_fecha": "27/03/24",
+        "text_hora": "21:00",
+        "text_usuario": "Usuario_33"
+      }
+    },
+    {
+      "design": "variante=variante6",
+      "size": {
+        "width": 359.0,
+        "height": 74.0
       },
       "parameters": {
         "text_lugar": "Pabellón Centro Histórico",
