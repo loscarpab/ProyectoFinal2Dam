@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.botonmas.Property1
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
@@ -60,7 +62,7 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
             ) {
                 // Título y subtítulo de la pantalla
                 TextoTopScreenLogs(
-                    textTitulo = "Mi usuario",
+                    textTitulo = stringResource(R.string.mi_usuario),
                     textSubtitulo = "",
                     modifier = Modifier
                         .fillMaxWidth() // Ancho completo
@@ -82,21 +84,21 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                         MyTextField(
                             value = loginViewModel.usuarioAutenticado.value.username,
                             onValueChange = {  },
-                            string = "Nombre de usuario",
+                            string = stringResource(id = R.string.nombre_de_usuario),
                             enabled = false // No editable
                         )
                         // Campo de texto para el correo electrónico (no editable)
                         MyTextField(
                             value =  loginViewModel.usuarioAutenticado.value.email,
                             onValueChange = {  },
-                            string = "Email",
+                            string = stringResource(id = R.string.email),
                             enabled = false // No editable
                         )
                     }
                 }
                 // Botón para cerrar sesión
                 BotonMas(
-                    textButton = "Cerrar sesión",
+                    textButton = stringResource(R.string.cerrar_sesion),
                     property1 = Property1.Variant3, // Propiedad de estilo del botón
                     onClickButton = {
                         loginViewModel.signOut {

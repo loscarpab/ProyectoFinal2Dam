@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.lineaseparadoratopbar.LineaSeparadoraTopbar
 import com.ccormor392.pruebaproyectofinal.logoapp.LogoApp
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
@@ -16,9 +18,11 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
  */
 @Composable
 fun MyTopBar(){
-    Column(modifier = Modifier.height(100.dp).background(PurpleGrey40)) {
+    Column(modifier = Modifier
+        .height(100.dp)
+        .background(PurpleGrey40)) {
         LogoApp(
-            textNombreApp = "QuickMatch",
+            textNombreApp = stringResource(R.string.nombreApp),
             modifier = Modifier.padding(start = 24.dp, top = 24.dp)
         )
         LineaSeparadoraTopbar()

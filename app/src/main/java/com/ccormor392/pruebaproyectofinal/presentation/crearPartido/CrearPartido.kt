@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
@@ -57,8 +59,8 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
             ) {
                 // Componentes de texto para título y subtítulo
                 TextoTopScreenLogs(
-                    textTitulo = "Crear partido",
-                    textSubtitulo = "Rellena los datos para crear tu partido",
+                    textTitulo = stringResource(R.string.crear_partido),
+                    textSubtitulo = stringResource(R.string.sub_crear_partido),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp, bottom = 32.dp)
@@ -81,19 +83,19 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                         MyTextField(
                             value = partidoViewModel.nombreSitio,
                             onValueChange = { partidoViewModel.changeLugar(it) },
-                            string = "Lugar"
+                            string = stringResource(R.string.lugar)
                         )
                         // Campo de texto para ingresar la fecha del partido
                         MyTextField(
                             value = partidoViewModel.fecha,
                             onValueChange = { partidoViewModel.changeFecha(it) },
-                            string = "Fecha"
+                            string = stringResource(R.string.fecha)
                         )
                         // Campo de texto para ingresar la hora del partido
                         MyTextField(
                             value = partidoViewModel.hora,
                             onValueChange = { partidoViewModel.changeHora(it) },
-                            string = "Hora"
+                            string = stringResource(R.string.hora)
                         )
                     }
                 }
@@ -113,9 +115,9 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                 // Muestra un diálogo de alerta si showAlert es verdadero
                 if (partidoViewModel.showAlert) {
                     Alert(
-                        title = "Alerta",
-                        message = "Todos los campos deben estar rellenos",
-                        confirmText = "Aceptar",
+                        title = stringResource(R.string.alerta),
+                        message = stringResource(R.string.alert_crear_partido),
+                        confirmText = stringResource(R.string.aceptar),
                         onConfirmClick = { partidoViewModel.closeAlert() },
                         onDismissClick = { }
                     )

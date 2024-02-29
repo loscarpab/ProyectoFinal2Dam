@@ -41,7 +41,7 @@ fun InicioSinRegistro(navController: NavHostController) {
         // Barra superior que muestra el logotipo de la aplicación
         topBar = {
             LogoApp(
-                textNombreApp = "QuickMatch",
+                textNombreApp = stringResource(id = R.string.nombreApp),
                 modifier = Modifier.padding(start = 32.dp, top = 40.dp)
             )
         },
@@ -56,13 +56,13 @@ fun InicioSinRegistro(navController: NavHostController) {
                 // Imagen de bienvenida
                 Image(
                     painter = painterResource(id = R.drawable.foto_inicio),
-                    contentDescription = "Jugadora con balón",
+                    contentDescription = stringResource(R.string.jugadora_con_balon),
                     modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
                 // Texto de bienvenida
                 Text(
-                    text = "Bienvenido a QuickMatch",
+                    text = stringResource(R.string.bienvenido_a_quickmatch),
                     fontFamily = poppins,
                     fontSize = 40.sp,
                     textAlign = TextAlign.Center,

@@ -8,5 +8,26 @@
     <string name="email">Email</string>
     <string name="apellidos">Apellidos</string>
     <string name="nombre_de_usuario">Nombre de usuario</string>
+    <string name="nombreApp">QuickMatch</string>
+    <string name="crear_partido">Crear partido</string>
+    <string name="sub_crear_partido">Rellena los datos para crear tu partido</string>
+    <string name="lugar">Lugar</string>
+    <string name="fecha">Fecha</string>
+    <string name="hora">Hora</string>
+    <string name="alerta">Alerta</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="alert_crear_partido">Todos los campos deben estar rellenos</string>
+    <string name="sub_iniciar_sesion">Rellena los campos con los datos de tu cuenta para iniciar sesión</string>
+    <string name="no_tienes_cuenta">¿No tienes cuenta?</string>
+    <string name="alerta_user">Usuario y/o contraseña incorrectos</string>
+    <string name="bienvenido_a_quickmatch">Bienvenido a QuickMatch</string>
+    <string name="jugadora_con_balon">Jugadora con balón</string>
+    <string name="sub_registrate">Rellena los campos con tus datos para crear una cuenta</string>
+    <string name="alerta_user_created">Usuario no creado correctamente</string>
+    <string name="mi_usuario">Mi usuario</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="mis_partidos">Mis Partidos</string>
+    <string name="no_tienes_ningun_partido_creado">No tienes ningún partido creado</string>
+    <string name="alerta_borrar">¿Estás seguro de que quieres borrar el partido?</string>
 
 </resources>

@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.cartapartido.CartaPartido
 import com.ccormor392.pruebaproyectofinal.cartapartido.Variante
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
@@ -48,12 +50,12 @@ fun MisPartidos(navHostController: NavHostController, misPartidosViewModel: MisP
             // Contenido principal de la pantalla
             MyScaffoldContent {
                 // Encabezado de la pantalla
-                TextoTopScreenLogs(textTitulo = "Mis Partidos", textSubtitulo = "")
+                TextoTopScreenLogs(textTitulo = stringResource(R.string.mis_partidos), textSubtitulo = "")
 
                 // Lista de partidos disponibles
                 if (misPartidosViewModel.listaMisPartidos.value.isEmpty()) {
                     Text(
-                        text = "No tienes ningún partido creado",
+                        text = stringResource(R.string.no_tienes_ningun_partido_creado),
                         fontFamily = poppins,
                         color = Color.White
                     )
@@ -86,9 +88,9 @@ fun MisPartidos(navHostController: NavHostController, misPartidosViewModel: MisP
             // Si se muestra la alerta de confirmación de eliminación
             if (misPartidosViewModel.showAlert) {
                 Alert(
-                    title = "Alerta",
-                    message = "¿Estás seguro de que quieres borrar el partido?",
-                    confirmText = "Aceptar",
+                    title =stringResource(id = R.string.alerta),
+                    message = stringResource(R.string.alerta_borrar),
+                    confirmText = stringResource(id = R.string.aceptar),
                     // Cuando se confirma la eliminación del partido
                     onConfirmClick = {
                         // Se pide de nuevo la lista de partidos

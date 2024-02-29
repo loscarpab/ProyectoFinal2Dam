@@ -46,7 +46,7 @@ fun Registro(
         topBar = {
             // Barra superior con el logo de la aplicación
             LogoApp(
-                textNombreApp = "QuickMatch",
+                textNombreApp = stringResource(id = R.string.nombreApp),
                 modifier = Modifier.padding(start = 32.dp, top = 40.dp)
             )
         },
@@ -62,8 +62,8 @@ fun Registro(
             ) {
                 // Título y subtítulo de la pantalla de registro
                 TextoTopScreenLogs(
-                    textTitulo = "Registrate",
-                    textSubtitulo = "Rellena los campos con tus datos para crear una cuenta"
+                    textTitulo = stringResource(id = R.string.registrate),
+                    textSubtitulo = stringResource(R.string.sub_registrate)
                 )
                 // Columna con los campos de texto y el botón de registro
                 Column(
@@ -94,9 +94,9 @@ fun Registro(
                 }
                 // Botón para realizar el registro de usuario
                 BotonSinIniciarSesion(
-                    textBoton = "Registrate",
-                    textSubButtonNotClickable = "¿Ya tienes cuenta?",
-                    textSubButtonClickable = "Inicia Sesión",
+                    textBoton = stringResource(id = R.string.registrate),
+                    textSubButtonNotClickable = stringResource(id = R.string.ya_tienes_cuenta),
+                    textSubButtonClickable = stringResource(id = R.string.inicia_sesion),
                     tipo = Tipo.Small,
                     onClickButton = {
                         loginViewModel.createUser { navController.navigate(Routes.Inicio.route) }
@@ -106,9 +106,9 @@ fun Registro(
                 // Mostrar un diálogo de alerta en caso de error
                 if (loginViewModel.showAlert) {
                     Alert(
-                        title = "Alerta",
-                        message = "Usuario no creado correctamente",
-                        confirmText = "Aceptar",
+                        title = stringResource(id = R.string.alerta),
+                        message = stringResource(R.string.alerta_user_created),
+                        confirmText = stringResource(id = R.string.aceptar),
                         onConfirmClick = { loginViewModel.closeAlert() },
                         onDismissClick = { }
                     ) // Ninguna acción en onDismissClick para que no oculte el diálogo

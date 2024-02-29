@@ -13,8 +13,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.cartapartido.CartaPartido
 import com.ccormor392.pruebaproyectofinal.cartapartido.Variante
@@ -51,7 +53,7 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     BotonMas(
-                        textButton = "Crea un partido",
+                        textButton = stringResource(id = R.string.crear_partido),
                         onClickButton = { navController.navigate(Routes.CrearPartido.route) }
                     )
                 }
