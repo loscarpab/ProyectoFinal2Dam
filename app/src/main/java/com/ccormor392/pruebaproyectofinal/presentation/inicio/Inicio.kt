@@ -56,6 +56,7 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
                         textButton = stringResource(id = R.string.crear_partido),
                         onClickButton = { navController.navigate(Routes.CrearPartido.route) }
                     )
+
                 }
                 // Lista de partidos disponibles
                 LazyVerticalGrid(

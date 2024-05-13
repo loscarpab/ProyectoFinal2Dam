@@ -1,10 +1,12 @@
 package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios
 
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ccormor392.pruebaproyectofinal.data.model.User
@@ -12,10 +14,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 /**
  * ViewModel responsable de gestionar la lógica de autenticación de usuarios.
@@ -33,6 +37,7 @@ class LoginViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
+    private val storageRef = Firebase.storage.reference
 
     var showAlert by mutableStateOf(false)
         private set
@@ -42,6 +47,9 @@ class LoginViewModel : ViewModel() {
         private set
     var userName by mutableStateOf("")
         private set
+    var imageUri by mutableStateOf<Uri?>(null)
+        private set
+
     private val _usuarioAutenticado = MutableStateFlow(User("", "", ""))
     val usuarioAutenticado: StateFlow<User> = _usuarioAutenticado
 
@@ -128,6 +136,51 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+
+    fun uploadImageToStorage(filename: Uri?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (filename != null) {
+                    var ultimabarra = filename.toString().lastIndexOf("%2F") + 3
+                    var uri = storageRef.child("images").child(auth.uid.toString())
+                        .child(filename.toString().substring(ultimabarra)).putFile(filename)
+                        .await().storage.downloadUrl.await()
+                    imageUri = uri
+                    if (imageUri != null) {
+                        firestore.collection("Users")
+                            .whereEqualTo("userId", auth.uid)
+                            .addSnapshotListener { querySnapshot, error ->
+                                if (error != null) {
+                                    // Manejar el error aquí si es necesario
+                                    return@addSnapshotListener
+                                }
+                                if (querySnapshot != null) {
+                                    for (document in querySnapshot) {
+                                        // El usuario no está en la lista de jugadores, se puede unir al partido
+                                        val partidoRef =
+                                            firestore.collection("Users").document(document.id)
+                                        partidoRef.update("avatar", imageUri)
+                                            .addOnSuccessListener {
+                                                // El usuario se ha cambiado el avatar exitosamente
+                                                //onSuccess()
+                                            }
+                                            .addOnFailureListener { exception ->
+                                                // Manejar errores al cambiar el partido
+                                                println("Error al cambiar el partido: $exception")
+                                            }
+
+                                    }
+                                }
+                            }
+                    }
+                }
+
+            } catch (e: Exception) {
+            }
+        }
+
+    }
+
     /**
      * Cierra el diálogo de alerta de error mostrada en la UI.
      */
@@ -182,12 +235,18 @@ class LoginViewModel : ViewModel() {
                     return@addSnapshotListener
                 }
                 if (querySnapshot != null) {
-                    for (document in querySnapshot){
+                    for (document in querySnapshot) {
                         val id = document.getString("userId")
                         val email = document.getString("email")
                         val username = document.getString("username")
                         val partidosCreados = document.getLong("partidosCreados")
-                        _usuarioAutenticado.value = User(id!!, email!!, username!!, partidosCreados!!)
+                        var avatar = document.getString("avatar")
+                        if (avatar == null){
+                            avatar = ""
+                        }
+                        _usuarioAutenticado.value =
+                            User(id!!, email!!, username!!, partidosCreados!!, avatar = avatar)
+                        imageUri = avatar.toUri()
                     }
                 }
             }

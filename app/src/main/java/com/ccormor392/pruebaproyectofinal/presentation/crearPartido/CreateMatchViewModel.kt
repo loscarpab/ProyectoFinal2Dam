@@ -7,13 +7,20 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.sql.Time
+import java.util.Calendar
+import java.util.Date
+
 /**
  * ViewModel para la creación de partidos.
  * Esta clase maneja la lógica relacionada con la creación de nuevos partidos, incluida la validación de datos y la interacción con Firestore.
@@ -39,6 +46,16 @@ class CreateMatchViewModel : ViewModel() {
         private set
     var nombreSitio by mutableStateOf("")
         private set
+
+    private var _showTimePicker = MutableStateFlow<Boolean>(false)
+    var showTimePicker :StateFlow<Boolean> = _showTimePicker
+    private var _showDatePicker = MutableStateFlow<Boolean>(false)
+    var showDatePicker :StateFlow<Boolean> = _showDatePicker
+
+
+
+
+
 
     /**
      * Obtiene el número de partidos creados por el usuario autenticado.
@@ -113,6 +130,7 @@ class CreateMatchViewModel : ViewModel() {
             }
     }
 
+
     /**
      * Actualiza el nombre del lugar del partido.
      * Esta función actualiza el nombre del sitio del partido.
@@ -129,8 +147,8 @@ class CreateMatchViewModel : ViewModel() {
      *
      * @param hora Nueva hora del partido.
      */
-    fun changeHora(hora: String) {
-        this.hora = hora
+    fun changeHora(hora: Int, minutos:Int) {
+        this.hora = "$hora:$minutos"
     }
 
     /**
@@ -150,4 +168,12 @@ class CreateMatchViewModel : ViewModel() {
     fun closeAlert() {
         showAlert = false
     }
+
+    fun changeHoraPicker() {
+        _showTimePicker.value = !_showTimePicker.value
+    }
+    fun changeDatePicker() {
+        _showDatePicker.value = !_showDatePicker.value
+    }
+
 }

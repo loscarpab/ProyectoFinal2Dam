@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.ccormor392.pruebaproyectofinal.navigation.NavManager
+import com.ccormor392.pruebaproyectofinal.presentation.amigos.AmigosViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CreateMatchViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.inicio.InicioViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
@@ -31,23 +32,22 @@ class MainActivity : ComponentActivity() {
         val inicioViewModel: InicioViewModel by viewModels()
         val unirsePartidoViewModel: UnirsePartidoViewModel by viewModels()
         val misPartidoViewModel: MisPartidosViewModel by viewModels()
+        val amigosViewModel: AmigosViewModel by viewModels()
 
         setContent {
             PruebaProyectoFinalTheme {
                 // Contenedor principal de la interfaz de usuario
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+
                     // Gestión de la navegación entre pantallas
                     NavManager(
                         loginViewModel,
                         partidoViewModel,
                         inicioViewModel,
                         unirsePartidoViewModel,
-                        misPartidoViewModel
+                        misPartidoViewModel,
+                        amigosViewModel
                     )
-                }
+
             }
         }
     }
