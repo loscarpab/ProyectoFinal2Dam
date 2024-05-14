@@ -2,6 +2,7 @@ package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDefaults
@@ -42,7 +44,12 @@ import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 import com.ccormor392.pruebaproyectofinal.ui.theme.xdark
+import java.security.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
 
 /**
  * Función componible para crear un nuevo partido.
@@ -61,6 +68,12 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
     val dateTime = LocalDateTime.now()
     val timePickerState = rememberTimePickerState(dateTime.hour, dateTime.minute, true)
     val datePickerState = rememberDatePickerState()
+    val timestamp = java.sql.Timestamp(datePickerState.selectedDateMillis ?: System.currentTimeMillis())
+    val date = Date(timestamp.time)
+    val format = SimpleDateFormat("dd/MM/yy")
+    val pepe = format.format(date)
+
+
     // Utiliza LaunchedEffect para ejecutar código cuando se lanza este composable
     LaunchedEffect(Unit) {
         partidoViewModel.numeroPartidosUsuarioAutenticado()
@@ -83,7 +96,7 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                 if (showTimePicker.value) {
                     TimePickerDialogs(
                         timePickerState = timePickerState,
-                        onDismissRequest = {partidoViewModel.changeHoraPicker()},
+                        onDismissRequest = { partidoViewModel.changeHoraPicker() },
                         confirmButton = {
                             Text(text = "Confirmar", modifier = Modifier.clickable {
                                 partidoViewModel.changeHora(
@@ -98,7 +111,16 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                 if (showDatePicker.value) {
                     DatePickerDialog(
                         onDismissRequest = { partidoViewModel.changeDatePicker() },
-                        confirmButton = {Text(text = "Confirmar", modifier = Modifier.clickable {})}) {
+                        confirmButton = {
+                            Button(onClick = {
+                                partidoViewModel.changeFecha(pepe)
+                                partidoViewModel.changeDatePicker()
+                            }) {
+                                Text(text = "Confirmar")
+                            }
+                        },
+                        modifier = Modifier.padding(15.dp)
+                    ) {
                         DatePicker(
                             state = datePickerState,
                             colors = colorsDatePickerDialog()
@@ -136,17 +158,17 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                         // Campo de texto para ingresar la fecha del partido
                         MyTextField(
                             value = partidoViewModel.fecha,
-                            onValueChange = {  },
+                            onValueChange = { },
                             string = stringResource(R.string.fecha),
-                            onClickDateIcon = {partidoViewModel.changeDatePicker()},
+                            onClickDateIcon = { partidoViewModel.changeDatePicker() },
                             iconName = "fecha",
                             enabled = false
                         )
                         MyTextField(
                             value = partidoViewModel.hora,
-                            onValueChange = {  },
+                            onValueChange = { },
                             string = stringResource(R.string.hora),
-                            onClickClockIcon = {partidoViewModel.changeHoraPicker()},
+                            onClickClockIcon = { partidoViewModel.changeHoraPicker() },
                             iconName = "hora",
                             enabled = false
                         )
@@ -192,6 +214,7 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
         }
     )
 }
+
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun colorsDatePickerDialog(): DatePickerColors {

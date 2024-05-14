@@ -2,6 +2,7 @@ package com.ccormor392.pruebaproyectofinal.presentation.misPartidos
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -51,7 +52,6 @@ fun MisPartidos(navHostController: NavHostController, misPartidosViewModel: MisP
             MyScaffoldContent {
                 // Encabezado de la pantalla
                 TextoTopScreenLogs(textTitulo = stringResource(R.string.mis_partidos), textSubtitulo = "")
-
                 // Lista de partidos disponibles
                 if (misPartidosViewModel.listaMisPartidos.value.isEmpty()) {
                     Text(
@@ -64,7 +64,8 @@ fun MisPartidos(navHostController: NavHostController, misPartidosViewModel: MisP
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 80.dp)
+                        .padding(top = 16.dp, bottom = 20.dp)
+                        .offset(y = (-60).dp)
                 ) {
                     // Itera sobre los elementos de la lista de partidos y muestra una tarjeta para cada uno
                     items(misPartidosViewModel.listaMisPartidos.value) { partido ->

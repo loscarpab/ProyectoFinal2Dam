@@ -2,16 +2,22 @@ package com.ccormor392.pruebaproyectofinal.presentation.inicio
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +42,7 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
  */
 @Composable
 fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
+    val lista = inicioViewModel.listaPartidosConNombreUsuario.collectAsState()
     // Se carga la lista de partidos al inicio de la pantalla
     LaunchedEffect(Unit) {
         inicioViewModel.pedirTodosLosPartidos()
@@ -58,29 +65,37 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
                     )
 
                 }
-                // Lista de partidos disponibles
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 80.dp)
-                ) {
-                    // Itera sobre los elementos de la lista de partidos y muestra una tarjeta para cada uno
-                    items(inicioViewModel.listaPartidosConNombreUsuario) { partidoConNombreUsuario ->
-                        CartaPartido(
-                            textLugar = partidoConNombreUsuario.first.nombreSitio,
-                            textFecha = partidoConNombreUsuario.first.fecha,
-                            textHora = partidoConNombreUsuario.first.hora,
-                            textUsuario = partidoConNombreUsuario.second,
-                            variante = Variante.SinImagen,
-                            modifier = Modifier.padding(8.dp),
-                            // Navega a la pantalla de unirse al partido al hacer clic en la tarjeta
-                            onClickCard = {
-                                navController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second}")
-                            }
-                        )
+                if (lista.value.isNotEmpty()){
+                    // Lista de partidos disponibles
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp, bottom = 80.dp)
+                    ) {
+                        // Itera sobre los elementos de la lista de partidos y muestra una tarjeta para cada uno
+                        items(lista.value) { partidoConNombreUsuario ->
+                            CartaPartido(
+                                textLugar = partidoConNombreUsuario.first.nombreSitio,
+                                textFecha = partidoConNombreUsuario.first.fecha,
+                                textHora = partidoConNombreUsuario.first.hora,
+                                textUsuario = partidoConNombreUsuario.second,
+                                variante = Variante.SinImagen,
+                                modifier = Modifier.padding(8.dp),
+                                // Navega a la pantalla de unirse al partido al hacer clic en la tarjeta
+                                onClickCard = {
+                                    navController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second}")
+                                }
+                            )
+                        }
                     }
                 }
+                else{
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        CircularProgressIndicator(modifier = Modifier.size(100.dp))
+                    }
+                }
+
             }
         },
         bottomBar = {

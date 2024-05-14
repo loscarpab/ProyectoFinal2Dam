@@ -157,8 +157,11 @@ class CreateMatchViewModel : ViewModel() {
      *
      * @param fecha Nueva fecha del partido.
      */
-    fun changeFecha(fecha: String) {
-        this.fecha = fecha
+    fun changeFecha(dia: Int, mes:Int, ano:Int) {
+        this.fecha = "$dia/$mes/$ano"
+    }
+    fun changeFecha(string:String) {
+        this.fecha = string
     }
 
     /**
