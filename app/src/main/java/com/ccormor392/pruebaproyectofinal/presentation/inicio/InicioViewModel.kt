@@ -1,9 +1,6 @@
 package com.ccormor392.pruebaproyectofinal.presentation.inicio
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
 import com.google.firebase.firestore.ktx.firestore
@@ -19,44 +16,73 @@ import kotlinx.coroutines.flow.StateFlow
  * @property listaPartidos Lista de partidos disponibles.
  * @property listaPartidosConNombreUsuario Lista de partidos con nombre de usuario del creador.
  */
+@Suppress("UNCHECKED_CAST")
 @SuppressLint("MutableCollectionMutableState")
 class InicioViewModel : ViewModel() {
+    // Instancia de Firestore
     private val firestore = Firebase.firestore
+
+    // MutableStateFlow para la lista de partidos
     private var listaPartidos = MutableStateFlow(mutableListOf<Partido>())
 
+    // MutableStateFlow para la lista de partidos con el nombre del usuario creador
     private var _listaPartidosConNombreUsuario = MutableStateFlow<MutableList<Pair<Partido, String>>>(mutableListOf())
     val listaPartidosConNombreUsuario: StateFlow<MutableList<Pair<Partido, String>>> = _listaPartidosConNombreUsuario
 
+    /**
+     * Método para obtener todos los partidos desde la colección "Partidos" en Firestore.
+     * Los datos obtenidos se almacenan en `listaPartidos` y se llama a `asignarUsernameCreadorAPartido` para
+     * asignar los nombres de usuario a cada partido.
+     */
     fun pedirTodosLosPartidos() {
+        // Escuchar cambios en la colección "Partidos" de Firestore
         firestore.collection("Partidos")
             .addSnapshotListener { querySnapshot, error ->
+                // Si ocurre un error, retornar sin hacer nada
                 if (error != null) {
                     return@addSnapshotListener
                 }
+                // Lista temporal para almacenar los documentos obtenidos
                 val documents = mutableListOf<Partido>()
                 if (querySnapshot != null) {
+                    // Iterar sobre cada documento en el snapshot
                     for (document in querySnapshot) {
-                        val jugadores = document.get("jugadores") as List<String>
+                        // Obtener los campos del documento
+                        val jugadores = document.get("jugadores") as List<*>
                         val creador = document.getString("creador")
                         val fecha = document.getString("fecha")
                         val hora = document.getString("hora")
                         val idPartido = document.getString("idPartido")
                         val nombreSitio = document.getString("nombreSitio")
 
+                        // Verificar que todos los campos necesarios no sean nulos
                         if (creador != null && fecha != null && hora != null && idPartido != null && nombreSitio != null) {
-                            val partido = Partido(creador, fecha, hora, idPartido, jugadores, nombreSitio)
+                            // Crear una instancia de Partido y añadirla a la lista temporal
+                            val partido = Partido(creador, fecha, hora, idPartido,
+                                jugadores as List<String>, nombreSitio)
                             documents.add(partido)
                         }
                     }
                 }
+                // Actualizar la lista de partidos
                 listaPartidos.value = documents
+                // Asignar nombres de usuario a los partidos
                 asignarUsernameCreadorAPartido()
             }
     }
 
+    /**
+     * Método para obtener el nombre de usuario basado en el ID del usuario.
+     * Este método consulta la colección "Users" en Firestore.
+     *
+     * @param id El ID del usuario.
+     * @param callback Función de callback para manejar el resultado del nombre de usuario.
+     */
     private fun getNombreUserById(id: String, callback: (String) -> Unit) {
+        // Consultar la colección "Users" para obtener el usuario con el ID especificado
         firestore.collection("Users").whereEqualTo("userId", id).get()
             .addOnSuccessListener { querySnapshot ->
+                // Si se obtienen resultados, extraer el nombre de usuario y llamarlo en el callback
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
                         val username = document.getString("username") ?: ""
@@ -64,18 +90,26 @@ class InicioViewModel : ViewModel() {
                     }
                 }
             }
-            .addOnFailureListener { exception ->
-                // Handle failure if necessary
+            .addOnFailureListener { _ ->
+                // Manejar el fallo si es necesario
             }
     }
 
+    /**
+     * Método para asignar el nombre de usuario creador a cada partido.
+     * Este método actualiza `_listaPartidosConNombreUsuario` con la lista de partidos y sus respectivos nombres de usuario.
+     */
     private fun asignarUsernameCreadorAPartido() {
+        // Inicializar la lista de partidos con nombre de usuario como una lista vacía
         _listaPartidosConNombreUsuario.value = mutableListOf()
         val currentPartidos = listaPartidos.value
 
+        // Si hay partidos en la lista, iterar sobre cada uno para asignar el nombre de usuario
         if (currentPartidos.isNotEmpty()) {
             currentPartidos.forEach { partido ->
+                // Obtener el nombre de usuario para el creador del partido
                 getNombreUserById(partido.creador) { nombreUsuario ->
+                    // Actualizar la lista con el partido y el nombre de usuario
                     val updatedList = _listaPartidosConNombreUsuario.value.toMutableList()
                     updatedList.add(Pair(partido, nombreUsuario))
                     _listaPartidosConNombreUsuario.value = updatedList
