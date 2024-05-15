@@ -7,6 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Date
 
 /**
  * ViewModel para la pantalla de inicio.
@@ -26,15 +27,19 @@ class InicioViewModel : ViewModel() {
     private var listaPartidos = MutableStateFlow(mutableListOf<Partido>())
 
     // MutableStateFlow para la lista de partidos con el nombre del usuario creador
-    private var _listaPartidosConNombreUsuario = MutableStateFlow<MutableList<Pair<Partido, String>>>(mutableListOf())
-    val listaPartidosConNombreUsuario: StateFlow<MutableList<Pair<Partido, String>>> = _listaPartidosConNombreUsuario
+    private var _listaPartidosConNombreUsuario =
+        MutableStateFlow<MutableList<Pair<Partido, String>>>(mutableListOf())
+    val listaPartidosConNombreUsuario: StateFlow<MutableList<Pair<Partido, String>>> =
+        _listaPartidosConNombreUsuario
 
     /**
      * Método para obtener todos los partidos desde la colección "Partidos" en Firestore.
-     * Los datos obtenidos se almacenan en `listaPartidos` y se llama a `asignarUsernameCreadorAPartido` para
+     * Los datos obtenidos se almacenan en listaPartidos` y se llama a `asignarUsernameCreadorAPartido` para
      * asignar los nombres de usuario a cada partido.
      */
     fun pedirTodosLosPartidos() {
+        listaPartidos.value = mutableListOf()
+        _listaPartidosConNombreUsuario.value = mutableListOf()
         // Escuchar cambios en la colección "Partidos" de Firestore
         firestore.collection("Partidos")
             .addSnapshotListener { querySnapshot, error ->
@@ -54,18 +59,27 @@ class InicioViewModel : ViewModel() {
                         val hora = document.getString("hora")
                         val idPartido = document.getString("idPartido")
                         val nombreSitio = document.getString("nombreSitio")
+                        val timestamp = document.getDate("timestamp")
+                        val foto = document.getString("foto")
 
                         // Verificar que todos los campos necesarios no sean nulos
                         if (creador != null && fecha != null && hora != null && idPartido != null && nombreSitio != null) {
                             // Crear una instancia de Partido y añadirla a la lista temporal
-                            val partido = Partido(creador, fecha, hora, idPartido,
-                                jugadores as List<String>, nombreSitio)
+                            val partido = Partido(
+                                creador,
+                                fecha,
+                                hora,
+                                idPartido,
+                                jugadores as List<String>,
+                                nombreSitio,
+                                timestamp ?: Date(System.currentTimeMillis()), foto ?: ""
+                            )
                             documents.add(partido)
                         }
                     }
                 }
                 // Actualizar la lista de partidos
-                listaPartidos.value = documents
+                listaPartidos.value = documents.sortedBy { it.timestamp }.toMutableList()
                 // Asignar nombres de usuario a los partidos
                 asignarUsernameCreadorAPartido()
             }

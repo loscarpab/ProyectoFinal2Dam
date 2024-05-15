@@ -1,5 +1,9 @@
 package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 
+import android.net.Uri
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -13,12 +17,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.sql.Time
-import java.util.Calendar
+import java.time.LocalDateTime
 import java.util.Date
 
 /**
@@ -33,7 +38,7 @@ import java.util.Date
 class CreateMatchViewModel : ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
-
+    private val storageRef = Firebase.storage.reference
     // Contador de partidos creados por el usuario
     private var numPartidosCreados by mutableLongStateOf(7)
 
@@ -46,12 +51,16 @@ class CreateMatchViewModel : ViewModel() {
         private set
     var nombreSitio by mutableStateOf("")
         private set
-
-    private var _showTimePicker = MutableStateFlow<Boolean>(false)
+    var foto by mutableStateOf("")
+        private set
+    var imageUri by mutableStateOf<Uri?>(null)
+        private set
+    private var _showTimePicker = MutableStateFlow(false)
     var showTimePicker :StateFlow<Boolean> = _showTimePicker
-    private var _showDatePicker = MutableStateFlow<Boolean>(false)
+    private var _showDatePicker = MutableStateFlow(false)
     var showDatePicker :StateFlow<Boolean> = _showDatePicker
 
+    private var _timestamp by mutableStateOf(Date(System.currentTimeMillis()))
 
 
 
@@ -88,27 +97,73 @@ class CreateMatchViewModel : ViewModel() {
         viewModelScope.launch {
             val userId = auth.currentUser?.uid
             if (userId != null) {
-                if (fecha.isNullOrEmpty() || hora.isNullOrEmpty() || nombreSitio.isNullOrEmpty()) {
+                if (fecha.isEmpty() || hora.isEmpty() || nombreSitio.isEmpty()) {
                     showAlert = true
                 } else {
                     val idPartido = userId + numPartidosCreados
-                    val partido = Partido(userId, fecha, hora, idPartido, nombreSitio = nombreSitio)
+                    val partido = Partido(userId, fecha, hora, idPartido, nombreSitio = nombreSitio, timestamp = _timestamp)
                     try {
                         partido.jugadores += userId
-                        firestore.collection("Partidos").add(partido).await()
-                        numPartidosCreados++
-                        actualizarPartidosCreadosPorId(userId, numPartidosCreados)
-                        onSuccess()
+                        firestore.collection("Partidos").add(partido).addOnSuccessListener {
+                            numPartidosCreados++
+                            actualizarPartidosCreadosPorId(userId, numPartidosCreados)
+                            onSuccess.invoke()
+                            Log.d("CreateMatchViewModel", "Partido creado con éxito.")
+                        }
+
                     } catch (e: Exception) {
-                        println("Error al crear el partido: ${e.message}")
+                        Log.e("CreateMatchViewModel", "Error al crear el partido: ${e.message}")
                     }
                 }
             } else {
-                println("El usuario no está autenticado.")
+                Log.e("CreateMatchViewModel", "El usuario no está autenticado.")
             }
         }
     }
 
+    fun uploadImageToStorage(filename: Uri?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (filename != null) {
+                    var nombreArchivo = auth.currentUser?.uid + (numPartidosCreados)
+                    var uri = storageRef.child("images").child(auth.uid.toString()).child("partidos")
+                        .child(nombreArchivo).putFile(filename)
+                        .await().storage.downloadUrl.await()
+                    imageUri = uri
+                    if (imageUri != null) {
+                        firestore.collection("Partidos")
+                            .whereEqualTo("idPartido", nombreArchivo)
+                            .addSnapshotListener { querySnapshot, error ->
+                                if (error != null) {
+                                    // Manejar el error aquí si es necesario
+                                    return@addSnapshotListener
+                                }
+                                if (querySnapshot != null) {
+                                    for (document in querySnapshot) {
+                                        // El usuario no está en la lista de jugadores, se puede unir al partido
+                                        val partidoRef =
+                                            firestore.collection("Partidos").document(document.id)
+                                        partidoRef.update("foto", imageUri)
+                                            .addOnSuccessListener {
+                                                // El usuario se ha cambiado el avatar exitosamente
+                                                //onSuccess()
+                                            }
+                                            .addOnFailureListener { exception ->
+                                                // Manejar errores al cambiar el partido
+                                                println("Error al cambiar el partido: $exception")
+                                            }
+
+                                    }
+                                }
+                            }
+                    }
+                }
+
+            } catch (e: Exception) {
+            }
+        }
+
+    }
     /**
      * Actualiza el número de partidos creados en Firestore.
      * Esta función actualiza el número de partidos creados por el usuario en Firestore.
@@ -155,10 +210,13 @@ class CreateMatchViewModel : ViewModel() {
      * Actualiza la fecha del partido.
      * Esta función actualiza la fecha del partido.
      *
-     * @param fecha Nueva fecha del partido.
+     * @param dia Nuevo dia del partido.
+     * @param mes Nuevo mes del partido.
+     * @param ano Nuevo año del partido.
      */
-    fun changeFecha(dia: Int, mes:Int, ano:Int) {
-        this.fecha = "$dia/$mes/$ano"
+    fun changeTimestamp(date:Date) {
+        this._timestamp =date
+
     }
     fun changeFecha(string:String) {
         this.fecha = string

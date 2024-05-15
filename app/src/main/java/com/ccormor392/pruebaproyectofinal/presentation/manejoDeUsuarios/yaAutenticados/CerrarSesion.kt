@@ -2,10 +2,14 @@ package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAuten
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContract
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +43,7 @@ import com.ccormor392.pruebaproyectofinal.navigation.Routes
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.PickImageFromGallery
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
@@ -56,7 +61,7 @@ import com.ccormor392.pruebaproyectofinal.xxlargexbold.Texto
 @Composable
 fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewModel) {
     val galleryLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { imageUri ->
+        rememberLauncherForActivityResult(PickImageFromGallery()) { imageUri ->
             imageUri?.let {
                 loginViewModel.uploadImageToStorage(imageUri)
             }
@@ -126,7 +131,7 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                             string = stringResource(id = R.string.email),
                             enabled = false // No editable
                         )
-                        Button(onClick = {galleryLauncher.launch("image/*")}) {
+                        Button(onClick = {galleryLauncher.launch()}) {
                             Text(text = "pepe")
                         }
                     }
@@ -158,3 +163,7 @@ fun showToast(context: Context, message: String) {
     ).show()
 
 }
+
+
+
+

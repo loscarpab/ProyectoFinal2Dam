@@ -11,4 +11,5 @@ val PurpleGrey40 = Color(24,29,39)
 val Pink40 = Color(0xFF7D5260)
 
 val xdark = Color(24,29,39)
+val dark = Color(37,77,50)
 val maincolor = Color(58,125,68)

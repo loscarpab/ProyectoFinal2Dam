@@ -1,13 +1,20 @@
 package com.ccormor392.pruebaproyectofinal
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.ccormor392.pruebaproyectofinal.navigation.NavManager
 import com.ccormor392.pruebaproyectofinal.presentation.amigos.AmigosViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CreateMatchViewModel
@@ -16,6 +23,8 @@ import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginVie
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidosViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirsePartidoViewModel
 import com.ccormor392.pruebaproyectofinal.ui.theme.PruebaProyectoFinalTheme
+import com.ccormor392.pruebaproyectofinal.ui.theme.xdark
+
 /**
  * Actividad principal que inicializa la aplicación.
  * Se encarga de configurar el contenido de la actividad y establecer el tema principal.
@@ -23,6 +32,7 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PruebaProyectoFinalTheme
  * Incluye la creación de los ViewModel necesarios para la gestión de la aplicación.
  */
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,6 +43,7 @@ class MainActivity : ComponentActivity() {
         val unirsePartidoViewModel: UnirsePartidoViewModel by viewModels()
         val misPartidoViewModel: MisPartidosViewModel by viewModels()
         val amigosViewModel: AmigosViewModel by viewModels()
+
 
         setContent {
             PruebaProyectoFinalTheme {

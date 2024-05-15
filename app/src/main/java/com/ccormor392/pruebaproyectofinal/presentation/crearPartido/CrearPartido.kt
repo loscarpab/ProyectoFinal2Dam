@@ -3,6 +3,9 @@ package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 import android.annotation.SuppressLint
 import android.os.Build
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,16 +42,19 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.PickImageFromGallery
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.TimePickerDialogs
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 import com.ccormor392.pruebaproyectofinal.ui.theme.xdark
+import com.google.type.DateTime
 import java.security.Timestamp
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.Calendar
 import java.util.Date
 
 /**
@@ -68,11 +74,20 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
     val dateTime = LocalDateTime.now()
     val timePickerState = rememberTimePickerState(dateTime.hour, dateTime.minute, true)
     val datePickerState = rememberDatePickerState()
-    val timestamp = java.sql.Timestamp(datePickerState.selectedDateMillis ?: System.currentTimeMillis())
+    val timestamp = java.sql.Timestamp(
+        (datePickerState.selectedDateMillis ?: System.currentTimeMillis())
+    )
     val date = Date(timestamp.time)
     val format = SimpleDateFormat("dd/MM/yy")
     val pepe = format.format(date)
 
+
+    val galleryLauncher =
+        rememberLauncherForActivityResult(PickImageFromGallery()) { imageUri ->
+            imageUri?.let {
+                partidoViewModel.uploadImageToStorage(imageUri)
+            }
+        }
 
     // Utiliza LaunchedEffect para ejecutar código cuando se lanza este composable
     LaunchedEffect(Unit) {
@@ -103,6 +118,14 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                                     timePickerState.hour,
                                     timePickerState.minute
                                 )
+                                partidoViewModel.changeTimestamp(
+                                    combinarFechaYHora(
+                                        datePickerState.selectedDateMillis
+                                            ?: System.currentTimeMillis(),
+                                        timePickerState.hour,
+                                        timePickerState.minute
+                                    )
+                                )
                                 partidoViewModel.changeHoraPicker()
                             })
 
@@ -114,6 +137,14 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                         confirmButton = {
                             Button(onClick = {
                                 partidoViewModel.changeFecha(pepe)
+                                partidoViewModel.changeTimestamp(
+                                    combinarFechaYHora(
+                                        datePickerState.selectedDateMillis
+                                            ?: System.currentTimeMillis(),
+                                        timePickerState.hour,
+                                        timePickerState.minute
+                                    )
+                                )
                                 partidoViewModel.changeDatePicker()
                             }) {
                                 Text(text = "Confirmar")
@@ -172,6 +203,9 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
                             iconName = "hora",
                             enabled = false
                         )
+                        Button(onClick = { galleryLauncher.launch() }) {
+                            androidx.compose.material.Text(text = "Subir Imagen")
+                        }
 
                         /*
                         // Campo de texto para ingresar la hora del partido
@@ -239,4 +273,20 @@ fun colorsDatePickerDialog(): DatePickerColors {
         dayInSelectionRangeContentColor = maincolor,
         dayInSelectionRangeContainerColor = maincolor
     )
+}
+
+fun combinarFechaYHora(fechaMillis: Long, hora: Int, minutos: Int): Date {
+    // Convertir la fecha de Long a Date
+    val fecha = Date(fechaMillis)
+
+    // Obtener el calendario y establecer la fecha
+    val calendario = Calendar.getInstance()
+    calendario.time = fecha
+
+    // Establecer la hora y los minutos
+    calendario.set(Calendar.HOUR_OF_DAY, hora)
+    calendario.set(Calendar.MINUTE, minutos)
+
+    // Devolver la fecha combinada
+    return calendario.time
 }

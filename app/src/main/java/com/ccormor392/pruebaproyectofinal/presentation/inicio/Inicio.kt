@@ -1,6 +1,7 @@
 package com.ccormor392.pruebaproyectofinal.presentation.inicio
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.cartapartido.CartaPartido
@@ -43,10 +45,13 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 @Composable
 fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
     val lista = inicioViewModel.listaPartidosConNombreUsuario.collectAsState()
-    // Se carga la lista de partidos al inicio de la pantalla
     LaunchedEffect(Unit) {
         inicioViewModel.pedirTodosLosPartidos()
+        Log.d("Inicio", "Lista de partidos solicitada.")
     }
+
+    // Agregar impresión de registro para el tamaño de la lista
+    Log.d("Inicio", "Tamaño de la lista de partidos: ${lista.value.size}")
     Scaffold(
         topBar = {
             MyTopBar()
@@ -75,6 +80,7 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
                     ) {
                         // Itera sobre los elementos de la lista de partidos y muestra una tarjeta para cada uno
                         items(lista.value) { partidoConNombreUsuario ->
+                            AsyncImage(model = partidoConNombreUsuario.first.foto, contentDescription = "fotopartido")
                             CartaPartido(
                                 textLugar = partidoConNombreUsuario.first.nombreSitio,
                                 textFecha = partidoConNombreUsuario.first.fecha,
