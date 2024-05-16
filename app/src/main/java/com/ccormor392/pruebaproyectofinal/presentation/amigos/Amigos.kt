@@ -20,12 +20,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.RowUser
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.TextTitlePage
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 import com.ccormor392.pruebaproyectofinal.usuarioitem.UsuarioItem
@@ -51,18 +55,20 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                     .background(PurpleGrey40),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextoTopScreenLogs(
-                    textTitulo = "Amigos",
-                    textSubtitulo = "",
-                    modifier = Modifier
+                TextTitlePage(string = "Amigos")
+                Row (
+                    Modifier
                         .fillMaxWidth()
-                        .padding(top = 24.dp)
-                )
-                MyTextField(
-                    value = amigosViewModel.nombre,
-                    onValueChange = { amigosViewModel.changeNombre(it) },
-                    string = "nombre"
-                )
+                        .padding(start = 32.dp, end = 32.dp, top = 16.dp)){
+                    MyTextField(
+                        value = amigosViewModel.nombre,
+                        onValueChange = { amigosViewModel.changeNombre(it) },
+                        iconName = "buscar",
+                        onClickSearchIcon = { amigosViewModel.buscarAmigo() },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
 
                 Row(
                     modifier = Modifier
@@ -77,6 +83,7 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                             horizontalAlignment = Alignment.Start
                         ) {
                             items(usersState.value) { user ->
+                                /*
                                 // Utiliza cada usuario para crear un elemento de la lista
                                 UsuarioItem(
                                     textUsername = user.username,
@@ -85,6 +92,9 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                                 Button(onClick = { amigosViewModel.agregarUsuario(user.userId) }) {
                                     Text(text = "Agregar")
                                 }
+
+                                 */
+                                RowUser(username = user.username, avatar = user.avatar)
                             }
                         }
 

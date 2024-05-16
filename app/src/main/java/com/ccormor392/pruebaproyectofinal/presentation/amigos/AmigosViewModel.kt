@@ -46,8 +46,9 @@ class AmigosViewModel: ViewModel() {
                             val email = document.getString("email")
                             val username = document.getString("username")
                             val partidosCreados = document.getLong("partidosCreados")
+                            val avatar = document.getString("avatar")
                             if (userId != null && email != null && username != null && partidosCreados != null) {
-                                val user = User(userId, email, username, partidosCreados, listOf())
+                                val user = User(userId, email, username, partidosCreados, listOf(), avatar?:"")
                                 userList.add(user)
                             }
                         }

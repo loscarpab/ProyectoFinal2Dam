@@ -21,7 +21,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -30,23 +34,29 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.botonmas.Property1
+import com.ccormor392.pruebaproyectofinal.infopartido.poppins
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.PickImageFromGallery
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.TextTitlePage
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
+import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 import com.ccormor392.pruebaproyectofinal.xxlargexbold.Texto
 
 /**
@@ -80,43 +90,50 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
             // Contenido principal de la pantalla
             Column(
                 Modifier
+                    .padding(top = 78.dp)
                     .fillMaxSize() // Ocupa todo el espacio disponible
-                    .padding(top = 78.dp) // Añade un espacio superior
+                    // Añade un espacio superior
                     .background(PurpleGrey40), // Fondo de color gris morado
                 horizontalAlignment = Alignment.CenterHorizontally // Alineación horizontal al centro
             ) {
                 // Título y subtítulo de la pantalla
-                TextoTopScreenLogs(
-                    textTitulo = stringResource(R.string.mi_usuario),
-                    textSubtitulo = "",
-                    modifier = Modifier
-                        .fillMaxWidth() // Ancho completo
-                        .padding(
-                            top = 24.dp,
-                            bottom = 32.dp
-                        ) // Añade un espacio superior e inferior
-                )
+                TextTitlePage(string = "Editar Perfil")
                 // Contenido central de la pantalla
                 Row(
                     modifier = Modifier
-                        .height(400.dp) // Altura fija
+                        .height(360.dp) // Altura fija
                         .fillMaxWidth(), // Ancho completo
-                    horizontalArrangement = Arrangement.Center // Alineación horizontal al centro
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically // Alineación horizontal al centro
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(), // Ocupa todo el espacio disponible
                         verticalArrangement = Arrangement.SpaceEvenly, // Espaciado vertical uniforme
                         horizontalAlignment = Alignment.CenterHorizontally // Alineación horizontal al centro
                     ) {
-                        AsyncImage(
-                            model = loginViewModel.imageUri,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .height(100.dp).width(100.dp)
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop,
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 24.dp)) {
+                            AsyncImage(
+                                model = loginViewModel.imageUri,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .height(120.dp)
+                                    .width(120.dp)
+                                    .clip(RoundedCornerShape(12.dp)),
+                                contentScale = ContentScale.Crop,
+                            )
+                            IconButton(
+                                onClick = { galleryLauncher.launch() },
+                                Modifier.padding(start = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Edit,
+                                    contentDescription = "Edit",
+                                    tint = maincolor
+                                )
+                            }
+                        }
+
                         // Campo de texto para el nombre de usuario (no editable)
                         MyTextField(
                             value = loginViewModel.usuarioAutenticado.value.username,
@@ -131,9 +148,7 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                             string = stringResource(id = R.string.email),
                             enabled = false // No editable
                         )
-                        Button(onClick = {galleryLauncher.launch()}) {
-                            Text(text = "pepe")
-                        }
+
                     }
                 }
                 // Botón para cerrar sesión
@@ -146,7 +161,7 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                         }
                     },
                     modifier = Modifier
-                        .padding(top = 64.dp)
+                        .padding(top = 48.dp)
                         .width(200.dp) // Añade un espacio superior y establece el ancho del botón
                 )
             }

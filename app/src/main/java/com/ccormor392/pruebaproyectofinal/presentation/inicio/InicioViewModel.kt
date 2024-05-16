@@ -3,6 +3,7 @@ package com.ccormor392.pruebaproyectofinal.presentation.inicio
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
+import com.ccormor392.pruebaproyectofinal.data.model.UserInicio
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,8 +29,8 @@ class InicioViewModel : ViewModel() {
 
     // MutableStateFlow para la lista de partidos con el nombre del usuario creador
     private var _listaPartidosConNombreUsuario =
-        MutableStateFlow<MutableList<Pair<Partido, String>>>(mutableListOf())
-    val listaPartidosConNombreUsuario: StateFlow<MutableList<Pair<Partido, String>>> =
+        MutableStateFlow<MutableList<Pair<Partido, UserInicio>>>(mutableListOf())
+    val listaPartidosConNombreUsuario: StateFlow<MutableList<Pair<Partido, UserInicio>>> =
         _listaPartidosConNombreUsuario
 
     /**
@@ -92,7 +93,7 @@ class InicioViewModel : ViewModel() {
      * @param id El ID del usuario.
      * @param callback Función de callback para manejar el resultado del nombre de usuario.
      */
-    private fun getNombreUserById(id: String, callback: (String) -> Unit) {
+    private fun getNombreUserById(id: String, callback: (UserInicio) -> Unit) {
         // Consultar la colección "Users" para obtener el usuario con el ID especificado
         firestore.collection("Users").whereEqualTo("userId", id).get()
             .addOnSuccessListener { querySnapshot ->
@@ -100,7 +101,9 @@ class InicioViewModel : ViewModel() {
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
                         val username = document.getString("username") ?: ""
-                        callback(username)
+                        val avatar = document.getString("avatar") ?: ""
+                        val user = UserInicio(username, avatar)
+                        callback(user)
                     }
                 }
             }
@@ -122,10 +125,10 @@ class InicioViewModel : ViewModel() {
         if (currentPartidos.isNotEmpty()) {
             currentPartidos.forEach { partido ->
                 // Obtener el nombre de usuario para el creador del partido
-                getNombreUserById(partido.creador) { nombreUsuario ->
+                getNombreUserById(partido.creador) { userInicio ->
                     // Actualizar la lista con el partido y el nombre de usuario
                     val updatedList = _listaPartidosConNombreUsuario.value.toMutableList()
-                    updatedList.add(Pair(partido, nombreUsuario))
+                    updatedList.add(Pair(partido, userInicio))
                     _listaPartidosConNombreUsuario.value = updatedList
                 }
             }
