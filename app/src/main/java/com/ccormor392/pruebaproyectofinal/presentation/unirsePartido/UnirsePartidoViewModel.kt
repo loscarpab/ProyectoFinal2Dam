@@ -102,8 +102,10 @@ class UnirsePartidoViewModel : ViewModel() {
                                 val email = document.getString("email")
                                 val username = document.getString("username")
                                 val partidosCreados = document.getLong("partidosCreados")
+                                val amigos = document.get("amigos") as List<String>
+                                val avatar = document.getString("avatar")
                                 if (userId != null && email != null && username != null && partidosCreados != null) {
-                                    val usuario = User(userId, email, username, partidosCreados)
+                                    val usuario = User(userId, email, username, partidosCreados, amigos?: mutableListOf(), avatar?:"")
                                     _users.value.add(usuario)
                                 }
                             }

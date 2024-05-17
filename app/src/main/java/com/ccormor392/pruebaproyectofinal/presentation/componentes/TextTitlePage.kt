@@ -12,14 +12,3 @@ import androidx.compose.ui.unit.sp
 import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.infopartido.poppins
 
-@Composable
-fun TextTitlePage(string: String){
-    Text(
-        text = string,
-        fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
-        fontFamily = poppins,
-        color = Color.White,
-        modifier = Modifier.padding(top = 24.dp)
-    )
-}

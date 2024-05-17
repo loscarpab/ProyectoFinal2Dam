@@ -1,6 +1,7 @@
 package com.ccormor392.pruebaproyectofinal.presentation.misPartidos
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -87,7 +88,7 @@ fun MisPartidos(navHostController: NavHostController, misPartidosViewModel: MisP
                 }
             }
             // Si se muestra la alerta de confirmación de eliminación
-            if (misPartidosViewModel.showAlert) {
+            AnimatedVisibility (misPartidosViewModel.showAlert) {
                 Alert(
                     title =stringResource(id = R.string.alerta),
                     message = stringResource(R.string.alerta_borrar),

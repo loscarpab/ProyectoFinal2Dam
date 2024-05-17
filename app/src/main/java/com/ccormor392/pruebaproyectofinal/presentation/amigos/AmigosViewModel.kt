@@ -1,7 +1,5 @@
 package com.ccormor392.pruebaproyectofinal.presentation.amigos
 
-import android.os.Debug
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,9 +25,7 @@ class AmigosViewModel: ViewModel() {
 
     private val _users = MutableStateFlow(mutableListOf<User>())
     val users: StateFlow<MutableList<User>> = _users
-    init {
-        restart()
-    }
+
     fun buscarAmigo() {
         viewModelScope.launch {
             try {
@@ -110,6 +106,51 @@ class AmigosViewModel: ViewModel() {
                 }
         }
     }
+    /**
+     * Permite al usuario eliminar a un amigo de su lista de amigos.
+     *
+     * @param idPersonaString ID de la persona que se desea desagregar.
+     */
+    fun desagregarUsuario(idPersonaString: String) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            // Verifica si el usuario está autenticado y puede eliminar un amigo
+            firestore.collection("Users")
+                .whereEqualTo("userId", userId)
+                .addSnapshotListener { querySnapshot, error ->
+                    if (error != null) {
+                        // Manejar el error aquí si es necesario
+                        println("Error al obtener los datos del usuario: $error")
+                        return@addSnapshotListener
+                    }
+                    if (querySnapshot != null) {
+                        for (document in querySnapshot) {
+                            val amigos = document.get("amigos") as? List<String>
+                            if (amigos != null && idPersonaString in amigos) {
+                                // El amigo está en la lista de amigos, se puede desagregar
+                                val userRef = firestore.collection("Users").document(document.id)
+                                userRef.update("amigos", FieldValue.arrayRemove(idPersonaString))
+                                    .addOnSuccessListener {
+                                        // El amigo se ha desagregado exitosamente
+                                        println("Amigo desagregado exitosamente.")
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        // Manejar errores al desagregar al amigo
+                                        println("Error al desagregar al amigo: $exception")
+                                    }
+                            } else {
+                                // El amigo no está en la lista de amigos
+                                println("El amigo no está en la lista de amigos.")
+                            }
+                        }
+                    }
+                }
+        } else {
+            // El usuario no está autenticado
+            println("El usuario no está autenticado.")
+        }
+    }
+
 
 
 

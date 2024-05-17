@@ -29,5 +29,7 @@
     <string name="mis_partidos">Mis Partidos</string>
     <string name="no_tienes_ningun_partido_creado">No tienes ningún partido creado</string>
     <string name="alerta_borrar">¿Estás seguro de que quieres borrar el partido?</string>
+    <string name="seguidores">Seguidores</string>
+    <string name="siguiendo">Siguiendo</string>
 
 </resources>

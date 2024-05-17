@@ -28,7 +28,8 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyScaffoldContent
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
-import com.ccormor392.pruebaproyectofinal.usuarioitem.UsuarioItem
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.RowUser
+
 /**
  * Composable que representa la pantalla para unirse a un partido existente.
  * Muestra la información del partido y la lista de jugadores, permitiendo al usuario unirse al partido.
@@ -84,7 +85,7 @@ fun UnirsePartido(
                 // Lista de jugadores que participan en el partido
                 LazyColumn(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start){
                     items(unirsePartidoViewModel.users.value){
-                        UsuarioItem(textUsername = it.username, modifier = Modifier.padding(top = 24.dp, start = 32.dp))
+                        RowUser(username = it.username, avatar = it.avatar, onClickRow = {navHostController.navigate("${Routes.MiPerfil}${it.userId}")})
                     }
                 }
             }

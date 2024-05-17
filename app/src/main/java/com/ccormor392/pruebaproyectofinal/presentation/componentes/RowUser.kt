@@ -1,10 +1,10 @@
 package com.ccormor392.pruebaproyectofinal.presentation.componentes
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,21 +29,20 @@ import com.ccormor392.pruebaproyectofinal.infopartido.poppins
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 
 @Composable
-fun RowUser(username: String, avatar: String) {
+fun RowUser(username: String, avatar: String, onClickButton: (() -> Unit)? = null, onClickRow: () -> Unit) {
     Row (
         Modifier
             .fillMaxWidth()
             .padding(horizontal = 28.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-        Row (verticalAlignment = Alignment.CenterVertically){
+        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { onClickRow() }){
             AsyncImage(
                 model = avatar,
                 contentDescription = "Avatar del usuario",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(52.dp)
-                    .padding(end = 8.dp)
                     .clip(
-                        RoundedCornerShape(20.dp)
+                        RoundedCornerShape(26.dp)
                     )
             )
             Text(
@@ -51,25 +50,30 @@ fun RowUser(username: String, avatar: String) {
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
                 fontFamily = poppins,
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
-
-        IconButton(onClick = { /*TODO*/ }) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(maincolor)
-                    .size(40.dp), contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_add_24),
-                    contentDescription = "icono agregar",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
+        if (onClickButton != null) {
+            IconButton(onClick = {
+                onClickButton()
+            }) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(maincolor)
+                        .size(40.dp), contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_add_24),
+                        contentDescription = "icono agregar",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
+
     }
 
 }

@@ -2,19 +2,12 @@ package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAuten
 
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
-import androidx.activity.result.contract.ActivityResultContract
-import android.content.Context
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,20 +16,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,18 +34,15 @@ import coil.compose.AsyncImage
 import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonmas.BotonMas
 import com.ccormor392.pruebaproyectofinal.botonmas.Property1
-import com.ccormor392.pruebaproyectofinal.infopartido.poppins
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MiTexto
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.PickImageFromGallery
-import com.ccormor392.pruebaproyectofinal.presentation.componentes.TextTitlePage
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
-import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
-import com.ccormor392.pruebaproyectofinal.xxlargexbold.Texto
 
 /**
  * Composable que representa la pantalla de cierre de sesión de usuario.
@@ -67,9 +52,8 @@ import com.ccormor392.pruebaproyectofinal.xxlargexbold.Texto
  * @param loginViewModel ViewModel que gestiona la lógica de la pantalla de cierre de sesión.
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewModel) {
+fun EditarPerfil(navController: NavHostController, loginViewModel: LoginViewModel) {
     val galleryLauncher =
         rememberLauncherForActivityResult(PickImageFromGallery()) { imageUri ->
             imageUri?.let {
@@ -97,7 +81,12 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
                 horizontalAlignment = Alignment.CenterHorizontally // Alineación horizontal al centro
             ) {
                 // Título y subtítulo de la pantalla
-                TextTitlePage(string = "Editar Perfil")
+                MiTexto(
+                    string = "Editar Perfil",
+                    modifier = Modifier.padding(top = 24.dp),
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 // Contenido central de la pantalla
                 Row(
                     modifier = Modifier
@@ -171,13 +160,6 @@ fun CerrarSesion(navController: NavHostController, loginViewModel: LoginViewMode
     )
 }
 
-fun showToast(context: Context, message: String) {
-    Toast.makeText(
-        context, message,
-        Toast.LENGTH_LONG
-    ).show()
-
-}
 
 
 

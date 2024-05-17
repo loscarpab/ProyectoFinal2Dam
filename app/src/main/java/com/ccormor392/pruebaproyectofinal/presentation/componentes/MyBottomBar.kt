@@ -14,7 +14,7 @@ fun MyBottomBar(navHostController: NavHostController) {
         onClickUsuario = {navHostController.navigate(Routes.Amigos.route)  },
         onClickIncio ={navHostController.navigate(Routes.Inicio.route)},
         onClickPartidos = {navHostController.navigate(Routes.MisPartidos.route)},
-        onClickAmigo = { navHostController.navigate(Routes.CerrarSesion.route)}
+        onClickAmigo = { navHostController.navigate(Routes.MiPerfil.route)}
     )
 }
 

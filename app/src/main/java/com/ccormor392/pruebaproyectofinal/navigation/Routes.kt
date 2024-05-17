@@ -12,7 +12,8 @@ sealed class Routes(val route: String) {
     object RegisteredManager : Routes("RegisteredManager")
     object CrearPartido : Routes("CrearPartido")
     object UnirsePartido : Routes("UnirsePartido")
-    object CerrarSesion : Routes("CerrarSesion")
+    object EditarPerfil : Routes("EditarPerfil")
     object MisPartidos : Routes("MisPartidos")
     object Amigos : Routes("Amigos")
+    object MiPerfil : Routes("MiPerfil")
 }

@@ -1,0 +1,201 @@
+package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonColors
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import com.ccormor392.pruebaproyectofinal.R
+import com.ccormor392.pruebaproyectofinal.lineaseparadoratopbar.LineaSeparadoraTopbar
+import com.ccormor392.pruebaproyectofinal.navigation.Routes
+import com.ccormor392.pruebaproyectofinal.presentation.amigos.AmigosViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MiButtonPerfil
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MiTexto
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyBottomBar
+import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
+import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
+import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
+@Composable
+fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, idUser:String? = null, amigosViewModel: AmigosViewModel? = null) {
+    val seguidores by loginViewModel.seguidores.collectAsState()
+    LaunchedEffect(Unit) {
+        loginViewModel.conseguirDatosUsuarioAutenticado(idUser)
+    }
+    Scaffold(
+        topBar = {
+            MyTopBar()
+        },
+        content = {
+            Column(
+                Modifier
+                    .padding(top = 84.dp)
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        Modifier
+                            .height(196.dp)
+                            .padding(horizontal = 24.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        AsyncImage(
+                            model = loginViewModel.imageUri,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(end = 40.dp)
+                                .height(136.dp)
+                                .width(136.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Crop,
+                        )
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(158.dp)
+                                .offset(y = (-2).dp),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            MiTexto(
+                                string = loginViewModel.usuarioAutenticado.value.username,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                ColumnaSeguidores(
+                                    texto = stringResource(R.string.seguidores),
+                                    numero = seguidores
+                                )
+                                ColumnaSeguidores(
+                                    texto = stringResource(R.string.siguiendo),
+                                    numero = loginViewModel.usuarioAutenticado.value.amigos.count()
+                                )
+
+                            }
+                            if (loginViewModel.esMiPerfil()){
+                                MiButtonPerfil(onClickButton = {navController.navigate(Routes.EditarPerfil.route)}, texto = "Editar Perfil")
+                            }
+                            else if (amigosViewModel!=null && !loginViewModel.soySeguidor){
+                                MiButtonPerfil(onClickButton = { amigosViewModel.agregarUsuario(idUser!!) }, texto = "Seguir")
+                            }
+                            else if (amigosViewModel!=null && loginViewModel.soySeguidor){
+                                MiButtonPerfil(onClickButton = { amigosViewModel.desagregarUsuario(idUser!!)
+                                }, texto = "Dejar de seguir")
+                            }
+                        }
+
+                    }
+                    LineaSeparadoraTopbar()
+
+                }
+                SingleChoiceSegmentedButtonRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                        .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
+                ) {
+                    SegmentedButton(
+                        selected = !loginViewModel.segmentedButton,
+                        onClick = { loginViewModel.changeSegmentedButton() },
+                        shape = SegmentedButtonDefaults.itemShape(
+                            index = 0,
+                            count = 2
+                        ), colors = mySegmentedButtonColors()
+                    ) {
+                        MiTexto(
+                            string = "Creados",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    SegmentedButton(
+                        selected = loginViewModel.segmentedButton,
+                        onClick = { loginViewModel.changeSegmentedButton() },
+                        shape = SegmentedButtonDefaults.itemShape(
+                            index = 1,
+                            count = 2
+                        ),
+                        colors =  mySegmentedButtonColors()
+                    ) {
+                        MiTexto(
+                            string = "Proximamente",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+
+        },
+        bottomBar = {
+            MyBottomBar(navHostController = navController)
+        }
+    )
+}
+
+@Composable
+fun ColumnaSeguidores(texto: String, numero: Int) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        MiTexto(
+            string = texto,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp)
+        )
+        MiTexto(
+            string = numero.toString(),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun mySegmentedButtonColors(): SegmentedButtonColors {
+    return SegmentedButtonDefaults.colors(
+        activeContainerColor = maincolor,
+        activeContentColor = Color.White,
+        activeBorderColor = maincolor,
+        inactiveContainerColor = Color.Transparent,
+        inactiveContentColor = maincolor,
+        inactiveBorderColor = maincolor,
+        )
+
+}

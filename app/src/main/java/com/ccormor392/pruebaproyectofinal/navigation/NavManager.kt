@@ -1,5 +1,9 @@
 package com.ccormor392.pruebaproyectofinal.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,16 +23,18 @@ import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CrearPartido
 import com.ccormor392.pruebaproyectofinal.presentation.crearPartido.CreateMatchViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.inicio.Inicio
 import com.ccormor392.pruebaproyectofinal.presentation.inicio.InicioViewModel
-import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados.CerrarSesion
+import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.sinAuntenticar.InicioSesion
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.sinAuntenticar.InicioSinRegistro
-import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.sinAuntenticar.RegisteredManager
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.sinAuntenticar.Registro
+import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados.EditarPerfil
+import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados.MiPerfil
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidos
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidosViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirsePartido
 import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirsePartidoViewModel
+
 /**
  * Gestor de navegación de la aplicación que define las rutas y las pantallas correspondientes a cada ruta.
  * También se encarga de pasar los ViewModels necesarios a las pantallas que los requieren.
@@ -38,6 +44,7 @@ import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirseParti
  * @param inicioViewModel ViewModel para la pantalla de inicio.
  * @param unirsePartidoViewModel ViewModel para la funcionalidad de unirse a un partido.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavManager(
     loginViewModel: LoginViewModel,
@@ -75,9 +82,19 @@ fun NavManager(
             // Pantalla para la creación de un nuevo partido
             CrearPartido(partidoViewModel, navController)
         }
-        composable(Routes.CerrarSesion.route) {
+        composable("${Routes.MiPerfil.route}/{idUser}", enterTransition = { slideInVertically() }, exitTransition = { slideOutVertically { it } }, arguments = listOf(
+            navArgument("idUser") { type = NavType.StringType }
+        ) ){navBackStackEntry->
             // Pantalla para cerrar sesión
-            CerrarSesion(navController, loginViewModel)
+            val idPartido = navBackStackEntry.arguments?.getString("idUser") ?: ""
+            MiPerfil(navController, loginViewModel, idPartido, amigosViewModel)
+        }
+        composable(Routes.MiPerfil.route, enterTransition = { slideInVertically ()}, exitTransition = { slideOutVertically { it } }) {
+            MiPerfil(navController, loginViewModel)
+        }
+        composable(Routes.EditarPerfil.route) {
+            // Pantalla para cerrar sesión
+            EditarPerfil(navController, loginViewModel)
         }
         composable(
             "${UnirsePartido.route}/{idPartido}/{nombreCreador}",

@@ -49,6 +49,13 @@ class LoginViewModel : ViewModel() {
         private set
     var imageUri by mutableStateOf<Uri?>(null)
         private set
+    var segmentedButton by mutableStateOf<Boolean>(true)
+        private set
+
+    private val _seguidores = MutableStateFlow(0)
+    val seguidores: StateFlow<Int> = _seguidores
+    var soySeguidor by mutableStateOf(false)
+        private set
 
     private val _usuarioAutenticado = MutableStateFlow(User("", "", ""))
     val usuarioAutenticado: StateFlow<User> = _usuarioAutenticado
@@ -121,7 +128,9 @@ class LoginViewModel : ViewModel() {
             val user = User(
                 userId = id.toString(),
                 email = email.toString(),
-                username = username
+                username = username,
+                amigos = mutableListOf(),
+                avatar = "https://firebasestorage.googleapis.com/v0/b/proyectofinal-f110d.appspot.com/o/images%2FdefaultAvatar.png?alt=media&token=36c16579-0a2e-4f75-a75b-1b2a37e6f732"
             )
             //Añade el usuario a la colección "Users" en la base de datos Firestore
             firestore.collection("Users")
@@ -226,9 +235,10 @@ class LoginViewModel : ViewModel() {
     /**
      * Recupera los datos del usuario ya autenticado
      */
-    fun conseguirDatosUsuarioAutenticado() {
+    fun conseguirDatosUsuarioAutenticado(idparam:String? =null) {
+        val idAbuscar = idparam?:auth.currentUser?.uid
         // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
-        firestore.collection("Users").whereEqualTo("userId", auth.currentUser!!.uid)
+        firestore.collection("Users").whereEqualTo("userId",idAbuscar)
             .addSnapshotListener { querySnapshot, error ->
                 if (error != null) {
                     // Manejar el error aquí si es necesario
@@ -241,14 +251,46 @@ class LoginViewModel : ViewModel() {
                         val username = document.getString("username")
                         val partidosCreados = document.getLong("partidosCreados")
                         var avatar = document.getString("avatar")
-                        if (avatar == null){
-                            avatar = ""
-                        }
+                        val amigos = document.get("amigos") as List<String>
+
                         _usuarioAutenticado.value =
-                            User(id!!, email!!, username!!, partidosCreados!!, avatar = avatar)
+                            User(id!!, email!!, username!!, partidosCreados!!, avatar = avatar?:"", amigos = amigos?: mutableListOf())
+                        if (avatar == null){
+                            avatar=""
+                        }
                         imageUri = avatar.toUri()
+                        buscarSeguidores(idAbuscar!!)
+                        soySeguidor(idAbuscar)
                     }
                 }
             }
+    }
+    private fun buscarSeguidores(idparam: String) {
+        // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
+        firestore.collection("Users").whereArrayContains("amigos",idparam)
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    // Manejar el error aquí si es necesario
+                    return@addSnapshotListener
+                }
+                _seguidores.value = querySnapshot?.count()?:0
+            }
+    }
+    private fun soySeguidor(idparam: String) {
+        // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
+        firestore.collection("Users").whereEqualTo("userId", auth.currentUser?.uid).whereArrayContains("amigos", idparam)
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    // Manejar el error aquí si es necesario
+                    return@addSnapshotListener
+                }
+                soySeguidor = !querySnapshot?.isEmpty!!
+            }
+    }
+    fun changeSegmentedButton(){
+        segmentedButton = !segmentedButton
+    }
+    fun esMiPerfil(): Boolean {
+        return auth.currentUser?.uid == usuarioAutenticado.value.userId
     }
 }
