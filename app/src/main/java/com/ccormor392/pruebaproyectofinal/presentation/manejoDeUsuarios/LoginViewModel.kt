@@ -232,64 +232,48 @@ class LoginViewModel : ViewModel() {
         onSuccess()
     }
 
-    /**
-     * Recupera los datos del usuario ya autenticado
-     */
-    fun conseguirDatosUsuarioAutenticado(idparam:String? =null) {
-        val idAbuscar = idparam?:auth.currentUser?.uid
-        // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
-        firestore.collection("Users").whereEqualTo("userId",idAbuscar)
-            .addSnapshotListener { querySnapshot, error ->
-                if (error != null) {
-                    // Manejar el error aquí si es necesario
-                    return@addSnapshotListener
-                }
-                if (querySnapshot != null) {
-                    for (document in querySnapshot) {
-                        val id = document.getString("userId")
-                        val email = document.getString("email")
-                        val username = document.getString("username")
-                        val partidosCreados = document.getLong("partidosCreados")
-                        var avatar = document.getString("avatar")
-                        val amigos = document.get("amigos") as List<String>
+    fun conseguirDatosUsuarioAutenticado(idparam: String? = null) {
+        val idAbuscar = idparam ?: auth.currentUser?.uid
+        firestore.collection("Users").whereEqualTo("userId", idAbuscar)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val id = document.getString("userId")!!
+                    val email = document.getString("email")!!
+                    val username = document.getString("username")!!
+                    val partidosCreados = document.getLong("partidosCreados")!!
+                    val avatar = document.getString("avatar") ?: ""
+                    val amigos = document.get("amigos") as? List<String> ?: mutableListOf()
 
-                        _usuarioAutenticado.value =
-                            User(id!!, email!!, username!!, partidosCreados!!, avatar = avatar?:"", amigos = amigos?: mutableListOf())
-                        if (avatar == null){
-                            avatar=""
-                        }
-                        imageUri = avatar.toUri()
-                        buscarSeguidores(idAbuscar!!)
-                        soySeguidor(idAbuscar)
-                    }
+                    _usuarioAutenticado.value = User(id, email, username, partidosCreados, amigos, avatar)
+                    imageUri = avatar.toUri()
+                    buscarSeguidores(idAbuscar!!)
+                    soySeguidor(idAbuscar)
                 }
             }
     }
+
     private fun buscarSeguidores(idparam: String) {
-        // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
-        firestore.collection("Users").whereArrayContains("amigos",idparam)
-            .addSnapshotListener { querySnapshot, error ->
-                if (error != null) {
-                    // Manejar el error aquí si es necesario
-                    return@addSnapshotListener
-                }
-                _seguidores.value = querySnapshot?.count()?:0
+        firestore.collection("Users").whereArrayContains("amigos", idparam)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                _seguidores.value = querySnapshot?.count() ?: 0
             }
     }
+
     private fun soySeguidor(idparam: String) {
-        // Realizar una consulta para obtener el documento del usuario basado en el nombre de usuario
-        firestore.collection("Users").whereEqualTo("userId", auth.currentUser?.uid).whereArrayContains("amigos", idparam)
-            .addSnapshotListener { querySnapshot, error ->
-                if (error != null) {
-                    // Manejar el error aquí si es necesario
-                    return@addSnapshotListener
-                }
-                soySeguidor = !querySnapshot?.isEmpty!!
+        firestore.collection("Users").whereEqualTo("userId", auth.currentUser?.uid)
+            .whereArrayContains("amigos", idparam)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                soySeguidor = !querySnapshot.isEmpty
             }
     }
+
     fun changeSegmentedButton(){
         segmentedButton = !segmentedButton
     }
+
     fun esMiPerfil(): Boolean {
         return auth.currentUser?.uid == usuarioAutenticado.value.userId
     }

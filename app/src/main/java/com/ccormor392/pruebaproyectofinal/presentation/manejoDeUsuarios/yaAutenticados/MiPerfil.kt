@@ -20,6 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,8 +50,25 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 @Composable
 fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, idUser:String? = null, amigosViewModel: AmigosViewModel? = null) {
     val seguidores by loginViewModel.seguidores.collectAsState()
+    val seguidoresAmigos = remember { mutableIntStateOf(0) }
+    val isFollowingState = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         loginViewModel.conseguirDatosUsuarioAutenticado(idUser)
+        amigosViewModel?.let {
+            it.checkIfFollowing(idUser!!)
+            it.isFollowing.collect { following ->
+                isFollowingState.value = following
+            }
+        }
+    }
+    LaunchedEffect(Unit) {
+        amigosViewModel?.let {
+            it.actualizarSeguidores(idUser!!)
+            it.seguidores.collect() { following ->
+                seguidoresAmigos.intValue = following
+            }
+        }
     }
     Scaffold(
         topBar = {
@@ -101,7 +121,7 @@ fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, i
                             ) {
                                 ColumnaSeguidores(
                                     texto = stringResource(R.string.seguidores),
-                                    numero = seguidores
+                                    numero = if (amigosViewModel!=null) seguidoresAmigos.intValue else seguidores
                                 )
                                 ColumnaSeguidores(
                                     texto = stringResource(R.string.siguiendo),
@@ -110,14 +130,14 @@ fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, i
 
                             }
                             if (loginViewModel.esMiPerfil()){
-                                MiButtonPerfil(onClickButton = {navController.navigate(Routes.EditarPerfil.route)}, texto = "Editar Perfil")
+                                MiButtonPerfil(onClickButton = { navController.navigate(Routes.EditarPerfil.route) }, texto = "Editar Perfil")
                             }
-                            else if (amigosViewModel!=null && !loginViewModel.soySeguidor){
-                                MiButtonPerfil(onClickButton = { amigosViewModel.agregarUsuario(idUser!!) }, texto = "Seguir")
-                            }
-                            else if (amigosViewModel!=null && loginViewModel.soySeguidor){
-                                MiButtonPerfil(onClickButton = { amigosViewModel.desagregarUsuario(idUser!!)
-                                }, texto = "Dejar de seguir")
+                            else if (amigosViewModel != null) {
+                                if (!isFollowingState.value) {
+                                    MiButtonPerfil(onClickButton = { amigosViewModel.agregarUsuario(idUser!!) }, texto = "Seguir")
+                                } else {
+                                    MiButtonPerfil(onClickButton = { amigosViewModel.desagregarUsuario(idUser!!) }, texto = "Dejar de seguir")
+                                }
                             }
                         }
 

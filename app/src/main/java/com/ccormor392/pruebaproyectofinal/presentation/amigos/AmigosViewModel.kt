@@ -1,5 +1,6 @@
 package com.ccormor392.pruebaproyectofinal.presentation.amigos
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,7 +16,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
 class AmigosViewModel: ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
@@ -26,10 +26,16 @@ class AmigosViewModel: ViewModel() {
     private val _users = MutableStateFlow(mutableListOf<User>())
     val users: StateFlow<MutableList<User>> = _users
 
+    private val _isFollowing = MutableStateFlow(false)
+    val isFollowing: StateFlow<Boolean> = _isFollowing
+
+    private val _seguidores = MutableStateFlow(0)
+    val seguidores: StateFlow<Int> = _seguidores
+
     fun buscarAmigo() {
         viewModelScope.launch {
             try {
-                val userList = mutableListOf<User>() // Lista temporal para almacenar los usuarios
+                val userList = mutableListOf<User>()
                 firestore.collection("Users")
                     .orderBy("username")
                     .startAt(nombre)
@@ -37,7 +43,6 @@ class AmigosViewModel: ViewModel() {
                     .get()
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
-                            // Recupera los datos del usuario desde Firestore
                             val userId = document.getString("userId")
                             val email = document.getString("email")
                             val username = document.getString("username")
@@ -48,7 +53,6 @@ class AmigosViewModel: ViewModel() {
                                 userList.add(user)
                             }
                         }
-                        // Asignar la nueva lista de usuarios al MutableStateFlow
                         _users.value = userList
                     }
                     .addOnFailureListener { exception ->
@@ -60,108 +64,94 @@ class AmigosViewModel: ViewModel() {
         }
     }
 
-    /**
-     * Permite al usuario unirse al partido actual.
-     *
-     * @param onSuccess Acción a realizar después de unirse exitosamente al partido.
-     */
-    fun agregarUsuario( idPersonaString: String) {
+    fun agregarUsuario(idPersonaString: String) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            // Verifica si el usuario está autenticado y puede unirse al partido
             firestore.collection("Users")
                 .whereEqualTo("userId", userId)
-                .addSnapshotListener { querySnapshot, error ->
-                    if (error != null) {
-                        // Manejar el error aquí si es necesario
-                        return@addSnapshotListener
-                    }
-                    if (querySnapshot != null) {
-                        for (document in querySnapshot) {
-                            val amigos = document.get("amigos") as? List<String>
-                            val userId = auth.currentUser?.uid
-                            if (amigos != null && userId != null && userId !in amigos) {
-                                // El usuario no está en la lista de jugadores, se puede unir al partido
-                                val partidoRef =
-                                    firestore.collection("Users").document(document.id)
-                                partidoRef.update("amigos", FieldValue.arrayUnion(idPersonaString))
-                                    .addOnSuccessListener {
-                                        // El usuario se ha unido al partido exitosamente
-                                        //onSuccess()
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        // Manejar errores al unirse al partido
-                                        println("Error al unirse al partido: $exception")
-                                    }
-                            } else if (amigos != null) {
-                                if (userId!! in amigos) {
-                                    // El usuario ya está en la lista de jugadores del partido
-                                } else {
-                                    // El usuario no está autenticado o ya está en la lista de jugadores
-                                    println("El usuario no está autenticado o ya está en la lista de jugadores.")
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val amigos = document.get("amigos") as? List<String>
+                        if (amigos != null && idPersonaString !in amigos) {
+                            val userRef = firestore.collection("Users").document(document.id)
+                            userRef.update("amigos", FieldValue.arrayUnion(idPersonaString))
+                                .addOnSuccessListener {
+                                    _isFollowing.value = true
+                                    actualizarSeguidores(idPersonaString)
+                                    Log.d("AMIGO", "Agregado correctamente")
                                 }
-                            }
+                                .addOnFailureListener { exception ->
+                                    Log.d("AMIGO", "Error al agregar al amigo: $exception")
+                                }
                         }
                     }
                 }
+                .addOnFailureListener { exception ->
+                    Log.d("AMIGO", "Error al obtener los datos del usuario: $exception")
+                }
         }
     }
-    /**
-     * Permite al usuario eliminar a un amigo de su lista de amigos.
-     *
-     * @param idPersonaString ID de la persona que se desea desagregar.
-     */
+
     fun desagregarUsuario(idPersonaString: String) {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            // Verifica si el usuario está autenticado y puede eliminar un amigo
             firestore.collection("Users")
                 .whereEqualTo("userId", userId)
-                .addSnapshotListener { querySnapshot, error ->
-                    if (error != null) {
-                        // Manejar el error aquí si es necesario
-                        println("Error al obtener los datos del usuario: $error")
-                        return@addSnapshotListener
-                    }
-                    if (querySnapshot != null) {
-                        for (document in querySnapshot) {
-                            val amigos = document.get("amigos") as? List<String>
-                            if (amigos != null && idPersonaString in amigos) {
-                                // El amigo está en la lista de amigos, se puede desagregar
-                                val userRef = firestore.collection("Users").document(document.id)
-                                userRef.update("amigos", FieldValue.arrayRemove(idPersonaString))
-                                    .addOnSuccessListener {
-                                        // El amigo se ha desagregado exitosamente
-                                        println("Amigo desagregado exitosamente.")
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        // Manejar errores al desagregar al amigo
-                                        println("Error al desagregar al amigo: $exception")
-                                    }
-                            } else {
-                                // El amigo no está en la lista de amigos
-                                println("El amigo no está en la lista de amigos.")
-                            }
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val amigos = document.get("amigos") as? List<String>
+                        if (amigos != null && idPersonaString in amigos) {
+                            val userRef = firestore.collection("Users").document(document.id)
+                            userRef.update("amigos", FieldValue.arrayRemove(idPersonaString))
+                                .addOnSuccessListener {
+                                    _isFollowing.value = false
+                                    actualizarSeguidores(idPersonaString)
+                                    Log.d("AMIGO", "Amigo desagregado exitosamente.")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.d("AMIGO", "Error al desagregar al amigo: $exception")
+                                }
                         }
                     }
                 }
-        } else {
-            // El usuario no está autenticado
-            println("El usuario no está autenticado.")
+                .addOnFailureListener { exception ->
+                    Log.d("AMIGO", "Error al obtener los datos del usuario: $exception")
+                }
         }
     }
 
+     fun actualizarSeguidores(idPersonaString: String) {
+        firestore.collection("Users").whereArrayContains("amigos", idPersonaString)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                _seguidores.value = querySnapshot.size()
+            }
+            .addOnFailureListener { exception ->
+                Log.d("AMIGO", "Error al actualizar el número de seguidores: $exception")
+            }
+    }
 
+    fun checkIfFollowing(idPersonaString: String) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            firestore.collection("Users")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val amigos = document.get("amigos") as? List<String>
+                        _isFollowing.value = amigos?.contains(idPersonaString) ?: false
+                    }
+                }
+        }
+    }
 
-
-    /**
-     * Actualiza el nombre de usuario.
-     *
-     * @param nombre Nuevo nombre de usuario a establecer.
-     */
     fun changeNombre(nombre: String) {
         this.nombre = nombre
     }
+
     fun restart(){
         _users.value = mutableListOf<User>()
         nombre = ""
