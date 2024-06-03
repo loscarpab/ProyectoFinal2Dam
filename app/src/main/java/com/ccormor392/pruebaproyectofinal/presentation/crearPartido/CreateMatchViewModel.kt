@@ -1,9 +1,6 @@
 package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 
-import android.net.Uri
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,19 +8,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
-import com.google.firebase.Timestamp
+import com.ccormor392.pruebaproyectofinal.data.model.Sitio
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.time.LocalDateTime
 import java.util.Date
 
 /**
@@ -38,7 +32,6 @@ import java.util.Date
 class CreateMatchViewModel : ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
-    private val storageRef = Firebase.storage.reference
     // Contador de partidos creados por el usuario
     private var numPartidosCreados by mutableLongStateOf(7)
 
@@ -49,16 +42,20 @@ class CreateMatchViewModel : ViewModel() {
         private set
     var hora by mutableStateOf("")
         private set
-    var nombreSitio by mutableStateOf("")
+    var sitio by mutableStateOf<Sitio>(Sitio())
         private set
-    var foto by mutableStateOf("")
-        private set
-    var imageUri by mutableStateOf<Uri?>(null)
-        private set
+
+    val query = MutableStateFlow("")
+    val active = MutableStateFlow(false)
+
+    private val _sitios = MutableStateFlow<List<Sitio>>(emptyList())
+    val sitios: StateFlow<List<Sitio>> = _sitios.asStateFlow()
     private var _showTimePicker = MutableStateFlow(false)
     var showTimePicker :StateFlow<Boolean> = _showTimePicker
     private var _showDatePicker = MutableStateFlow(false)
     var showDatePicker :StateFlow<Boolean> = _showDatePicker
+    private var _foto = MutableStateFlow("")
+    var foto :StateFlow<String> = _foto
 
     private var _timestamp by mutableStateOf(Date(System.currentTimeMillis()))
 
@@ -97,11 +94,11 @@ class CreateMatchViewModel : ViewModel() {
         viewModelScope.launch {
             val userId = auth.currentUser?.uid
             if (userId != null) {
-                if (fecha.isEmpty() || hora.isEmpty() || nombreSitio.isEmpty()) {
+                if (fecha.isEmpty() || hora.isEmpty() || sitio.nombre.isEmpty()) {
                     showAlert = true
                 } else {
                     val idPartido = userId + numPartidosCreados
-                    val partido = Partido(userId, fecha, hora, idPartido, nombreSitio = nombreSitio, timestamp = _timestamp)
+                    val partido = Partido(userId, fecha, hora, idPartido, sitio = sitio, timestamp = _timestamp)
                     try {
                         partido.jugadores += userId
                         firestore.collection("Partidos").add(partido).addOnSuccessListener {
@@ -119,50 +116,6 @@ class CreateMatchViewModel : ViewModel() {
                 Log.e("CreateMatchViewModel", "El usuario no está autenticado.")
             }
         }
-    }
-
-    fun uploadImageToStorage(filename: Uri?) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (filename != null) {
-                    var nombreArchivo = auth.currentUser?.uid + (numPartidosCreados)
-                    var uri = storageRef.child("images").child(auth.uid.toString()).child("partidos")
-                        .child(nombreArchivo).putFile(filename)
-                        .await().storage.downloadUrl.await()
-                    imageUri = uri
-                    if (imageUri != null) {
-                        firestore.collection("Partidos")
-                            .whereEqualTo("idPartido", nombreArchivo)
-                            .addSnapshotListener { querySnapshot, error ->
-                                if (error != null) {
-                                    // Manejar el error aquí si es necesario
-                                    return@addSnapshotListener
-                                }
-                                if (querySnapshot != null) {
-                                    for (document in querySnapshot) {
-                                        // El usuario no está en la lista de jugadores, se puede unir al partido
-                                        val partidoRef =
-                                            firestore.collection("Partidos").document(document.id)
-                                        partidoRef.update("foto", imageUri)
-                                            .addOnSuccessListener {
-                                                // El usuario se ha cambiado el avatar exitosamente
-                                                //onSuccess()
-                                            }
-                                            .addOnFailureListener { exception ->
-                                                // Manejar errores al cambiar el partido
-                                                println("Error al cambiar el partido: $exception")
-                                            }
-
-                                    }
-                                }
-                            }
-                    }
-                }
-
-            } catch (e: Exception) {
-            }
-        }
-
     }
     /**
      * Actualiza el número de partidos creados en Firestore.
@@ -184,6 +137,25 @@ class CreateMatchViewModel : ViewModel() {
                 }
             }
     }
+    fun getAllSitios() {
+        viewModelScope.launch {
+            try {
+                firestore.collection("Sitios").get()
+                    .addOnSuccessListener { documents ->
+                        val sitiosTemp = mutableListOf<Sitio>()
+                        for (document in documents) {
+                            var sitio = document.toObject(Sitio::class.java)
+                            sitiosTemp.add(sitio)
+                        }
+                        _sitios.value = sitiosTemp
+                    }.addOnFailureListener { exception ->
+                        println("Error al obtener el documento: $exception")
+                    }
+            } catch (e: FirebaseFirestoreException) {
+                println("Error al acceder a Firestore: ${e.message}")
+            }
+        }
+    }
 
 
     /**
@@ -192,8 +164,8 @@ class CreateMatchViewModel : ViewModel() {
      *
      * @param lugar Nuevo nombre del lugar del partido.
      */
-    fun changeLugar(lugar: String) {
-        this.nombreSitio = lugar
+    fun changeLugar(lugar: Sitio) {
+        this.sitio = lugar
     }
 
     /**
@@ -236,5 +208,31 @@ class CreateMatchViewModel : ViewModel() {
     fun changeDatePicker() {
         _showDatePicker.value = !_showDatePicker.value
     }
+    /**
+     * Actualiza la consulta de búsqueda actual.
+     *
+     * @param newQuery La nueva cadena de texto de consulta para la búsqueda.
+     */
+    fun setQuery(newQuery: String) {
+        query.value = newQuery
+    }
 
+    /**
+     * Establece si la búsqueda está activa o no.
+     *
+     * @param newActive El nuevo estado booleano que indica si la búsqueda está activa.
+     */
+    fun setActive(newActive: Boolean) {
+        active.value = newActive
+    }
+    fun setFoto(newUrl: String) {
+        _foto.value = newUrl
+    }
+    fun restart(){
+        _foto.value = "https://firebasestorage.googleapis.com/v0/b/proyectofinal-f110d.appspot.com/o/images%2FSelectImagePartido.png?alt=media&token=d50d1619-99b3-4414-a068-2c54673d5c33"
+        sitio = Sitio()
+        hora = ""
+        fecha = ""
+        query.value = ""
+    }
 }

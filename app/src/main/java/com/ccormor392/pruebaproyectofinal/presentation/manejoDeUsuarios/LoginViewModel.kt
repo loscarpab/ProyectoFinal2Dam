@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ccormor392.pruebaproyectofinal.data.model.Partido
 import com.ccormor392.pruebaproyectofinal.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 
 /**
  * ViewModel responsable de gestionar la lógica de autenticación de usuarios.
@@ -54,6 +56,12 @@ class LoginViewModel : ViewModel() {
 
     private val _seguidores = MutableStateFlow(0)
     val seguidores: StateFlow<Int> = _seguidores
+
+    private val _listaPartidosPasados = MutableStateFlow(mutableListOf<Partido>())
+    val listaPartidosPasados: StateFlow<MutableList<Partido>> = _listaPartidosPasados
+
+    private val _listaPartidosProximamente = MutableStateFlow(mutableListOf<Partido>())
+    val listaPartidosProximamente: StateFlow<MutableList<Partido>> = _listaPartidosProximamente
     var soySeguidor by mutableStateOf(false)
         private set
 
@@ -252,7 +260,31 @@ class LoginViewModel : ViewModel() {
                 }
             }
     }
+    fun recuperarPartidos(idparam: String? = null){
+        val idAbuscar = idparam ?: auth.currentUser?.uid
+        _listaPartidosPasados.value = mutableListOf()
+        _listaPartidosProximamente.value = mutableListOf()
+        viewModelScope.launch {
+            try {
+                firestore.collection("Partidos").whereEqualTo("creador", idAbuscar)
+                    .get()
+                    .addOnSuccessListener {querySnapshot ->
+                        for(document in querySnapshot){
+                            val partido = document.toObject(Partido::class.java)
+                            if (partido.timestamp <= Date(System.currentTimeMillis())){
+                                _listaPartidosPasados.value.add(partido)
+                            }
+                            else{
+                                _listaPartidosProximamente.value.add(partido)
+                            }
+                        }
+                    }
+            }catch (_:Exception){
 
+            }
+        }
+
+    }
     private fun buscarSeguidores(idparam: String) {
         firestore.collection("Users").whereArrayContains("amigos", idparam)
             .get()

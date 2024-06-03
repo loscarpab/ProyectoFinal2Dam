@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
     // Observa el StateFlow _users y conviértelo en un State que puedas utilizar
     val usersState = amigosViewModel.users.collectAsState()
+    val isLoading = amigosViewModel.isLoading.collectAsState()
     LaunchedEffect(Unit) {
         amigosViewModel.restart()
     }
@@ -79,32 +81,27 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-
-                    // Aquí accedes a la lista de usuarios desde el State
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        items(usersState.value) { user ->
-                            /*
-                            // Utiliza cada usuario para crear un elemento de la lista
-                            UsuarioItem(
-                                textUsername = user.username,
-                                modifier = Modifier.padding(top = 24.dp, start = 32.dp)
-                            )
-                            Button(onClick = { amigosViewModel.agregarUsuario(user.userId) }) {
-                                Text(text = "Agregar")
+                    if(isLoading.value && usersState.value.isNotEmpty()){
+                        CircularProgressIndicator()
+                    }
+                    else if(!isLoading.value && usersState.value.isEmpty()){
+                        MiTexto(string = "No se encontraron resultados", modifier = Modifier.padding(top = 16.dp))
+                    }
+                    else{
+                        // Aquí accedes a la lista de usuarios desde el State
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            items(usersState.value) { user ->
+                                RowUser(
+                                    username = user.username,
+                                    avatar = user.avatar,
+                                    onClickRow = { navController.navigate("${Routes.MiPerfil.route}/${user.userId}") },
+                                    onClickButton = { amigosViewModel.agregarUsuario(user.userId) })
                             }
-
-                             */
-                            RowUser(
-                                username = user.username,
-                                avatar = user.avatar,
-                                onClickRow = { navController.navigate("${Routes.MiPerfil.route}/${user.userId}") },
-                                onClickButton = { amigosViewModel.agregarUsuario(user.userId) })
                         }
                     }
-
                 }
                 BotonMas(
                     textButton = "Buscar",

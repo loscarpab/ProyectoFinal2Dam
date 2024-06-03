@@ -63,7 +63,7 @@ class MisPartidosViewModel : ViewModel() {
 
                         // Se verifica que los campos necesarios no sean nulos antes de crear el partido
                         if (creador != null && fecha != null && hora != null && idPartido != null && nombreSitio != null) {
-                            val partido = Partido(creador, fecha, hora, idPartido, jugadores, nombreSitio)
+                            val partido = Partido(creador, fecha, hora, idPartido, jugadores, nombreSitio = nombreSitio)
                             documents.add(partido)
                         }
                     }

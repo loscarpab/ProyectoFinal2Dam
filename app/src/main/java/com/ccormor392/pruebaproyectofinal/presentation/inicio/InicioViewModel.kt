@@ -72,8 +72,9 @@ class InicioViewModel : ViewModel() {
                                 hora,
                                 idPartido,
                                 jugadores as List<String>,
-                                nombreSitio,
-                                timestamp ?: Date(System.currentTimeMillis()), foto ?: ""
+                                nombreSitio = nombreSitio,
+                                timestamp = timestamp ?: Date(System.currentTimeMillis()),
+                                foto = foto ?: ""
                             )
                             documents.add(partido)
                         }

@@ -29,12 +29,16 @@ class AmigosViewModel: ViewModel() {
     private val _isFollowing = MutableStateFlow(false)
     val isFollowing: StateFlow<Boolean> = _isFollowing
 
+    private var _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     private val _seguidores = MutableStateFlow(0)
     val seguidores: StateFlow<Int> = _seguidores
 
     fun buscarAmigo() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 val userList = mutableListOf<User>()
                 firestore.collection("Users")
                     .orderBy("username")
@@ -53,6 +57,7 @@ class AmigosViewModel: ViewModel() {
                                 userList.add(user)
                             }
                         }
+                        _isLoading.value = false
                         _users.value = userList
                     }
                     .addOnFailureListener { exception ->
@@ -155,5 +160,6 @@ class AmigosViewModel: ViewModel() {
     fun restart(){
         _users.value = mutableListOf<User>()
         nombre = ""
+        _isLoading.value = true
     }
 }

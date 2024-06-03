@@ -9,10 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerColors
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -92,9 +88,9 @@ fun TimePickerDialogs(
 @OptIn(ExperimentalMaterial3Api::class)
 fun colorsTimePickerDialog():TimePickerColors{
     return TimePickerDefaults.colors(
-        clockDialColor = xdark,
+        clockDialColor = Color.White,
         selectorColor = maincolor,
-        containerColor = xdark,
+        containerColor = Color.White,
         periodSelectorBorderColor = Color.White,
         clockDialSelectedContentColor = Color.White,
         clockDialUnselectedContentColor = xdark,

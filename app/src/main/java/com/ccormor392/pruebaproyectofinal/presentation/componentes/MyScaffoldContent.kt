@@ -11,12 +11,12 @@ import androidx.compose.ui.unit.dp
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 
 @Composable
-fun MyScaffoldContent(content: @Composable () -> Unit) {
+fun MyScaffoldContent(padding:Int = 100, content: @Composable () -> Unit) {
     Column(
         Modifier
             .fillMaxSize()
             .background(PurpleGrey40)
-            .padding(top = 100.dp),
+            .padding(top = padding.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         content()

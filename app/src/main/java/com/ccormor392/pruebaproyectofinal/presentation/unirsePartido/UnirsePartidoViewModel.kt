@@ -71,7 +71,7 @@ class UnirsePartidoViewModel : ViewModel() {
                                 hora,
                                 idPartidoRecuperado,
                                 jugadores,
-                                nombreSitio,
+                                nombreSitio = nombreSitio,
                             )
                             // Recupera los nombres de los jugadores del partido
                             recuperarNombreJugadores()
