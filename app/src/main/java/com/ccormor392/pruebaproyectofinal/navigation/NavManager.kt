@@ -32,6 +32,9 @@ import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutent
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados.MiPerfil
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidos
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidosViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.Sitio
+import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.Sitios
+import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.SitiosViewModel
 import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirsePartido
 import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirsePartidoViewModel
 
@@ -52,7 +55,8 @@ fun NavManager(
     inicioViewModel: InicioViewModel,
     unirsePartidoViewModel: UnirsePartidoViewModel,
     misPartidosViewModel: MisPartidosViewModel,
-    amigosViewModel: AmigosViewModel
+    amigosViewModel: AmigosViewModel,
+    sitiosViewModel: SitiosViewModel
 ) {
     val navController = rememberNavController()
 
@@ -119,6 +123,14 @@ fun NavManager(
         composable(Routes.Amigos.route) {
             // Pantalla para ver los partidos creados
             Amigos(amigosViewModel,navController)
+        }
+        composable(Routes.Sitios.route) {
+            // Pantalla para ver los partidos creados
+            Sitios(navController, sitiosViewModel)
+        }
+        composable(Routes.Sitio.route) {
+            // Pantalla para ver los partidos creados
+            Sitio(sitiosViewModel, navController )
         }
     }
 }

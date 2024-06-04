@@ -16,4 +16,6 @@ sealed class Routes(val route: String) {
     object MisPartidos : Routes("MisPartidos")
     object Amigos : Routes("Amigos")
     object MiPerfil : Routes("MiPerfil")
+    object Sitios : Routes("Sitios")
+    object Sitio : Routes("Sitio")
 }

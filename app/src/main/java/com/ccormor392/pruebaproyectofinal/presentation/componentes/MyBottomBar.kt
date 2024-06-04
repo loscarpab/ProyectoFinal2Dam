@@ -13,7 +13,7 @@ fun MyBottomBar(navHostController: NavHostController) {
         modifier = Modifier.fillMaxWidth(),
         onClickUsuario = {navHostController.navigate(Routes.Amigos.route)  },
         onClickIncio ={navHostController.navigate(Routes.Inicio.route)},
-        onClickPartidos = {navHostController.navigate(Routes.MisPartidos.route)},
+        onClickPartidos = {navHostController.navigate(Routes.Sitios.route)},
         onClickAmigo = { navHostController.navigate(Routes.MiPerfil.route)}
     )
 }

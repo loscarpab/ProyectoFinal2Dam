@@ -23,8 +23,8 @@ class AmigosViewModel: ViewModel() {
     var nombre by mutableStateOf("")
         private set
 
-    private val _users = MutableStateFlow(mutableListOf<User>())
-    val users: StateFlow<MutableList<User>> = _users
+    private val _users = MutableStateFlow(mapOf<User, Boolean>())
+    val users: StateFlow<Map<User, Boolean>> = _users
 
     private val _isFollowing = MutableStateFlow(false)
     val isFollowing: StateFlow<Boolean> = _isFollowing
@@ -58,7 +58,7 @@ class AmigosViewModel: ViewModel() {
                             }
                         }
                         _isLoading.value = false
-                        _users.value = userList
+                        checkIfFollowing(userList)
                     }
                     .addOnFailureListener { exception ->
                         println("Error al obtener el documento: $exception")
@@ -77,13 +77,15 @@ class AmigosViewModel: ViewModel() {
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     for (document in querySnapshot) {
-                        val amigos = document.get("amigos") as? List<String>
-                        if (amigos != null && idPersonaString !in amigos) {
+                        val usuario = document.toObject(User::class.java)
+                        val amigos = usuario.amigos
+                        if (idPersonaString !in amigos) {
                             val userRef = firestore.collection("Users").document(document.id)
                             userRef.update("amigos", FieldValue.arrayUnion(idPersonaString))
                                 .addOnSuccessListener {
                                     _isFollowing.value = true
                                     actualizarSeguidores(idPersonaString)
+                                    checkIfFollowing(_users.value.keys.toMutableList())
                                     Log.d("AMIGO", "Agregado correctamente")
                                 }
                                 .addOnFailureListener { exception ->
@@ -106,13 +108,15 @@ class AmigosViewModel: ViewModel() {
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     for (document in querySnapshot) {
-                        val amigos = document.get("amigos") as? List<String>
-                        if (amigos != null && idPersonaString in amigos) {
+                        val usuario = document.toObject(User::class.java)
+                        val amigos = usuario.amigos
+                        if ( idPersonaString in amigos) {
                             val userRef = firestore.collection("Users").document(document.id)
                             userRef.update("amigos", FieldValue.arrayRemove(idPersonaString))
                                 .addOnSuccessListener {
                                     _isFollowing.value = false
                                     actualizarSeguidores(idPersonaString)
+                                    checkIfFollowing(_users.value.keys.toMutableList())
                                     Log.d("AMIGO", "Amigo desagregado exitosamente.")
                                 }
                                 .addOnFailureListener { exception ->
@@ -146,9 +150,26 @@ class AmigosViewModel: ViewModel() {
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     for (document in querySnapshot) {
-                        val amigos = document.get("amigos") as? List<String>
-                        _isFollowing.value = amigos?.contains(idPersonaString) ?: false
+                        val usuario = document.toObject(User::class.java)
+                        val amigos = usuario.amigos
+                        _isFollowing.value = amigos.contains(idPersonaString)
                     }
+                }
+        }
+    }
+    private fun checkIfFollowing(lista:MutableList<User>) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            firestore.collection("Users")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    val usuario = querySnapshot.documents[0].toObject(User::class.java)!!
+                    val amigos = usuario.amigos
+                    val ids = lista.map { it.userId }
+                    val amigosEnBusqueda = amigos.filter { it in ids }
+                    _users.value = lista.associateWith { it.userId in amigosEnBusqueda }
+                    println(_users.value)
                 }
         }
     }
@@ -158,7 +179,7 @@ class AmigosViewModel: ViewModel() {
     }
 
     fun restart(){
-        _users.value = mutableListOf<User>()
+        _users.value = mapOf()
         nombre = ""
         _isLoading.value = true
     }

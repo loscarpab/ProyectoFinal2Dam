@@ -1,6 +1,7 @@
 package com.ccormor392.pruebaproyectofinal.presentation.componentes
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +30,7 @@ import com.ccormor392.pruebaproyectofinal.infopartido.poppins
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 
 @Composable
-fun RowUser(username: String, avatar: String, onClickButton: (() -> Unit)? = null, onClickRow: () -> Unit) {
+fun RowUser(username: String, avatar: String, onClickButton: (() -> Unit)? = null, onClickRow: () -> Unit, leSigo:Boolean = false) {
     Row (
         Modifier
             .fillMaxWidth()
@@ -58,19 +59,37 @@ fun RowUser(username: String, avatar: String, onClickButton: (() -> Unit)? = nul
             IconButton(onClick = {
                 onClickButton()
             }) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(18.dp))
-                        .background(maincolor)
-                        .size(40.dp), contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_add_24),
-                        contentDescription = "icono agregar",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
+                if (leSigo){
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(18.dp))
+                            .border(2.dp, maincolor, shape = RoundedCornerShape(18.dp))
+                            .size(40.dp), contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_remove_24),
+                            contentDescription = "icono agregar",
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
+                else{
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(18.dp))
+                            .background(maincolor)
+                            .size(40.dp), contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_add_24),
+                            contentDescription = "icono agregar",
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+
             }
         }
 

@@ -1,7 +1,6 @@
 package com.ccormor392.pruebaproyectofinal.presentation.inicio
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -45,11 +44,7 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
     val lista = inicioViewModel.listaPartidosConNombreUsuario.collectAsState()
     LaunchedEffect(Unit) {
         inicioViewModel.pedirTodosLosPartidos()
-        Log.d("Inicio", "Lista de partidos solicitada.")
     }
-
-    // Agregar impresión de registro para el tamaño de la lista
-    Log.d("Inicio", "Tamaño de la lista de partidos: ${lista.value.size}")
     Scaffold(
         topBar = {
             MyTopBar()

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -93,12 +92,23 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.Start
                         ) {
-                            items(usersState.value) { user ->
-                                RowUser(
-                                    username = user.username,
-                                    avatar = user.avatar,
-                                    onClickRow = { navController.navigate("${Routes.MiPerfil.route}/${user.userId}") },
-                                    onClickButton = { amigosViewModel.agregarUsuario(user.userId) })
+                            usersState.value.forEach { (user, bool) ->
+                                item {
+                                    val lambda =
+                                    if (bool){
+                                        { amigosViewModel.desagregarUsuario(user.userId) }
+                                    }
+                                    else{
+                                        {amigosViewModel.agregarUsuario(user.userId)}
+                                    }
+                                    RowUser(
+                                        username = user.username,
+                                        avatar = user.avatar,
+                                        onClickRow = { navController.navigate("${Routes.MiPerfil.route}/${user.userId}") },
+                                        onClickButton = lambda,
+                                        leSigo = bool
+                                    )
+                                }
                             }
                         }
                     }
