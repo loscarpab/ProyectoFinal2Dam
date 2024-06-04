@@ -358,7 +358,7 @@ fun InputFields(
                     // Muestra cada sitio filtrado como un texto clickeable.
                     filterSitio.forEach {
                         Text(
-                            text = it.ubicacion.toString(),
+                            text = it.nombre.toString(),
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(bottom = 10.dp, start = 10.dp)

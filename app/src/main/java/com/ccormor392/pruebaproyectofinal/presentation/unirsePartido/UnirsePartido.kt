@@ -63,7 +63,7 @@ fun UnirsePartido(
             MyScaffoldContent {
                 // Información del partido (lugar, creador, fecha y hora)
                 InfoPartido(
-                    textLugar = unirsePartidoViewModel.partido.value.nombreSitio,
+                    textLugar = unirsePartidoViewModel.partido.value.sitio.nombre,
                     textUsername = nombreCreador,
                     textFecha = unirsePartidoViewModel.partido.value.fecha,
                     textHora = unirsePartidoViewModel.partido.value.hora,

@@ -10,9 +10,7 @@ data class Partido(
     val idPartido:String = "",
     var jugadores: List<String> = listOf(),
     val sitio: Sitio = Sitio(),
-    val nombreSitio:String = "",
     val timestamp: Date = Date(System.currentTimeMillis()),
-    val foto:String = ""
 ){
 }
 

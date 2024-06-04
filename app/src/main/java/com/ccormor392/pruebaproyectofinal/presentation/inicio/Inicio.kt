@@ -78,8 +78,8 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
                             Box (modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.Center){
                                 CardMatch(
                                     onClick = { navController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second.username}") },
-                                    imagenPartido = partidoConNombreUsuario.first.foto,
-                                    nombreLugar = partidoConNombreUsuario.first.nombreSitio,
+                                    imagenPartido = partidoConNombreUsuario.first.sitio.foto,
+                                    nombreLugar = partidoConNombreUsuario.first.sitio.nombre,
                                     fechaPartido = partidoConNombreUsuario.first.fecha,
                                     horaPartido =  partidoConNombreUsuario.first.hora,
                                     avatarUsuario =  partidoConNombreUsuario.second.avatar,

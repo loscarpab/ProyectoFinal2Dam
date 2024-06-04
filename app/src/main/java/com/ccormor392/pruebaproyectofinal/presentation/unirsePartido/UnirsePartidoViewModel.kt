@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 /**
  * ViewModel que gestiona la funcionalidad de unirse a un partido existente.
  * Proporciona la lógica para obtener información del partido, incluidos los jugadores,
@@ -56,26 +57,10 @@ class UnirsePartidoViewModel : ViewModel() {
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
                         // Recupera los datos del partido desde Firestore
-                        val jugadores = document.get("jugadores") as List<String>
-                        val creador = document.getString("creador")
-                        val fecha = document.getString("fecha")
-                        val hora = document.getString("hora")
-                        val idPartidoRecuperado = document.getString("idPartido")
-                        val nombreSitio = document.getString("nombreSitio")
+                        val partidos = document.toObject(Partido::class.java)
+                        _partido.value = partidos
+                        recuperarNombreJugadores()
 
-                        // Verifica si los campos necesarios no son nulos antes de crear el partido
-                        if (creador != null && fecha != null && hora != null && idPartidoRecuperado != null && nombreSitio != null) {
-                            _partido.value = Partido(
-                                creador,
-                                fecha,
-                                hora,
-                                idPartidoRecuperado,
-                                jugadores,
-                                nombreSitio = nombreSitio,
-                            )
-                            // Recupera los nombres de los jugadores del partido
-                            recuperarNombreJugadores()
-                        }
                     }
                 }
             }

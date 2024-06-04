@@ -211,8 +211,8 @@ fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, i
                             .padding(vertical = 8.dp), contentAlignment = Alignment.Center){
                             CardMatch(
                                 onClick = { navController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.idPartido}/${loginViewModel.usuarioAutenticado.value.username}") },
-                                imagenPartido = partidoConNombreUsuario.foto,
-                                nombreLugar = partidoConNombreUsuario.nombreSitio,
+                                imagenPartido = partidoConNombreUsuario.sitio.foto,
+                                nombreLugar = partidoConNombreUsuario.sitio.nombre,
                                 fechaPartido = partidoConNombreUsuario.fecha,
                                 horaPartido =  partidoConNombreUsuario.hora,
                                 avatarUsuario =  loginViewModel.usuarioAutenticado.value.avatar,

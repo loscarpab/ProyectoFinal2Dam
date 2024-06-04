@@ -8,7 +8,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.Date
 
 /**
  * ViewModel para la pantalla de inicio.
@@ -54,30 +53,8 @@ class InicioViewModel : ViewModel() {
                     // Iterar sobre cada documento en el snapshot
                     for (document in querySnapshot) {
                         // Obtener los campos del documento
-                        val jugadores = document.get("jugadores") as List<*>
-                        val creador = document.getString("creador")
-                        val fecha = document.getString("fecha")
-                        val hora = document.getString("hora")
-                        val idPartido = document.getString("idPartido")
-                        val nombreSitio = document.getString("nombreSitio")
-                        val timestamp = document.getDate("timestamp")
-                        val foto = document.getString("foto")
-
-                        // Verificar que todos los campos necesarios no sean nulos
-                        if (creador != null && fecha != null && hora != null && idPartido != null && nombreSitio != null) {
-                            // Crear una instancia de Partido y añadirla a la lista temporal
-                            val partido = Partido(
-                                creador,
-                                fecha,
-                                hora,
-                                idPartido,
-                                jugadores as List<String>,
-                                nombreSitio = nombreSitio,
-                                timestamp = timestamp ?: Date(System.currentTimeMillis()),
-                                foto = foto ?: ""
-                            )
-                            documents.add(partido)
-                        }
+                        val partido = document.toObject(Partido::class.java)
+                        documents.add(partido)
                     }
                 }
                 // Actualizar la lista de partidos

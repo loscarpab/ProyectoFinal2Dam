@@ -54,18 +54,8 @@ class MisPartidosViewModel : ViewModel() {
                 // Procesamiento de los documentos obtenidos de la consulta
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
-                        val jugadores = document.get("jugadores") as List<String>
-                        val creador = document.getString("creador")
-                        val fecha = document.getString("fecha")
-                        val hora = document.getString("hora")
-                        val idPartido = document.getString("idPartido")
-                        val nombreSitio = document.getString("nombreSitio")
-
-                        // Se verifica que los campos necesarios no sean nulos antes de crear el partido
-                        if (creador != null && fecha != null && hora != null && idPartido != null && nombreSitio != null) {
-                            val partido = Partido(creador, fecha, hora, idPartido, jugadores, nombreSitio = nombreSitio)
-                            documents.add(partido)
-                        }
+                        val partido =document.toObject(Partido::class.java)
+                        documents.add(partido)
                     }
                 }
                 // Se actualiza la lista de partidos con los documentos obtenidos

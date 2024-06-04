@@ -71,7 +71,7 @@ fun MisPartidos(navHostController: NavHostController, misPartidosViewModel: MisP
                     // Itera sobre los elementos de la lista de partidos y muestra una tarjeta para cada uno
                     items(misPartidosViewModel.listaMisPartidos.value) { partido ->
                         CartaPartido(
-                            textLugar = partido.nombreSitio,
+                            textLugar = partido.sitio.nombre,
                             textFecha = partido.fecha,
                             textHora = partido.hora,
                             textUsuario = partido.creador,
