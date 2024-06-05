@@ -8,7 +8,7 @@ data class Partido(
     val fecha: String = "",
     val hora: String = "",
     val idPartido:String = "",
-    var jugadores: List<String> = listOf(),
+    var jugadores: List<JugadorPartido> = listOf(),
     val sitio: Sitio = Sitio(),
     val timestamp: Date = Date(System.currentTimeMillis()),
 ){

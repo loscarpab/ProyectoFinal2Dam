@@ -7,8 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ccormor392.pruebaproyectofinal.data.model.JugadorPartido
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
 import com.ccormor392.pruebaproyectofinal.data.model.Sitio
+import com.ccormor392.pruebaproyectofinal.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -59,7 +61,9 @@ class CreateMatchViewModel : ViewModel() {
 
     private var _timestamp by mutableStateOf(Date(System.currentTimeMillis()))
 
-
+    // Flujo mutable para almacenar el usuario del partido
+    private val _user = MutableStateFlow(JugadorPartido())
+    val user: StateFlow<JugadorPartido> = _user
 
 
 
@@ -83,6 +87,21 @@ class CreateMatchViewModel : ViewModel() {
             }
         }
     }
+    /**
+     * Recupera el nombre de los jugadores del partido y los almacena en el flujo de usuarios.
+     */
+    private fun recuperarNombreJugadores(userId: String, posicion: Int = 0, equipo: Boolean = true, onSuccess: () -> Unit) {
+        firestore.collection("Users").whereEqualTo("userId", userId).get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot != null) {
+                    for (document in querySnapshot) {
+                        val usuario = document.toObject(User::class.java)
+                        _user.value = JugadorPartido(usuario.userId, usuario.username, usuario.avatar, posicion, equipo)
+                        onSuccess()
+                    }
+                }
+            }
+    }
 
     /**
      * Crea un nuevo partido.
@@ -100,14 +119,15 @@ class CreateMatchViewModel : ViewModel() {
                     val idPartido = userId + numPartidosCreados
                     val partido = Partido(userId, fecha, hora, idPartido, sitio = sitio, timestamp = _timestamp)
                     try {
-                        partido.jugadores += userId
-                        firestore.collection("Partidos").add(partido).addOnSuccessListener {
-                            numPartidosCreados++
-                            actualizarPartidosCreadosPorId(userId, numPartidosCreados)
-                            onSuccess.invoke()
-                            Log.d("CreateMatchViewModel", "Partido creado con éxito.")
+                        recuperarNombreJugadores(userId){
+                            partido.jugadores += _user.value
+                            firestore.collection("Partidos").add(partido).addOnSuccessListener {
+                                numPartidosCreados++
+                                actualizarPartidosCreadosPorId(userId, numPartidosCreados)
+                                onSuccess.invoke()
+                                Log.d("CreateMatchViewModel", "Partido creado con éxito.")
+                            }
                         }
-
                     } catch (e: Exception) {
                         Log.e("CreateMatchViewModel", "Error al crear el partido: ${e.message}")
                     }

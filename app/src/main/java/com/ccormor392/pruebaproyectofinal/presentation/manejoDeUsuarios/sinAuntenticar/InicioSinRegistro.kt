@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,7 +24,8 @@ import androidx.navigation.NavHostController
 import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonsininiciarsesion.BotonSinIniciarSesion
 import com.ccormor392.pruebaproyectofinal.logoapp.LogoApp
-import com.ccormor392.pruebaproyectofinal.navigation.Routes.*
+import com.ccormor392.pruebaproyectofinal.navigation.Routes.InicioSesion
+import com.ccormor392.pruebaproyectofinal.navigation.Routes.Registro
 import com.ccormor392.pruebaproyectofinal.xxlargexbold.poppins
 
 
@@ -67,6 +69,7 @@ fun InicioSinRegistro(navController: NavHostController) {
                     fontSize = 40.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.ExtraBold,
+                    color = Color.White,
                     lineHeight = 60.sp
                 )
 

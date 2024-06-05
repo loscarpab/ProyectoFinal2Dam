@@ -2,8 +2,8 @@ package com.ccormor392.pruebaproyectofinal.presentation.componentes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,9 +14,9 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 fun MyScaffoldContent(padding:Int = 100, content: @Composable () -> Unit) {
     Column(
         Modifier
-            .fillMaxSize()
             .background(PurpleGrey40)
-            .padding(top = padding.dp),
+            .padding(top = padding.dp)
+            .wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         content()

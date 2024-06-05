@@ -64,6 +64,8 @@ class InicioViewModel : ViewModel() {
             }
     }
 
+
+
     /**
      * Método para obtener el nombre de usuario basado en el ID del usuario.
      * Este método consulta la colección "Users" en Firestore.
