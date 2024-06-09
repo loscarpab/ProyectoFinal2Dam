@@ -45,6 +45,11 @@ fun Sitio(
     val cameraPositionState = rememberCameraPositionState{
         position = CameraPosition.fromLatLngZoom(mark, 15f)
     }
+    val tipo = when(selectedSitio.tipo){
+        "fut7" -> "Futbol 7"
+        "futsal" -> "Futbol Sala"
+        else -> "Futbol"
+    }
     Scaffold(
         // Barra superior
         topBar = { MyTopBar() },
@@ -61,7 +66,7 @@ fun Sitio(
                 )
                 Column(horizontalAlignment = Alignment.Start) {
                     MiTexto(string = selectedSitio.nombreLargo, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(top = 8.dp, start = 16.dp))
-                    MiTexto(string = selectedSitio.tipo, fontWeight = FontWeight.Medium, fontSize = 12.sp,modifier= Modifier.padding(top = 8.dp, start = 16.dp))
+                    MiTexto(string = tipo, fontWeight = FontWeight.Medium, fontSize = 12.sp,modifier= Modifier.padding(top = 8.dp, start = 16.dp))
                     HorizontalDivider(thickness = 0.5.dp, color = Color.White, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp))
                 }
                 GoogleMap(

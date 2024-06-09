@@ -89,7 +89,7 @@ dependencies {
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-    //maps
+    //map
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     val mapsComposeVersion = "4.4.1"
     implementation("com.google.maps.android:maps-compose:$mapsComposeVersion")

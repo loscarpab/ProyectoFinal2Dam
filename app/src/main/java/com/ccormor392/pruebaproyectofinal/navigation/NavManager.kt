@@ -110,7 +110,7 @@ fun NavManager(
             // Pantalla para unirse a un partido
             val idPartido = navBackStackEntry.arguments?.getString("idPartido") ?: ""
             val nombreCreador = navBackStackEntry.arguments?.getString("nombreCreador") ?: ""
-            UnirsePartido(unirsePartidoViewModel, idPartido, nombreCreador, navController)
+            UnirsePartido(unirsePartidoViewModel, sitiosViewModel,idPartido, nombreCreador, navController)
         }
         composable(CrearPartido.route) {
             // Pantalla para la creación de un nuevo partido

@@ -34,6 +34,8 @@ class UnirsePartidoViewModel : ViewModel() {
     var showAlert by mutableStateOf(false)
         private set
     var clickable by mutableStateOf(true)
+    var equipo2 by mutableStateOf<Boolean>(false)
+        private set
 
     // Flujo mutable para almacenar el partido al que se va a unir el usuario
     private val _partido = MutableStateFlow(Partido())
@@ -117,7 +119,7 @@ class UnirsePartidoViewModel : ViewModel() {
                             for (document in querySnapshot) {
                                 val partido = document.toObject(Partido::class.java)
                                 val jugadores = partido.jugadores
-                                val posiciones = jugadores.map { it.posicion }
+                                val posiciones = jugadores.filter { it.equipo == !equipo2 }.map { it.posicion }
                                 val partidoRef = firestore.collection("Partidos").document(document.id)
 
                                 if (posicion !in posiciones) {
@@ -164,7 +166,7 @@ class UnirsePartidoViewModel : ViewModel() {
                                 } else {
                                     // Manejo de la navegación si la posición ya está ocupada
                                     clickable = true
-                                    navController.navigate("${Routes.MiPerfil}${jugadores.first { it.posicion == posicion }.userId}")
+                                    navController.navigate("${Routes.MiPerfil.route}/${jugadores.filter { it.equipo == !equipo2 }.first { it.posicion == posicion }.userId}")
                                 }
                             }
                         } else {
@@ -190,12 +192,15 @@ class UnirsePartidoViewModel : ViewModel() {
         showAlert = false
     }
 
-    fun recuperarFoto(index: Int): String? {
+    fun recuperarFoto(index: Int, equipo2: Boolean): String? {
         return try {
-            _partido.value.jugadores.find { it.posicion == index }!!.avatar
+            _partido.value.jugadores.filter { it.equipo == !equipo2 }.find { it.posicion == index }!!.avatar
         } catch (e: Exception) {
             null
         }
 
+    }
+    fun changeSegmentedButton(){
+        equipo2 = !equipo2
     }
 }
