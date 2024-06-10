@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -33,13 +34,17 @@ fun CardMatch(
     fechaPartido: String,
     horaPartido: String,
     avatarUsuario: String,
-    nombreUsuario: String
+    nombreUsuario: String,
+    jugadoresInscritos:String,
+    jugadoresTotales: String,
+    paddingEnd:Dp = 0.dp
 ) {
 
     Card(
         Modifier
             .width(180.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .padding(end = paddingEnd),
         colors = CardDefaults.cardColors(containerColor = Color(10, 17, 26))
     ) {
 
@@ -94,34 +99,46 @@ fun CardMatch(
                 color = Color.White
             )
         }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 1.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = avatarUsuario,
-                contentDescription = "Avatar del usuario",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(28.dp)
-                    .width(32.dp)
-                    .padding(end = 6.dp)
-                    .clip(
-                        RoundedCornerShape(18.dp)
-                    )
-            )
+        Row (Modifier
+            .fillMaxWidth()
+            .padding(top = 1.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AsyncImage(
+                    model = avatarUsuario,
+                    contentDescription = "Avatar del usuario",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .height(28.dp)
+                        .width(32.dp)
+                        .padding(end = 6.dp)
+                        .clip(
+                            RoundedCornerShape(18.dp)
+                        )
+                )
+                Text(
+                    text = nombreUsuario,
+                    modifier = Modifier,
+                    textAlign = TextAlign.Center,
+                    fontFamily = poppins,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
+                )
+            }
             Text(
-                text = nombreUsuario,
-                modifier = Modifier,
+                text = "$jugadoresInscritos/$jugadoresTotales",
+                modifier = Modifier
+                    .padding(top = 2.dp, start = 10.dp),
                 textAlign = TextAlign.Center,
                 fontFamily = poppins,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Normal,
                 color = Color.White
             )
-
         }
+
     }
 }

@@ -216,7 +216,9 @@ fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, i
                                 fechaPartido = partidoConNombreUsuario.fecha,
                                 horaPartido =  partidoConNombreUsuario.hora,
                                 avatarUsuario =  loginViewModel.usuarioAutenticado.value.avatar,
-                                nombreUsuario = loginViewModel.usuarioAutenticado.value.username
+                                nombreUsuario = loginViewModel.usuarioAutenticado.value.username,
+                                jugadoresInscritos = partidoConNombreUsuario.jugadores.size.toString(),
+                                jugadoresTotales = if (partidoConNombreUsuario.sitio.tipo == "fut7") "14" else "10"
                             )
                         }
                     }

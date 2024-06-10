@@ -195,7 +195,11 @@ class CreateMatchViewModel : ViewModel() {
      * @param hora Nueva hora del partido.
      */
     fun changeHora(hora: Int, minutos:Int) {
-        this.hora = "$hora:$minutos"
+        var minutosstr = minutos.toString()
+        if (minutos in 0..9){
+            minutosstr = "0$minutosstr"
+        }
+        this.hora = "$hora:$minutosstr"
     }
 
     /**

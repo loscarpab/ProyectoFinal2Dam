@@ -1,9 +1,12 @@
 package com.ccormor392.pruebaproyectofinal.presentation.inicio
 
 import android.annotation.SuppressLint
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
 import com.ccormor392.pruebaproyectofinal.data.model.UserInicio
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +22,12 @@ import kotlinx.coroutines.flow.StateFlow
  */
 @Suppress("UNCHECKED_CAST")
 @SuppressLint("MutableCollectionMutableState")
-class InicioViewModel : ViewModel() {
+class InicioViewModel(application: Application) : AndroidViewModel(application) {
     // Instancia de Firestore
     private val firestore = Firebase.firestore
+    private val auth = Firebase.auth
+    @SuppressLint("StaticFieldLeak")
+    val context = getApplication<Application>().applicationContext
 
     // MutableStateFlow para la lista de partidos
     private var listaPartidos = MutableStateFlow(mutableListOf<Partido>())
@@ -113,5 +119,8 @@ class InicioViewModel : ViewModel() {
                 }
             }
         }
+    }
+    fun getUserId(): String {
+        return auth.currentUser?.uid ?: ""
     }
 }
