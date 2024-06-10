@@ -1,11 +1,11 @@
 {
   "name": "carta_partido",
-  "version": 32,
+  "version": 33,
   "source-key": {
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "115:89",
-    "version": "5740837592",
+    "version": "5964614816",
     "component-id": "3d25b61dc15e4c24dba26b917fe660af48545ef2"
   },
   "default": "variante=Blanco",
@@ -70,8 +70,8 @@
         "rules": [
           {
             "id": "top_level",
-            "padding": "8.0",
-            "border-radius": "12.0",
+            "padding": 8.0,
+            "border-radius": 12.0,
             "tap-handler": "$onClickCard",
             "children": [
               "imagen_lugar",
@@ -79,26 +79,26 @@
               "fechahora_lugar",
               "usuario"
             ],
-            "item-spacing": "2.0",
+            "item-spacing": 2.0,
             "background-color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "imagen_lugar",
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "108.0"
+                "value": 108.0
               }
             },
             "image-content": "imagen_lugar.jpeg",
@@ -109,25 +109,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "220.00000000000003",
-              "saturation": "0.3846153846153847",
-              "value": "0.15294117647058825"
+              "alpha": 1.0,
+              "hue": 220.00000000000003,
+              "saturation": 0.3846153846153847,
+              "value": 0.15294117647058825
             },
             "text-content": "$text_lugar",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -135,7 +135,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -146,15 +146,15 @@
               "fecha",
               "hora"
             ],
-            "item-spacing": "20.0",
-            "clip-content": "false"
+            "item-spacing": 20.0,
+            "clip-content": false
           },
           {
             "id": "usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -165,50 +165,50 @@
               "avatar_usuario",
               "cuadro_nombre_usuario"
             ],
-            "item-spacing": "4.0",
-            "clip-content": "false"
+            "item-spacing": 4.0,
+            "clip-content": false
           },
           {
             "id": "fecha",
             "color": {
-              "alpha": "1.0",
-              "hue": "220.00000000000003",
-              "saturation": "0.3846153846153847",
-              "value": "0.15294117647058825"
+              "alpha": 1.0,
+              "hue": 220.00000000000003,
+              "saturation": 0.3846153846153847,
+              "value": 0.15294117647058825
             },
             "text-content": "$text_fecha",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "hora",
             "color": {
-              "alpha": "1.0",
-              "hue": "220.00000000000003",
-              "saturation": "0.3846153846153847",
-              "value": "0.15294117647058825"
+              "alpha": 1.0,
+              "hue": 220.00000000000003,
+              "saturation": 0.3846153846153847,
+              "value": 0.15294117647058825
             },
             "text-content": "$text_hora",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "avatar_usuario",
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               },
               "height-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               }
             },
             "image-content": "avatar_usuario.jpeg",
@@ -219,7 +219,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -230,33 +230,33 @@
             "children": [
               "nombre_usuario"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "nombre_usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "220.00000000000003",
-              "saturation": "0.3846153846153847",
-              "value": "0.15294117647058825"
+              "alpha": 1.0,
+              "hue": 220.00000000000003,
+              "saturation": 0.3846153846153847,
+              "value": 0.15294117647058825
             },
             "text-content": "$text_usuario",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align": "left",
-            "text-size": "8.0",
-            "letter-spacing": "0.10000000149011612",
-            "line-height": "2.75",
+            "text-size": 8.0,
+            "letter-spacing": 0.10000000149011612,
+            "line-height": 2.75,
             "typeface": "Poppins"
           }
         ]
@@ -265,34 +265,34 @@
         "rules": [
           {
             "id": "top_level",
-            "padding": "8.0",
-            "border-radius": "12.0",
+            "padding": 8.0,
+            "border-radius": 12.0,
             "tap-handler": "$onClickCard",
             "children": [
               "imagen_lugar",
               "info_partido",
               "usuario"
             ],
-            "item-spacing": "2.0",
+            "item-spacing": 2.0,
             "background-color": {
-              "alpha": "1.0",
-              "hue": "212.0",
-              "saturation": "0.6",
-              "value": "0.09803921568627451"
+              "alpha": 1.0,
+              "hue": 212.0,
+              "saturation": 0.6,
+              "value": 0.09803921568627451
             },
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "imagen_lugar",
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "106.0"
+                "value": 106.0
               }
             },
             "image-content": "imagen_lugar.jpeg",
@@ -301,12 +301,12 @@
           {
             "id": "info_partido",
             "padding": {
-              "top": "2.0"
+              "top": 2.0
             },
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -316,15 +316,15 @@
               "nombre_lugar",
               "fechahora_lugar"
             ],
-            "item-spacing": "2.0",
-            "clip-content": "false"
+            "item-spacing": 2.0,
+            "clip-content": false
           },
           {
             "id": "usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -335,33 +335,33 @@
               "avatar_usuario",
               "cuadro_nombre_usuario"
             ],
-            "item-spacing": "4.0",
-            "clip-content": "false"
+            "item-spacing": 4.0,
+            "clip-content": false
           },
           {
             "id": "nombre_lugar",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_lugar",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -369,7 +369,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -380,50 +380,50 @@
               "fecha",
               "hora"
             ],
-            "item-spacing": "20.0",
-            "clip-content": "false"
+            "item-spacing": 20.0,
+            "clip-content": false
           },
           {
             "id": "fecha",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_fecha",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "hora",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_hora",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "avatar_usuario",
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               },
               "height-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               }
             },
             "image-content": "avatar_usuario.jpeg",
@@ -434,7 +434,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -445,33 +445,33 @@
             "children": [
               "nombre_usuario"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "nombre_usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_usuario",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align": "left",
-            "text-size": "8.0",
-            "letter-spacing": "0.10000000149011612",
-            "line-height": "2.75",
+            "text-size": 8.0,
+            "letter-spacing": 0.10000000149011612,
+            "line-height": 2.75,
             "typeface": "Poppins"
           }
         ]
@@ -480,8 +480,8 @@
         "rules": [
           {
             "id": "top_level",
-            "padding": "8.0",
-            "border-radius": "12.0",
+            "padding": 8.0,
+            "border-radius": 12.0,
             "tap-handler": "$onClickCard",
             "size-constraints": {
               "width-constraints": {
@@ -495,24 +495,24 @@
               "info_partido",
               "usuario"
             ],
-            "item-spacing": "2.0",
+            "item-spacing": 2.0,
             "background-color": {
-              "alpha": "1.0",
-              "hue": "212.0",
-              "saturation": "0.6",
-              "value": "0.09803921568627451"
+              "alpha": 1.0,
+              "hue": 212.0,
+              "saturation": 0.6,
+              "value": 0.09803921568627451
             },
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "info_partido",
             "padding": {
-              "top": "2.0"
+              "top": 2.0
             },
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "140.0"
+                "value": 140.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -522,15 +522,15 @@
               "nombre_lugar",
               "fechahora_lugar"
             ],
-            "item-spacing": "2.0",
-            "clip-content": "false"
+            "item-spacing": 2.0,
+            "clip-content": false
           },
           {
             "id": "usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "143.0"
+                "value": 143.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -540,33 +540,33 @@
             "children": [
               "cuadro_nombre_usuario"
             ],
-            "item-spacing": "4.0",
-            "clip-content": "false"
+            "item-spacing": 4.0,
+            "clip-content": false
           },
           {
             "id": "nombre_lugar",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "139.0"
+                "value": 139.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_lugar",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -574,7 +574,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -585,37 +585,37 @@
               "fecha",
               "hora"
             ],
-            "item-spacing": "20.0",
-            "clip-content": "false"
+            "item-spacing": 20.0,
+            "clip-content": false
           },
           {
             "id": "fecha",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_fecha",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "hora",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_hora",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -623,7 +623,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -632,32 +632,32 @@
             "children": [
               "nombre_usuario"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "nombre_usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_usuario",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "10.0",
-            "letter-spacing": "0.10000000149011612",
-            "line-height": "2.2",
+            "max-lines": -1,
+            "text-size": 10.0,
+            "letter-spacing": 0.10000000149011612,
+            "line-height": 2.2,
             "typeface": "Poppins"
           }
         ]
@@ -666,19 +666,19 @@
         "rules": [
           {
             "id": "top_level",
-            "padding": "8.0",
-            "border-radius": "12.0",
+            "padding": 8.0,
+            "border-radius": 12.0,
             "drop-shadow": {
               "color": {
-                "alpha": "0.09803921568627451",
-                "hue": "0.0",
-                "saturation": "0.0",
-                "value": "0.0"
+                "alpha": 0.09803921568627451,
+                "hue": 0.0,
+                "saturation": 0.0,
+                "value": 0.0
               },
-              "blur": "16.0",
-              "offset-x": "0.0",
-              "offset-y": "8.0",
-              "spread": "0.0",
+              "blur": 16.0,
+              "offset-x": 0.0,
+              "offset-y": 8.0,
+              "spread": 0.0,
               "blend-mode": "normal"
             },
             "tap-handler": "$onClickCard",
@@ -688,26 +688,26 @@
               "fechahora_lugar",
               "usuario"
             ],
-            "item-spacing": "2.0",
+            "item-spacing": 2.0,
             "background-color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             },
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "imagen_lugar",
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "108.0"
+                "value": 108.0
               }
             },
             "image-content": "imagen_lugar.jpeg",
@@ -718,25 +718,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_lugar",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -744,7 +744,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -755,15 +755,15 @@
               "fecha",
               "hora"
             ],
-            "item-spacing": "20.0",
-            "clip-content": "false"
+            "item-spacing": 20.0,
+            "clip-content": false
           },
           {
             "id": "usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -774,50 +774,50 @@
               "avatar_usuario",
               "cuadro_nombre_usuario"
             ],
-            "item-spacing": "4.0",
-            "clip-content": "false"
+            "item-spacing": 4.0,
+            "clip-content": false
           },
           {
             "id": "fecha",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_fecha",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "hora",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_hora",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "avatar_usuario",
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               },
               "height-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               }
             },
             "image-content": "avatar_usuario.jpeg",
@@ -828,7 +828,7 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -839,33 +839,33 @@
             "children": [
               "nombre_usuario"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "nombre_usuario",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_usuario",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align": "left",
-            "text-size": "8.0",
-            "letter-spacing": "0.10000000149011612",
-            "line-height": "2.75",
+            "text-size": 8.0,
+            "letter-spacing": 0.10000000149011612,
+            "line-height": 2.75,
             "typeface": "Poppins"
           }
         ]
@@ -875,12 +875,12 @@
           {
             "id": "top_level",
             "padding": {
-              "left": "16.0",
-              "top": "12.0",
-              "right": "16.0",
-              "bottom": "12.0"
+              "left": 16.0,
+              "top": 12.0,
+              "right": 16.0,
+              "bottom": 12.0
             },
-            "border-radius": "12.0",
+            "border-radius": 12.0,
             "tap-handler": "$onClickCard",
             "size-constraints": {
               "width-constraints": {
@@ -895,14 +895,14 @@
               "info_partido",
               "mdi:delete"
             ],
-            "item-spacing": "96.0",
+            "item-spacing": 96.0,
             "background-color": {
-              "alpha": "1.0",
-              "hue": "212.0",
-              "saturation": "0.6",
-              "value": "0.09803921568627451"
+              "alpha": 1.0,
+              "hue": 212.0,
+              "saturation": 0.6,
+              "value": 0.09803921568627451
             },
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "info_partido",
@@ -919,40 +919,40 @@
               "nombre_lugar",
               "fechahora_lugar"
             ],
-            "item-spacing": "2.0",
-            "clip-content": "false"
+            "item-spacing": 2.0,
+            "clip-content": false
           },
           {
             "id": "mdi:delete",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "24.0"
+                "value": 24.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "24.0"
+                "value": 24.0
               }
             },
-            "is-structured": "false",
+            "is-structured": false,
             "children": [
               "Vector"
             ]
           },
           {
             "id": "nombre_lugar",
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_lugar",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -971,56 +971,56 @@
               "fecha",
               "hora"
             ],
-            "item-spacing": "20.0",
-            "clip-content": "false"
+            "item-spacing": 20.0,
+            "clip-content": false
           },
           {
             "id": "fecha",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_fecha",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "hora",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_hora",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "Vector",
             "margin": {
-              "left": "5.0",
-              "top": "3.0",
-              "right": "5.0",
-              "bottom": "3.0"
+              "left": 5.0,
+              "top": 3.0,
+              "right": 5.0,
+              "bottom": 3.0
             },
             "tap-handler": "$onClickDelete",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               }
             },
             "vector-content": "vector.svg"

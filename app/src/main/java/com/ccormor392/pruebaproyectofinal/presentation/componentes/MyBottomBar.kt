@@ -11,10 +11,10 @@ import com.ccormor392.pruebaproyectofinal.navigation.Routes
 fun MyBottomBar(navHostController: NavHostController) {
     BottomBar(
         modifier = Modifier.fillMaxWidth(),
-        onClickUsuario = {navHostController.navigate(Routes.Amigos.route)  },
-        onClickIncio ={navHostController.navigate(Routes.Inicio.route)},
-        onClickPartidos = {navHostController.navigate(Routes.Sitios.route)},
-        onClickAmigo = { navHostController.navigate(Routes.MiPerfil.route)}
+        onClickUsuario = {navHostController.navigate(Routes.MiPerfil.route)  },
+        onClickInicio ={navHostController.navigate(Routes.Inicio.route)},
+        onClickExplorar = {navHostController.navigate(Routes.Sitios.route)},
+        onClickAmigos = { navHostController.navigate(Routes.Amigos.route)}
     )
 }
 

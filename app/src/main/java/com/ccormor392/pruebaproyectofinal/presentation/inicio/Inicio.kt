@@ -168,7 +168,7 @@ fun FilaInicio(lista: List<Pair<Partido, UserInicio>>, navController: NavHostCon
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = paddingTop, bottom = 20.dp),
+            .padding(start = 8.dp, end = 16.dp, top = paddingTop, bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

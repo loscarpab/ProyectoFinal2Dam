@@ -1,11 +1,11 @@
 {
   "name": "boton_mas",
-  "version": 32,
+  "version": 33,
   "source-key": {
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "129:187",
-    "version": "5740837592",
+    "version": "5964614816",
     "component-id": "d670d4e9023199696550f5993955579e2c5386ea"
   },
   "default": "Property 1=pequeño",
@@ -39,12 +39,12 @@
           {
             "id": "top_level",
             "padding": {
-              "left": "29.0",
-              "top": "8.0",
-              "right": "29.0",
-              "bottom": "8.0"
+              "left": 29.0,
+              "top": 8.0,
+              "right": 29.0,
+              "bottom": 8.0
             },
-            "border-radius": "20.0",
+            "border-radius": 20.0,
             "tap-handler": "$onClickButton",
             "size-constraints": {
               "width-constraints": {
@@ -60,22 +60,22 @@
               "Registrate"
             ],
             "background-color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             }
           },
           {
             "id": "Frame 1",
             "padding": {
-              "top": "5.5",
-              "bottom": "5.5"
+              "top": 5.5,
+              "bottom": 5.5
             },
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "19.0"
+                "value": 19.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -85,32 +85,32 @@
             "children": [
               "Vector"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "Registrate",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "200.0"
+                "value": 200.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_button",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "20.0",
-            "line-height": "1.5",
+            "text-size": 20.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -118,11 +118,11 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "19.0"
+                "value": 19.0
               }
             },
             "vector-content": "vector.svg"
@@ -134,12 +134,12 @@
           {
             "id": "top_level",
             "padding": {
-              "left": "29.0",
-              "top": "14.0",
-              "right": "29.0",
-              "bottom": "14.0"
+              "left": 29.0,
+              "top": 14.0,
+              "right": 29.0,
+              "bottom": 14.0
             },
-            "border-radius": "20.0",
+            "border-radius": 20.0,
             "tap-handler": "$onClickButton",
             "size-constraints": {
               "width-constraints": {
@@ -155,10 +155,10 @@
               "Registrate"
             ],
             "background-color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             }
           },
           {
@@ -166,11 +166,11 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "19.0"
+                "value": 19.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "19.0"
+                "value": 19.0
               }
             },
             "vector-content": "vector2.svg"
@@ -180,25 +180,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "200.0"
+                "value": 200.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_button",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "20.0",
-            "line-height": "1.5",
+            "text-size": 20.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]
@@ -208,17 +208,17 @@
           {
             "id": "top_level",
             "padding": {
-              "left": "29.0",
-              "top": "8.0",
-              "right": "29.0",
-              "bottom": "8.0"
+              "left": 29.0,
+              "top": 8.0,
+              "right": 29.0,
+              "bottom": 8.0
             },
-            "border-radius": "20.0",
+            "border-radius": 20.0,
             "tap-handler": "$onClickButton",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "proportional",
-                "value": "1.0"
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -229,10 +229,10 @@
               "Registrate"
             ],
             "background-color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             }
           },
           {
@@ -240,25 +240,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "200.0"
+                "value": 200.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_button",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "20.0",
-            "line-height": "1.5",
+            "text-size": 20.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]

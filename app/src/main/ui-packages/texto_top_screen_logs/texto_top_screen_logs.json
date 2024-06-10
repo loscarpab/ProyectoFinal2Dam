@@ -1,11 +1,11 @@
 {
   "name": "texto_top_screen_logs",
-  "version": 32,
+  "version": 33,
   "source-key": {
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "53:233",
-    "version": "5740837592",
+    "version": "5964614816",
     "component-id": "f05c240b9e24c06d0f1422c66114b777ccc41aaf"
   },
   "default": "textoTopScreenLogs",
@@ -42,33 +42,32 @@
               "Registrate",
               "Rellena los campos con tus datos para crear una cuenta"
             ],
-            "item-spacing": "16.0",
-            "clip-content": "false"
+            "item-spacing": 16.0,
+            "clip-content": false
           },
           {
             "id": "Registrate",
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "fixed",
-                "value": "248.0"
+                "sizing-mode": "proportional",
+                "value": 1.0
               },
               "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": "47.0"
+                "sizing-mode": "shrink"
               }
             },
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text-titulo",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "32.0",
-            "line-height": "1.5",
+            "max-lines": -1,
+            "text-size": 32.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -76,25 +75,24 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "280.0"
+                "value": 309.0
               },
               "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": "47.0"
+                "sizing-mode": "shrink"
               }
             },
-            "font-weight": "500.0",
+            "font-weight": 500.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text-subtitulo",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "16.0",
-            "line-height": "1.5",
+            "max-lines": -1,
+            "text-size": 16.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]
@@ -117,8 +115,8 @@
     {
       "design": "textoTopScreenLogs",
       "size": {
-        "width": 280.0,
-        "height": 110.0
+        "width": 309.0,
+        "height": 112.0
       },
       "parameters": {
         "text-titulo": "Registrate",

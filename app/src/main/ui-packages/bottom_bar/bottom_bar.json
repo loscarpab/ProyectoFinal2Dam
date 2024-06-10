@@ -1,11 +1,11 @@
 {
   "name": "bottom_bar",
-  "version": 32,
+  "version": 33,
   "source-key": {
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "29:21",
-    "version": "5740837592",
+    "version": "5964614816",
     "component-id": "0becdacbc525aabcf8886b809257b16a36d784ea"
   },
   "default": "BottomBar",
@@ -22,15 +22,15 @@
       },
       {
         "type": "group",
-        "id": "IconoMisPartidos"
-      },
-      {
-        "type": "group",
-        "id": "IconoUsuario"
+        "id": "IconoExploras"
       },
       {
         "type": "group",
         "id": "IconoAmigos"
+      },
+      {
+        "type": "group",
+        "id": "IconoUsuario"
       },
       {
         "type": "image",
@@ -41,28 +41,36 @@
         "id": "InicioText"
       },
       {
-        "type": "image",
-        "id": "campofutbol"
+        "type": "group",
+        "id": "Frame 2"
       },
       {
         "type": "text",
-        "id": "PartidosText"
+        "id": "explorarText"
+      },
+      {
+        "type": "vector",
+        "id": "Vectorbr2"
+      },
+      {
+        "type": "vector",
+        "id": "Vectorbr1"
       },
       {
         "type": "image",
-        "id": "usuario"
-      },
-      {
-        "type": "text",
-        "id": "UsuarioText"
-      },
-      {
-        "type": "image",
-        "id": "imageamigo"
+        "id": "imageuser"
       },
       {
         "type": "text",
         "id": "AmigosText"
+      },
+      {
+        "type": "image",
+        "id": "imageuser2"
+      },
+      {
+        "type": "text",
+        "id": "UsuarioText"
       }
     ],
     "modes": {
@@ -71,14 +79,15 @@
           {
             "id": "top_level",
             "padding": {
-              "left": "27.0",
-              "top": "10.0",
-              "right": "27.0",
-              "bottom": "16.0"
+              "left": 27.0,
+              "top": 10.0,
+              "right": 27.0,
+              "bottom": 16.0
             },
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "shrink"
+                "sizing-mode": "proportional",
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -88,25 +97,26 @@
             "cross-axis-align": "start",
             "children": [
               "IconoInicio",
-              "IconoMisPartidos",
-              "IconoUsuario",
-              "IconoAmigos"
+              "IconoExploras",
+              "IconoAmigos",
+              "IconoUsuario"
             ],
-            "item-spacing": "53.0",
+            "item-spacing": 18.0,
             "background-color": {
-              "alpha": "1.0",
-              "hue": "139.5",
-              "saturation": "0.5194805194805194",
-              "value": "0.30196078431372547"
+              "alpha": 1.0,
+              "hue": 139.5,
+              "saturation": 0.5194805194805194,
+              "value": 0.30196078431372547
             },
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "IconoInicio",
-            "tap-handler": "$onClickIncio",
+            "tap-handler": "$onClickInicio",
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "shrink"
+                "sizing-mode": "proportional",
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
@@ -116,74 +126,77 @@
               "image 2",
               "InicioText"
             ],
-            "item-spacing": "6.0",
-            "clip-content": "false"
+            "item-spacing": 6.0,
+            "clip-content": false
           },
           {
-            "id": "IconoMisPartidos",
-            "tap-handler": "$onClickPartidos",
+            "id": "IconoExploras",
+            "tap-handler": "$onClickExplorar",
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "shrink"
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 53.0
+              }
+            },
+            "children": [
+              "Frame 2",
+              "explorarText"
+            ],
+            "item-spacing": 6.0,
+            "clip-content": false
+          },
+          {
+            "id": "IconoAmigos",
+            "tap-handler": "$onClickAmigos",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "main-axis-align": "end",
             "children": [
-              "campofutbol",
-              "PartidosText"
+              "imageuser",
+              "AmigosText"
             ],
-            "item-spacing": "6.0",
-            "clip-content": "false"
+            "item-spacing": 6.0,
+            "clip-content": false
           },
           {
             "id": "IconoUsuario",
             "tap-handler": "$onClickUsuario",
             "size-constraints": {
               "width-constraints": {
-                "sizing-mode": "shrink"
+                "sizing-mode": "proportional",
+                "value": 1.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
             "children": [
-              "usuario",
+              "imageuser2",
               "UsuarioText"
             ],
-            "item-spacing": "6.0",
-            "clip-content": "false"
-          },
-          {
-            "id": "IconoAmigos",
-            "tap-handler": "$onClickAmigo",
-            "size-constraints": {
-              "width-constraints": {
-                "sizing-mode": "shrink"
-              },
-              "height-constraints": {
-                "sizing-mode": "shrink"
-              }
-            },
-            "children": [
-              "imageamigo",
-              "AmigosText"
-            ],
-            "item-spacing": "6.0",
-            "clip-content": "false"
+            "item-spacing": 6.0,
+            "clip-content": false
           },
           {
             "id": "image 2",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "32.0"
+                "value": 32.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "32.0"
+                "value": 32.0
               }
             },
             "image-content": "image_2.png",
@@ -191,151 +204,149 @@
           },
           {
             "id": "InicioText",
-            "size-constraints": {
-              "width-constraints": {
-                "sizing-mode": "fixed",
-                "value": "40.0"
-              },
-              "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": "10.0"
-              }
-            },
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "Inicio",
             "overflow": "visible",
-            "max-lines": "-1",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
-            "id": "campofutbol",
+            "id": "Frame 2",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "36.79999923706055"
+                "value": 32.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "32.0"
+                "value": 32.0
               }
             },
-            "image-content": "campofutbol.png",
-            "scale": "contain"
+            "is-structured": false,
+            "children": [
+              "Vectorbr2",
+              "Vectorbr1"
+            ],
+            "clip-content": false
           },
           {
-            "id": "PartidosText",
-            "size-constraints": {
-              "width-constraints": {
-                "sizing-mode": "fixed",
-                "value": "62.0"
-              },
-              "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": "10.0"
-              }
-            },
+            "id": "explorarText",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
-            "text-content": "Mis Partidos",
+            "text-content": "Explorar",
             "overflow": "visible",
-            "max-lines": "-1",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
-            "id": "usuario",
+            "id": "Vectorbr2",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "32.0"
+                "value": 32.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "32.0"
+                "value": 32.0
               }
             },
-            "image-content": "usuario.png",
+            "vector-content": "vectorbr2.svg"
+          },
+          {
+            "id": "Vectorbr1",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 7.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 7.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 18.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 17.0
+              }
+            },
+            "vector-content": "vectorbr1.svg"
+          },
+          {
+            "id": "imageuser",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 32.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 32.0
+              }
+            },
+            "image-content": "imageuser.png",
             "scale": "contain"
-          },
-          {
-            "id": "UsuarioText",
-            "size-constraints": {
-              "width-constraints": {
-                "sizing-mode": "fixed",
-                "value": "40.0"
-              },
-              "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": "10.0"
-              }
-            },
-            "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
-            },
-            "text-content": "Amigos",
-            "overflow": "visible",
-            "max-lines": "-1",
-            "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
-            "typeface": "Poppins"
-          },
-          {
-            "id": "imageamigo",
-            "size-constraints": {
-              "width-constraints": {
-                "sizing-mode": "fixed",
-                "value": "32.0"
-              },
-              "height-constraints": {
-                "sizing-mode": "fixed",
-                "value": "32.0"
-              }
-            },
-            "image-content": "imageamigo.png",
-            "scale": "cover"
           },
           {
             "id": "AmigosText",
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "Amigos",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": 10.0,
+            "line-height": 1.5,
+            "typeface": "Poppins"
+          },
+          {
+            "id": "imageuser2",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "40.0"
+                "value": 32.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "10.0"
+                "value": 32.0
               }
             },
+            "image-content": "imageuser2.png",
+            "scale": "cover"
+          },
+          {
+            "id": "UsuarioText",
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "Usuario",
             "overflow": "visible",
-            "max-lines": "-1",
             "text-align-vertical": "center",
-            "text-size": "10.0",
-            "line-height": "1.5",
+            "text-size": 10.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]
@@ -343,22 +354,22 @@
     }
   },
   "parameters": {
-    "onClickIncio": {
+    "onClickInicio": {
       "data-type": "void-callback",
       "required": false,
       "description": ""
     },
-    "onClickPartidos": {
+    "onClickExplorar": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "onClickAmigos": {
       "data-type": "void-callback",
       "required": false,
       "description": ""
     },
     "onClickUsuario": {
-      "data-type": "void-callback",
-      "required": false,
-      "description": ""
-    },
-    "onClickAmigo": {
       "data-type": "void-callback",
       "required": false,
       "description": ""
@@ -368,8 +379,8 @@
     {
       "design": "BottomBar",
       "size": {
-        "width": 395.0,
-        "height": 74.0
+        "width": 387.0,
+        "height": 79.0
       }
     }
   ],

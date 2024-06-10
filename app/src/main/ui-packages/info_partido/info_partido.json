@@ -1,11 +1,11 @@
 {
   "name": "info_partido",
-  "version": 32,
+  "version": 33,
   "source-key": {
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "191:294",
-    "version": "5740837592",
+    "version": "5964614816",
     "component-id": "4acf8204d84b6a817d01e892f790fd9a7c8e0898"
   },
   "default": "InfoPartido",
@@ -55,23 +55,23 @@
               "infoPartido",
               "Nombre de usuario"
             ],
-            "item-spacing": "2.0",
-            "clip-content": "false"
+            "item-spacing": 2.0,
+            "clip-content": false
           },
           {
             "id": "Pabellón Centro Histórico",
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_lugar",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "20.0",
-            "line-height": "1.5",
+            "text-size": 20.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -91,56 +91,56 @@
               "27/03/24",
               "88:88"
             ],
-            "item-spacing": "6.0",
-            "clip-content": "false"
+            "item-spacing": 6.0,
+            "clip-content": false
           },
           {
             "id": "Nombre de usuario",
-            "font-weight": "500.0",
+            "font-weight": 500.0,
             "color": {
-              "alpha": "0.8980392156862745",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 0.8980392156862745,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_username",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "12.0",
-            "line-height": "1.5",
+            "text-size": 12.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "27/03/24",
-            "font-weight": "500.0",
+            "font-weight": 500.0,
             "color": {
-              "alpha": "0.8980392156862745",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 0.8980392156862745,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_fecha",
             "overflow": "visible",
             "text-align": "left",
             "text-align-vertical": "center",
-            "text-size": "12.0",
-            "line-height": "1.5",
+            "text-size": 12.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
             "id": "88:88",
-            "font-weight": "500.0",
+            "font-weight": 500.0,
             "color": {
-              "alpha": "0.8980392156862745",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 0.8980392156862745,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text_hora",
             "overflow": "visible",
             "text-align-vertical": "center",
-            "text-size": "12.0",
-            "line-height": "1.5",
+            "text-size": 12.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]

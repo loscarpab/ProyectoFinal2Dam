@@ -1,7 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.android")
     //Figma
-    id("com.google.relay") version "0.3.02"
+    id("com.google.relay") version "0.3.12"
     id("com.android.application")
     //Firebase
     id("com.google.gms.google-services")

@@ -1,11 +1,11 @@
 {
   "name": "boton_sin_iniciar_sesion",
-  "version": 32,
+  "version": 33,
   "source-key": {
     "type": "figma",
     "file": "xhJqFSFooT82RYKVoHA0N5",
     "node": "53:95",
-    "version": "5740837592",
+    "version": "5964614816",
     "component-id": "3762f998e8336e5a65de157884542d2d538d69ca"
   },
   "default": "tipo=normal",
@@ -22,7 +22,7 @@
       },
       {
         "type": "group",
-        "id": "IniciarSesion"
+        "id": "BotonSinIniciarSesion/IniciarSesion"
       },
       {
         "type": "text",
@@ -52,20 +52,20 @@
             },
             "children": [
               "Boton",
-              "IniciarSesion"
+              "BotonSinIniciarSesion/IniciarSesion"
             ],
-            "item-spacing": "8.0",
-            "clip-content": "false"
+            "item-spacing": 8.0,
+            "clip-content": false
           },
           {
             "id": "Boton",
             "padding": {
-              "left": "41.0",
-              "top": "14.0",
-              "right": "41.0",
-              "bottom": "14.0"
+              "left": 41.0,
+              "top": 14.0,
+              "right": 41.0,
+              "bottom": 14.0
             },
-            "border-radius": "20.0",
+            "border-radius": 20.0,
             "tap-handler": "$onClickButton",
             "size-constraints": {
               "width-constraints": {
@@ -80,14 +80,14 @@
               "Registrate"
             ],
             "background-color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             }
           },
           {
-            "id": "IniciarSesion",
+            "id": "BotonSinIniciarSesion/IniciarSesion",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "shrink"
@@ -101,32 +101,32 @@
               "¿Ya tienes cuenta?",
               "Inicia sesión"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "Registrate",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "200.0"
+                "value": 200.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text-boton",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "20.0",
-            "line-height": "1.5",
+            "text-size": 20.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -134,25 +134,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "153.0"
+                "value": 153.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text-subButton-notClickable",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "15.0",
-            "line-height": "1.5",
+            "max-lines": -1,
+            "text-size": 15.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -161,25 +161,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "103.0"
+                "value": 103.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             },
             "text-content": "$text-subButton-Clickable",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "15.0",
-            "line-height": "1.5",
+            "max-lines": -1,
+            "text-size": 15.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]
@@ -198,20 +198,20 @@
             },
             "children": [
               "Boton",
-              "IniciarSesion"
+              "BotonSinIniciarSesion/IniciarSesion"
             ],
-            "item-spacing": "8.0",
-            "clip-content": "false"
+            "item-spacing": 8.0,
+            "clip-content": false
           },
           {
             "id": "Boton",
             "padding": {
-              "left": "71.0",
-              "top": "8.0",
-              "right": "71.0",
-              "bottom": "8.0"
+              "left": 71.0,
+              "top": 8.0,
+              "right": 71.0,
+              "bottom": 8.0
             },
-            "border-radius": "20.0",
+            "border-radius": 20.0,
             "tap-handler": "$onClickButton",
             "size-constraints": {
               "width-constraints": {
@@ -226,14 +226,14 @@
               "Registrate"
             ],
             "background-color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             }
           },
           {
-            "id": "IniciarSesion",
+            "id": "BotonSinIniciarSesion/IniciarSesion",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "shrink"
@@ -247,32 +247,32 @@
               "¿Ya tienes cuenta?",
               "Inicia sesión"
             ],
-            "clip-content": "false"
+            "clip-content": false
           },
           {
             "id": "Registrate",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "140.0"
+                "value": 140.0
               },
               "height-constraints": {
                 "sizing-mode": "shrink"
               }
             },
-            "font-weight": "700.0",
+            "font-weight": 700.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text-boton",
             "overflow": "visible",
-            "max-lines": "-1",
+            "max-lines": -1,
             "text-align-vertical": "center",
-            "text-size": "20.0",
-            "line-height": "1.5",
+            "text-size": 20.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -280,25 +280,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "153.0"
+                "value": 153.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "1.0"
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
             },
             "text-content": "$text-subButton-notClickable",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "15.0",
-            "line-height": "1.5",
+            "max-lines": -1,
+            "text-size": 15.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           },
           {
@@ -307,25 +307,25 @@
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "fixed",
-                "value": "103.0"
+                "value": 103.0
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "22.0"
+                "value": 22.0
               }
             },
-            "font-weight": "600.0",
+            "font-weight": 600.0,
             "color": {
-              "alpha": "1.0",
-              "hue": "128.955223880597",
-              "saturation": "0.5359999999999999",
-              "value": "0.49019607843137253"
+              "alpha": 1.0,
+              "hue": 128.955223880597,
+              "saturation": 0.5359999999999999,
+              "value": 0.49019607843137253
             },
             "text-content": "$text-subButton-Clickable",
             "overflow": "visible",
-            "max-lines": "-1",
-            "text-size": "15.0",
-            "line-height": "1.5",
+            "max-lines": -1,
+            "text-size": 15.0,
+            "line-height": 1.5,
             "typeface": "Poppins"
           }
         ]
