@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Date
+import java.util.Locale
 
 /**
  * ViewModel responsable de gestionar la lógica de autenticación de usuarios.
@@ -42,6 +43,8 @@ class LoginViewModel : ViewModel() {
     private val storageRef = Firebase.storage.reference
 
     var showAlert by mutableStateOf(false)
+        private set
+    var showLoading by mutableStateOf(false)
         private set
     var email by mutableStateOf("")
         private set
@@ -77,6 +80,7 @@ class LoginViewModel : ViewModel() {
      * @param onSuccess Acción a ejecutar si el inicio de sesión es exitoso.
      */
     fun login(onSuccess: () -> Unit) {
+        showLoading = true
         viewModelScope.launch {
             try {
                 // Utiliza el servicio de autenticación de Firebase para validar al usuario por email y contraseña
@@ -86,10 +90,12 @@ class LoginViewModel : ViewModel() {
                             onSuccess()
                         } else {
                             Log.d("ERROR EN FIREBASE", "Usuario y/o contrasena incorrectos")
+                            showLoading = false
                             showAlert = true
                         }
                     }
             } catch (e: Exception) {
+                showLoading = false
                 Log.d("ERROR EN JETPACK", "ERROR: ${e.localizedMessage}")
             }
         }
@@ -103,6 +109,7 @@ class LoginViewModel : ViewModel() {
      * @param onSuccess Acción a ejecutar si el registro es exitoso.
      */
     fun createUser(onSuccess: () -> Unit) {
+        showLoading = true
         viewModelScope.launch {
             try {
                 //Utiliza el servicio de autenticación de Firebase para registrar al usuario por email y contraseña
@@ -110,14 +117,17 @@ class LoginViewModel : ViewModel() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             //Si se realiza con éxito, almacenamos el usuario en la colección "Users"
-                            saveUser(userName)
+                            saveUser(userName.lowercase(Locale.ROOT))
+                            showLoading = false
                             onSuccess()
                         } else {
                             Log.d("ERROR EN FIREBASE", "Error al crear usuario")
                             showAlert = true
+                            showLoading = false
                         }
                     }
             } catch (e: Exception) {
+                showLoading = false
                 Log.d("ERROR CREAR USUARIO", "ERROR: ${e.localizedMessage}")
             }
         }
@@ -152,15 +162,18 @@ class LoginViewModel : ViewModel() {
                 .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
         }
     }
+    fun isAdmin():Boolean{
+        val email = auth.currentUser?.email
+        return email == "admin@admin.com"
+    }
 
 
     fun uploadImageToStorage(filename: Uri?) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (filename != null) {
-                    var ultimabarra = filename.toString().lastIndexOf("%2F") + 3
                     var uri = storageRef.child("images").child(auth.uid.toString())
-                        .child(filename.toString().substring(ultimabarra)).putFile(filename)
+                        .child("${auth.uid.toString()}foto").putFile(filename)
                         .await().storage.downloadUrl.await()
                     imageUri = uri
                     if (imageUri != null) {

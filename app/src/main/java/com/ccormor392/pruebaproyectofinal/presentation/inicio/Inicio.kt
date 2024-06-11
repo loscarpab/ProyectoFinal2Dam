@@ -73,7 +73,7 @@ import java.util.Date
 fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
     val lista = inicioViewModel.listaPartidosConNombreUsuario.collectAsState()
     val locationPermissionState = rememberPermissionState(
-        android.Manifest.permission.ACCESS_COARSE_LOCATION
+        android.Manifest.permission.ACCESS_FINE_LOCATION
     )
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(inicioViewModel.context) }
     var location by remember { mutableStateOf<Location?>(null) }

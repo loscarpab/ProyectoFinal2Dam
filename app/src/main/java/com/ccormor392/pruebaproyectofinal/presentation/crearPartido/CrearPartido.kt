@@ -2,6 +2,7 @@ package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
@@ -9,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -185,7 +187,10 @@ fun MainContent(
         // Botón para crear un nuevo partido
         BotonMas(
             textButton = "Crea un partido", onClickButton = {
-                partidoViewModel.crearPartido { navController.navigate(Routes.Inicio.route) }
+                partidoViewModel.crearPartido {
+                    navController.navigate(Routes.Inicio.route)
+                    Toast.makeText(partidoViewModel.context, "Partido creado con éxito", Toast.LENGTH_SHORT)
+                }
             }, modifier = Modifier.padding(top = 32.dp) // Padding superior
         )
 
@@ -357,18 +362,18 @@ fun InputFields(
                     val filterSitio = sitios.filter { it.nombre.contains(query, ignoreCase = true) }
                     // Muestra cada sitio filtrado como un texto clickeable.
                     filterSitio.forEach {
-                        Text(
-                            text = it.nombre.toString(),
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .padding(bottom = 10.dp, start = 10.dp)
-                                .clickable {
-                                    partidoViewModel.setQuery(it.nombre)
-                                    partidoViewModel.changeLugar(it)
-                                    partidoViewModel.setActive(false)
-                                    partidoViewModel.setFoto(it.foto)
-                                }
-                        )
+                        Row (Modifier.padding(vertical = 8.dp, horizontal = 16.dp).fillMaxWidth().clickable {
+                            partidoViewModel.setQuery(it.nombre)
+                            partidoViewModel.changeLugar(it)
+                            partidoViewModel.setActive(false)
+                            partidoViewModel.setFoto(it.foto)
+                        }){
+                            Text(
+                                text = it.nombre.toString(),
+                                fontSize = 16.sp
+                            )
+                        }
+
                     }
                 }
             }

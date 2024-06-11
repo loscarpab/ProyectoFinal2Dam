@@ -6,6 +6,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -26,6 +28,7 @@ import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.logoapp.poppins
 import com.ccormor392.pruebaproyectofinal.ui.theme.xdark
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextField(
     value: String,
@@ -38,6 +41,7 @@ fun MyTextField(
     string: String? = null,
     enabled: Boolean = true,
     iconName: String = "",
+    desplegado:Boolean? = null,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
 
@@ -101,6 +105,11 @@ fun MyTextField(
                                 tint = xdark
                             )
                         }
+                    }
+                }
+                "desplegado" -> {
+                    if (desplegado != null){
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = desplegado)
                     }
                 }
             }

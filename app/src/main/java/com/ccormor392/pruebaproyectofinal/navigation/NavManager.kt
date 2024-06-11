@@ -32,6 +32,7 @@ import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutent
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados.MiPerfil
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidos
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.MisPartidosViewModel
+import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.Peticion
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.Sitio
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.Sitios
 import com.ccormor392.pruebaproyectofinal.presentation.misPartidos.SitiosViewModel
@@ -126,11 +127,15 @@ fun NavManager(
         }
         composable(Routes.Sitios.route) {
             // Pantalla para ver los partidos creados
-            Sitios(navController, sitiosViewModel)
+            Sitios(navController, sitiosViewModel, loginViewModel)
         }
         composable(Routes.Sitio.route) {
             // Pantalla para ver los partidos creados
             Sitio(sitiosViewModel, navController )
+        }
+        composable(Routes.Peticion.route) {
+            // Pantalla para ver los partidos creados
+            Peticion(navController,sitiosViewModel, loginViewModel)
         }
     }
 }

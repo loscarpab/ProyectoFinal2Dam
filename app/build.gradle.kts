@@ -91,7 +91,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     //map
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
     val mapsComposeVersion = "4.4.1"
     implementation("com.google.maps.android:maps-compose:$mapsComposeVersion")
     // Google Maps Compose utility library
@@ -99,6 +99,7 @@ dependencies {
     // Google Maps Compose widgets library
     implementation("com.google.maps.android:maps-compose-widgets:$mapsComposeVersion")
     implementation ("com.google.accompanist:accompanist-permissions:0.24.13-rc")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
 
 
 }

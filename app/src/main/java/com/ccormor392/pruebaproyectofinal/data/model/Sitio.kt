@@ -7,6 +7,7 @@ data class Sitio(
     val nombre: String = "",
     val nombreLargo: String = "",
     val ubicacion: GeoPoint = GeoPoint(0.0, 0.0),
-    val tipo: String =""
+    val tipo: String ="",
+    val peticion:Boolean = true
 ) {
 }

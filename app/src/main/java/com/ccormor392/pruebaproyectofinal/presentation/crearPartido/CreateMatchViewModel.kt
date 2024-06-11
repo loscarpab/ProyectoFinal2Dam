@@ -1,10 +1,13 @@
 package com.ccormor392.pruebaproyectofinal.presentation.crearPartido
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ccormor392.pruebaproyectofinal.data.model.JugadorPartido
@@ -31,14 +34,19 @@ import java.util.Date
  * @property hora La hora del partido.
  * @property nombreSitio El nombre del sitio del partido.
  */
-class CreateMatchViewModel : ViewModel() {
+class CreateMatchViewModel (application: Application) : AndroidViewModel(application) {
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
     // Contador de partidos creados por el usuario
     private var numPartidosCreados by mutableLongStateOf(7)
 
+    @SuppressLint("StaticFieldLeak")
+    val context = getApplication<Application>().applicationContext
+
     // Propiedades para la fecha, hora y nombre del sitio del partido
     var showAlert by mutableStateOf(false)
+        private set
+    var showLoading by mutableStateOf(false)
         private set
     var fecha by mutableStateOf("")
         private set
@@ -110,10 +118,12 @@ class CreateMatchViewModel : ViewModel() {
      * @param onSuccess Callback para manejar el éxito de la creación del partido.
      */
     fun crearPartido(onSuccess: () -> Unit) {
+        showLoading = true
         viewModelScope.launch {
             val userId = auth.currentUser?.uid
             if (userId != null) {
                 if (fecha.isEmpty() || hora.isEmpty() || sitio.nombre.isEmpty()) {
+                    showLoading = false
                     showAlert = true
                 } else {
                     val idPartido = userId + numPartidosCreados
@@ -125,14 +135,17 @@ class CreateMatchViewModel : ViewModel() {
                                 numPartidosCreados++
                                 actualizarPartidosCreadosPorId(userId, numPartidosCreados)
                                 onSuccess.invoke()
+                                showLoading = false
                                 Log.d("CreateMatchViewModel", "Partido creado con éxito.")
                             }
                         }
                     } catch (e: Exception) {
+                        showLoading = false
                         Log.e("CreateMatchViewModel", "Error al crear el partido: ${e.message}")
                     }
                 }
             } else {
+                showLoading = false
                 Log.e("CreateMatchViewModel", "El usuario no está autenticado.")
             }
         }

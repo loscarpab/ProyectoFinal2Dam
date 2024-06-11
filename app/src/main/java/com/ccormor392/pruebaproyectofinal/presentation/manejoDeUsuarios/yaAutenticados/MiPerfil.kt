@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -91,8 +92,8 @@ fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, i
             ) {
                 Column(
                     Modifier
-                        .height(200.dp)
                         .fillMaxWidth()
+                        .padding(bottom = 16.dp)
                 ) {
                     Row(
                         Modifier
@@ -149,11 +150,11 @@ fun MiPerfil(navController: NavHostController, loginViewModel: LoginViewModel, i
                                 }
                             }
                         }
-
                     }
-                    LineaSeparadoraTopbar()
-
+                    Divider(color = Color.White , modifier = Modifier.padding(top = 22.dp) , thickness = 0.5.dp)
                 }
+
+
                 SingleChoiceSegmentedButtonRow(
                     modifier = Modifier
                         .fillMaxWidth()

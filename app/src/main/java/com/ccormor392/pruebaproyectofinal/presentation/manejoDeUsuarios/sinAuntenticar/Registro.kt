@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.botonsininiciarsesion.BotonSinIniciarSesion
@@ -112,6 +114,11 @@ fun Registro(
                         onConfirmClick = { loginViewModel.closeAlert() },
                         onDismissClick = { }
                     ) // Ninguna acción en onDismissClick para que no oculte el diálogo
+                }
+                if (loginViewModel.showLoading){
+                    Dialog(onDismissRequest = { }) {
+                        CircularProgressIndicator()
+                    }
                 }
             }
         },
