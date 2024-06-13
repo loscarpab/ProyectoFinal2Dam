@@ -2,14 +2,7 @@ package com.ccormor392.pruebaproyectofinal.presentation.misPartidos
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -17,11 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,6 +41,15 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
+/**
+ * Composable para mostrar detalles de un sitio seleccionado.
+ *
+ * Muestra la imagen, detalles del sitio, ubicación en el mapa y lista de próximos partidos.
+ *
+ * @param sitiosViewModel ViewModel para manejar datos relacionados con sitios.
+ * @param navHostController Controlador de navegación de Jetpack Compose.
+ * @param loginViewModel ViewModel para manejar la autenticación y roles de usuario.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Sitio(
@@ -59,26 +57,36 @@ fun Sitio(
     navHostController: NavHostController,
     loginViewModel: LoginViewModel
 ) {
+    // Obtiene el sitio seleccionado del ViewModel y los partidos relacionados
     val selectedSitio by sitiosViewModel.selectedSitio.collectAsState()
     val listaPartidos by sitiosViewModel.listaPartidosConNombreUsuario.collectAsState()
-    // Componentes de texto para el título y el subtítulo
+
+    // Crea un marcador en el mapa basado en la ubicación del sitio seleccionado
     val mark = LatLng(selectedSitio.ubicacion.latitude, selectedSitio.ubicacion.longitude)
     val markState = MarkerState(position = mark)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(mark, 15f)
     }
+
+    // Determina el tipo de sitio para mostrar en la interfaz de usuario
     val tipo = when (selectedSitio.tipo) {
         "fut7" -> "Futbol 7"
         "futsal" -> "Futbol Sala"
         else -> "Futbol"
     }
+
+    // Lanza un efecto cuando se carga el composable para pedir los partidos del sitio
     LaunchedEffect(Unit) {
         sitiosViewModel.pedirTodosLosPartidos()
     }
+
+    // Construcción del Scaffold para la pantalla
     Scaffold(
-        // Barra superior
+        // Barra superior personalizada
         topBar = { MyTopBar() },
+        // Contenido principal
         content = {
+            // Lógica para mostrar los botones de administrador si el usuario es administrador
             if (loginViewModel.isAdmin()) {
                 Box(
                     Modifier
@@ -87,6 +95,7 @@ fun Sitio(
                         .zIndex(2F), contentAlignment = Alignment.BottomEnd
                 ) {
                     Row {
+                        // Botón para confirmar una petición de sitio
                         if (selectedSitio.peticion) {
                             FloatingActionButton(
                                 onClick = {
@@ -98,7 +107,6 @@ fun Sitio(
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
-
                                 },
                                 containerColor = maincolor,
                                 contentColor = Color.White,
@@ -108,21 +116,24 @@ fun Sitio(
                             }
                         }
 
+                        // Botón para eliminar un sitio o una petición
                         FloatingActionButton(
                             onClick = {
-                                sitiosViewModel.borrarSitio { navHostController.navigate(Routes.Sitios.route) }
-                                if (selectedSitio.peticion) {
-                                    Toast.makeText(
-                                        sitiosViewModel.context,
-                                        "Petición denegada",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        sitiosViewModel.context,
-                                        "Sitio borrado",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                sitiosViewModel.borrarSitio {
+                                    navHostController.navigate(Routes.Sitios.route)
+                                    if (selectedSitio.peticion) {
+                                        Toast.makeText(
+                                            sitiosViewModel.context,
+                                            "Petición denegada",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            sitiosViewModel.context,
+                                            "Sitio borrado",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
                             },
                             containerColor = Color.Red,
@@ -134,12 +145,14 @@ fun Sitio(
                 }
             }
 
+            // Lista desplazable de columnas para mostrar detalles del sitio y partidos
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 80.dp, bottom = 80.dp),
             ) {
+                // Elemento de la imagen del sitio
                 item {
                     AsyncImage(
                         model = selectedSitio.foto,
@@ -148,9 +161,10 @@ fun Sitio(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(224.dp)
-
                     )
                 }
+
+                // Elemento del nombre y tipo del sitio
                 item {
                     Column(horizontalAlignment = Alignment.Start) {
                         MiTexto(
@@ -172,6 +186,8 @@ fun Sitio(
                         )
                     }
                 }
+
+                // Elemento para mostrar la ubicación en un mapa
                 item {
                     Column {
                         MiTexto(
@@ -196,24 +212,26 @@ fun Sitio(
                         }
                     }
                 }
+
+                // Elemento para mostrar la lista de próximos partidos, solo si no es una petición
                 if (!selectedSitio.peticion) {
                     item {
                         Column {
                             MiTexto(
-                                string = "Proximos Partidos",
+                                string = "Próximos Partidos",
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Medium,
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
                             if (listaPartidos.isEmpty()) {
                                 MiTexto(
-                                    string = "No se han encotrado partidos",
+                                    string = "No se han encontrado partidos",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium,
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                             } else {
-                                // Lista de partidos disponibles
+                                // Lista horizontal de partidos disponibles
                                 LazyRow(
                                     horizontalArrangement = Arrangement.Center,
                                     modifier = Modifier
@@ -229,7 +247,11 @@ fun Sitio(
                                             contentAlignment = Alignment.Center
                                         ) {
                                             CardMatch(
-                                                onClick = { navHostController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second.username}") },
+                                                onClick = {
+                                                    navHostController.navigate(
+                                                        "${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second.username}"
+                                                    )
+                                                },
                                                 imagenPartido = partidoConNombreUsuario.first.sitio.foto,
                                                 nombreLugar = partidoConNombreUsuario.first.sitio.nombre,
                                                 fechaPartido = partidoConNombreUsuario.first.fecha,
@@ -248,17 +270,19 @@ fun Sitio(
                         }
                     }
                 }
+
+                // Elemento para mostrar un indicador de carga si está activo
                 item {
                     if (sitiosViewModel.showLoading) {
                         Dialog(onDismissRequest = { }) {
                             CircularProgressIndicator()
                         }
                     }
-
                 }
 
             }
         },
-        bottomBar = { MyBottomBar(navHostController = navHostController) })
+        // Barra inferior personalizada
+        bottomBar = { MyBottomBar(navHostController = navHostController) }
+    )
 }
-

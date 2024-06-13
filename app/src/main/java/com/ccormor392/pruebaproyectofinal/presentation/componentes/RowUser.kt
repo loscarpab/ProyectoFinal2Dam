@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,23 +29,45 @@ import com.ccormor392.pruebaproyectofinal.R
 import com.ccormor392.pruebaproyectofinal.infopartido.poppins
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 
+/**
+ * Composable que muestra una fila con el avatar del usuario, nombre de usuario y un botón opcional.
+ *
+ * @param username Nombre de usuario a mostrar.
+ * @param avatar URL del avatar del usuario.
+ * @param onClickButton Acción a realizar cuando se hace clic en el botón (opcional).
+ * @param onClickRow Acción a realizar cuando se hace clic en la fila.
+ * @param leSigo Indica si el usuario actual sigue al usuario representado en la fila.
+ */
 @Composable
-fun RowUser(username: String, avatar: String, onClickButton: (() -> Unit)? = null, onClickRow: () -> Unit, leSigo:Boolean = false) {
-    Row (
+fun RowUser(
+    username: String,
+    avatar: String,
+    onClickButton: (() -> Unit)? = null,
+    onClickRow: () -> Unit,
+    leSigo: Boolean = false
+) {
+    Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 28.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { onClickRow() }){
+            .padding(horizontal = 28.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // Parte izquierda de la fila: avatar y nombre de usuario clicables
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable { onClickRow() }
+        ) {
+            // Avatar del usuario
             AsyncImage(
                 model = avatar,
                 contentDescription = "Avatar del usuario",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(
-                        RoundedCornerShape(26.dp)
-                    )
+                    .clip(RoundedCornerShape(26.dp))
             )
+            // Nombre de usuario
             Text(
                 text = username,
                 fontWeight = FontWeight.Medium,
@@ -55,44 +77,34 @@ fun RowUser(username: String, avatar: String, onClickButton: (() -> Unit)? = nul
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
-        if (onClickButton != null) {
-            IconButton(onClick = {
-                onClickButton()
-            }) {
-                if (leSigo){
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(18.dp))
-                            .border(2.dp, maincolor, shape = RoundedCornerShape(18.dp))
-                            .size(40.dp), contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_remove_24),
-                            contentDescription = "icono agregar",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-                else{
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(18.dp))
-                            .background(maincolor)
-                            .size(40.dp), contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_person_add_24),
-                            contentDescription = "icono agregar",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
 
+        // Parte derecha de la fila: botón opcional (se muestra solo si onClickButton no es nulo)
+        onClickButton?.let {
+            IconButton(onClick = { onClickButton() }) {
+                // Icono y estilo dependiendo de si el usuario sigue o no al representado
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(if (leSigo) maincolor else Color.Transparent)
+                        .border(
+                            width = if (leSigo) 2.dp else 0.dp,
+                            color = maincolor,
+                            shape = RoundedCornerShape(18.dp)
+                        )
+                        .size(40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    // Icono de añadir o remover usuario según corresponda
+                    Icon(
+                        imageVector = ImageVector.vectorResource(
+                            id = if (leSigo) R.drawable.baseline_person_remove_24 else R.drawable.baseline_person_add_24
+                        ),
+                        contentDescription = "Icono de acción",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
-
     }
-
 }

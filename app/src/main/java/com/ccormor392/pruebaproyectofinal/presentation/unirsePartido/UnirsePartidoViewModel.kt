@@ -22,22 +22,26 @@ import kotlinx.coroutines.flow.StateFlow
  * Proporciona la lógica para obtener información del partido, incluidos los jugadores,
  * y permite al usuario unirse al partido si es posible.
  *
- * @property showAlert Estado de la alerta que indica si el usuario ya está entre los jugadores del partido.
- * @property partido Flujo de estado que contiene la información del partido al que se va a unir el usuario.
- * @property users Flujo de estado que contiene la lista de usuarios del partido.
+ * @property showAlert Estado que indica si se debe mostrar la alerta al usuario.
+ * @property partido Flujo de estado que contiene la información del partido al que se unirá el usuario.
+ * @property user Flujo de estado que contiene la información del usuario en el contexto del partido.
  */
 class UnirsePartidoViewModel : ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
 
-    // Estado para mostrar la alerta
+    // Estado para mostrar la alerta de jugador ya unido
     var showAlert by mutableStateOf(false)
         private set
+
+    // Estado para controlar la activación de clics en la interfaz
     var clickable by mutableStateOf(true)
-    var equipo2 by mutableStateOf<Boolean>(false)
+
+    // Estado que indica el equipo seleccionado por el usuario
+    var equipo2 by mutableStateOf(false)
         private set
 
-    // Flujo mutable para almacenar el partido al que se va a unir el usuario
+    // Flujo mutable para almacenar el partido al que se unirá el usuario
     private val _partido = MutableStateFlow(Partido())
     val partido: StateFlow<Partido> = _partido
 
@@ -45,23 +49,22 @@ class UnirsePartidoViewModel : ViewModel() {
     private val _user = MutableStateFlow(JugadorPartido())
     val user: StateFlow<JugadorPartido> = _user
 
-
     /**
-     * Obtiene un partido específico de Firestore basado en su ID.
+     * Obtiene la información de un partido específico desde Firestore basado en su ID.
      *
-     * @param idPartido ID del partido que se va a obtener.
+     * @param idPartido ID del partido que se desea obtener.
      */
     fun getPartidobyId(idPartido: String) {
-        // Obtiene la información del partido desde Firestore
+        // Escucha los cambios en el documento del partido en Firestore
         firestore.collection("Partidos").whereEqualTo("idPartido", idPartido)
             .addSnapshotListener { querySnapshot, error ->
                 if (error != null) {
-                    // Manejar el error aquí si es necesario
+                    // Manejar errores si ocurrieron durante la consulta
                     return@addSnapshotListener
                 }
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
-                        // Recupera los datos del partido desde Firestore
+                        // Recupera y actualiza la información del partido
                         val partidos = document.toObject(Partido::class.java)
                         _partido.value = partidos
                     }
@@ -70,7 +73,13 @@ class UnirsePartidoViewModel : ViewModel() {
     }
 
     /**
-     * Recupera el nombre de los jugadores del partido y los almacena en el flujo de usuarios.
+     * Recupera el nombre de usuario y otros detalles del jugador desde Firestore
+     * y los almacena en el flujo de usuario (_user).
+     *
+     * @param userId ID del usuario cuyo nombre se desea recuperar.
+     * @param posicion Posición del jugador en el partido.
+     * @param equipo Equipo al que pertenece el jugador.
+     * @param onSuccess Acción a realizar después de recuperar los datos del jugador.
      */
     private fun recuperarNombreJugadores(
         userId: String,
@@ -83,6 +92,7 @@ class UnirsePartidoViewModel : ViewModel() {
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
                         val usuario = document.toObject(User::class.java)
+                        // Actualiza la información del jugador en el flujo de usuario
                         _user.value = JugadorPartido(
                             usuario.userId,
                             usuario.username,
@@ -96,11 +106,13 @@ class UnirsePartidoViewModel : ViewModel() {
             }
     }
 
-
     /**
      * Permite al usuario unirse al partido actual.
      *
      * @param onSuccess Acción a realizar después de unirse exitosamente al partido.
+     * @param posicion Posición del jugador en el partido.
+     * @param equipo Equipo al que pertenece el jugador.
+     * @param navController Controlador de navegación para gestionar las transiciones entre pantallas.
      */
     fun unirseAPartido(
         onSuccess: () -> Unit,
@@ -132,6 +144,7 @@ class UnirsePartidoViewModel : ViewModel() {
                                             }
                                         }
 
+                                        // Actualiza la lista de jugadores en Firestore
                                         partidoRef.update("jugadores", updatedJugadores)
                                             .addOnSuccessListener {
                                                 // El usuario se ha unido al partido exitosamente
@@ -144,6 +157,7 @@ class UnirsePartidoViewModel : ViewModel() {
                                                 println("Error al unirse al partido: $exception")
                                             }
                                     } else {
+                                        // Añade un nuevo jugador a la lista de jugadores en Firestore
                                         val nuevoJugador = JugadorPartido(
                                             userId = userId,
                                             username = _user.value.username,
@@ -164,7 +178,7 @@ class UnirsePartidoViewModel : ViewModel() {
                                             }
                                     }
                                 } else {
-                                    // Manejo de la navegación si la posición ya está ocupada
+                                    // Navega a la pantalla de perfil del jugador si la posición está ocupada
                                     clickable = true
                                     navController.navigate("${Routes.MiPerfil.route}/${jugadores.filter { it.equipo == !equipo2 }.first { it.posicion == posicion }.userId}")
                                 }
@@ -174,7 +188,7 @@ class UnirsePartidoViewModel : ViewModel() {
                         }
                     }
                     .addOnFailureListener { exception ->
-                        // Manejar errores de la consulta Firestore
+                        // Manejar errores al consultar Firestore
                         clickable = true
                         println("Error en la consulta Firestore: $exception")
                     }
@@ -184,7 +198,6 @@ class UnirsePartidoViewModel : ViewModel() {
         }
     }
 
-
     /**
      * Cierra la alerta mostrada al usuario.
      */
@@ -192,15 +205,25 @@ class UnirsePartidoViewModel : ViewModel() {
         showAlert = false
     }
 
+    /**
+     * Recupera el enlace de la foto de un jugador específico en el partido.
+     *
+     * @param index Índice del jugador en la lista de jugadores.
+     * @param equipo2 Indica si se está mostrando el equipo 2 en la interfaz.
+     * @return Enlace de la foto del jugador o null si no se encuentra.
+     */
     fun recuperarFoto(index: Int, equipo2: Boolean): String? {
         return try {
             _partido.value.jugadores.filter { it.equipo == !equipo2 }.find { it.posicion == index }!!.avatar
         } catch (e: Exception) {
             null
         }
-
     }
-    fun changeSegmentedButton(){
+
+    /**
+     * Cambia el estado del equipo seleccionado (Equipo 1 o Equipo 2).
+     */
+    fun changeSegmentedButton() {
         equipo2 = !equipo2
     }
 }

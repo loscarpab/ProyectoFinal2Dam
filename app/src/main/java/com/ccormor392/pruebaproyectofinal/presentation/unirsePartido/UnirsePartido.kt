@@ -3,7 +3,6 @@ package com.ccormor392.pruebaproyectofinal.presentation.unirsePartido
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,14 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,10 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -53,8 +48,6 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.ccormor392.pruebaproyectofinal.R
-import com.ccormor392.pruebaproyectofinal.infopartido.InfoPartido
-import com.ccormor392.pruebaproyectofinal.lineaseparadoratopbar.LineaSeparadoraTopbar
 import com.ccormor392.pruebaproyectofinal.logoapp.poppins
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.Alert
@@ -71,6 +64,7 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
  * Muestra la información del partido y la lista de jugadores, permitiendo al usuario unirse al partido.
  *
  * @param unirsePartidoViewModel ViewModel que gestiona la lógica de la pantalla de unirse a un partido.
+ * @param sitiosViewModel ViewModel que gestiona la lógica de los sitios (ubicaciones de los partidos).
  * @param idPartido ID único del partido al que se desea unir el usuario.
  * @param nombreCreador Nombre del creador del partido.
  * @param navHostController Controlador de navegación para gestionar las transiciones entre pantallas.
@@ -85,46 +79,60 @@ fun UnirsePartido(
     nombreCreador: String,
     navHostController: NavHostController
 ) {
+    // Recupera el estado actual del partido desde el ViewModel usando StateFlow
     val partido by unirsePartidoViewModel.partido.collectAsState()
-    val tipo = when(partido.sitio.tipo){
+
+    // Determina el tipo de partido según el tipo de sitio (ubicación) del partido
+    val tipo = when (partido.sitio.tipo) {
         "fut7" -> "Futbol 7"
         "futsal" -> "Futbol Sala"
         else -> "Futbol"
     }
+
     // Efecto de lanzamiento para obtener la información del partido por su ID
     LaunchedEffect(Unit) {
         unirsePartidoViewModel.getPartidobyId(idPartido)
     }
+
     // Estructura del diseño de la pantalla para unirse a un partido
-    Scaffold(topBar = {
-        // Barra superior personalizada
-        MyTopBar()
-    }, content = {
+    Scaffold(
+        topBar = {
+            // Barra superior personalizada
+            MyTopBar()
+        },
+        content = {
             // Contenido principal de la pantalla
             Column(
                 Modifier
                     .padding(top = 79.dp, bottom = 79.dp)
-                    .verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(Modifier.wrapContentSize(), contentAlignment = Alignment.BottomEnd){
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Contenedor para la imagen y el icono del sitio
+                Box(Modifier.wrapContentSize(), contentAlignment = Alignment.BottomEnd) {
+                    // Carga asíncrona de la imagen del sitio
                     AsyncImage(
-                        model = partido.sitio.foto ,
+                        model = partido.sitio.foto,
                         contentDescription = "foto sitio",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(224.dp)
                             .zIndex(1f)
-
                     )
-                    Box(Modifier.padding(16.dp).zIndex(2f)){
+                    // Icono sobre la imagen para acceder a detalles del sitio
+                    Box(Modifier.padding(16.dp).zIndex(2f)) {
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(18.dp))
                                 .background(maincolor)
-                                .size(40.dp).zIndex(2f).clickable {
+                                .size(40.dp)
+                                .zIndex(2f)
+                                .clickable {
                                     sitiosViewModel.seleccionarSitio(partido.sitio)
                                     navHostController.navigate(Routes.Sitio.route)
-                                }, contentAlignment = Alignment.Center
+                                },
+                            contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.LocationOn,
@@ -134,152 +142,187 @@ fun UnirsePartido(
                             )
                         }
                     }
-
                 }
 
+                // Columna para mostrar detalles del partido
                 Column(horizontalAlignment = Alignment.Start) {
-                    MiTexto(string = partido.sitio.nombreLargo, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(top = 8.dp, start = 16.dp))
-                    MiTexto(string = tipo, fontWeight = FontWeight.Medium, fontSize = 12.sp,modifier= Modifier.padding(top = 8.dp, start = 16.dp))
-                    MiTexto(string = nombreCreador, fontWeight = FontWeight.Medium, fontSize = 12.sp,modifier= Modifier.padding(top = 8.dp, start = 16.dp))
-                    HorizontalDivider(thickness = 0.5.dp, color = Color.White, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp))
+                    MiTexto(
+                        string = partido.sitio.nombreLargo,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(top = 8.dp, start = 16.dp)
+                    )
+                    MiTexto(
+                        string = tipo,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 8.dp, start = 16.dp)
+                    )
+                    MiTexto(
+                        string = nombreCreador,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 8.dp, start = 16.dp)
+                    )
+                    HorizontalDivider(
+                        thickness = 0.5.dp,
+                        color = Color.White,
+                        modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                    )
                 }
 
-                    // Título de la sección de jugadores
-                    Text(
-                        text = "Jugadores",
-                        fontSize = 20.sp,
-                        fontFamily = poppins,
+                // Título de la sección de jugadores
+                Text(
+                    text = "Jugadores",
+                    fontSize = 20.sp,
+                    fontFamily = poppins,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp),
+                    textAlign = TextAlign.Left,
+                    color = Color.White
+                )
+
+                // Fila de botones segmentados para seleccionar equipo
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    SingleChoiceSegmentedButtonRow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 24.dp),
-                        textAlign = TextAlign.Left,
-                        color = androidx.compose.ui.graphics.Color.White
-                    )
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
-                        SingleChoiceSegmentedButtonRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
+                            .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
+                    ) {
+                        // Botón para el equipo 1
+                        SegmentedButton(
+                            selected = !unirsePartidoViewModel.equipo2,
+                            onClick = { unirsePartidoViewModel.changeSegmentedButton() },
+                            shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                            colors = mySegmentedButtonColors()
                         ) {
-                            SegmentedButton(
-                                selected = !unirsePartidoViewModel.equipo2,
-                                onClick = { unirsePartidoViewModel.changeSegmentedButton() },
-                                shape = SegmentedButtonDefaults.itemShape(
-                                    index = 0,
-                                    count = 2
-                                ), colors = mySegmentedButtonColors()
-                            ) {
-                                MiTexto(
-                                    string = "Equipo 1",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                            SegmentedButton(
-                                selected = unirsePartidoViewModel.equipo2,
-                                onClick = { unirsePartidoViewModel.changeSegmentedButton() },
-                                shape = SegmentedButtonDefaults.itemShape(
-                                    index = 1,
-                                    count = 2
-                                ),
-                                colors =  mySegmentedButtonColors()
-                            ) {
-                                MiTexto(
-                                    string = "Equipo 2",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                        }
-                    }
-                    BoxWithConstraints(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.campofutbol),
-                            contentDescription = "fondo campo futbol",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .zIndex(0f)
-                                .padding(8.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                        val realHeight = maxWidth*0.755f
-                        val sizeIcon = maxWidth*0.16f
-                        val offsets = if (partido.sitio.tipo == "fut7"){
-                            listOf(
-                                Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight - sizeIcon / 2).value), // portero
-                                Offset((maxWidth * 0.75f - sizeIcon / 2).value, (realHeight * 0.70f - sizeIcon / 2).value), // dfd
-                                Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight * 0.75f - sizeIcon / 2).value), // dfc
-                                Offset((maxWidth * 0.25f - sizeIcon / 2).value, (realHeight * 0.70f - sizeIcon / 2).value), // dfi
-                                Offset((maxWidth * 0.65f - sizeIcon / 2).value, (realHeight * 0.40f - sizeIcon / 2).value), // cd
-                                Offset((maxWidth * 0.35f - sizeIcon / 2).value, (realHeight * 0.40f - sizeIcon / 2).value), // ci
-                                Offset((maxWidth * 0.5f - sizeIcon / 2).value, (realHeight * 0.18f - sizeIcon / 2).value)  // del
-                            )
-                        }else{
-                            listOf(
-                                Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight - sizeIcon / 2).value), // portero
-                                Offset((maxWidth * 0.70f - sizeIcon / 2).value, (realHeight * 0.45f - sizeIcon / 2).value), // dfd
-                                Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight * 0.70f - sizeIcon / 2).value), // dfc
-                                Offset((maxWidth * 0.30f - sizeIcon / 2).value, (realHeight * 0.45f - sizeIcon / 2).value), // dfi
-                                Offset((maxWidth * 0.5f - sizeIcon / 2).value, (realHeight * 0.20f - sizeIcon / 2).value)  // del
-                            )
+                            MiTexto(string = "Equipo 1", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                         }
 
-                        offsets.forEachIndexed() {index, offset ->
-                            OffsetImage(
-                                offset = offset,
-                                sizeIcon = sizeIcon,
-                                enlace = unirsePartidoViewModel.recuperarFoto(index, unirsePartidoViewModel.equipo2),
-                                posicion = index,
-                                unirsePartidoViewModel,
-                                navHostController,
-                                idPartido = idPartido
-                            )
-                        }
-
-                    }
-                    // Título de la sección de jugadores
-                    Text(
-                        text = "Lista",
-                        fontSize = 20.sp,
-                        fontFamily = poppins,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp, start = 24.dp),
-                        textAlign = TextAlign.Left,
-                        color = androidx.compose.ui.graphics.Color.White
-                    )
-                    // Lista de jugadores que participan en el partido
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(), horizontalAlignment = Alignment.Start,
-                    ) {
-                        partido.jugadores.filter { it.equipo == !unirsePartidoViewModel.equipo2 }.forEach {
-                            RowUser(username = it.username,
-                                avatar = it.avatar,
-                                onClickRow = { navHostController.navigate("${Routes.MiPerfil}${it.userId}") })
+                        // Botón para el equipo 2
+                        SegmentedButton(
+                            selected = unirsePartidoViewModel.equipo2,
+                            onClick = { unirsePartidoViewModel.changeSegmentedButton() },
+                            shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                            colors = mySegmentedButtonColors()
+                        ) {
+                            MiTexto(string = "Equipo 2", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                         }
                     }
-
                 }
 
+                // Contenedor para el campo de juego
+                BoxWithConstraints(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Imagen del campo de juego con posiciones de los jugadores
+                    Image(
+                        painter = painterResource(id = R.drawable.campofutbol),
+                        contentDescription = "fondo campo futbol",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .zIndex(0f)
+                            .padding(8.dp),
+                        contentScale = ContentScale.Crop
+                    )
 
+                    // Cálculo y disposición de las posiciones de los jugadores en el campo
+                    // Calcula la altura real y el tamaño de los iconos según las dimensiones del campo
+                    val realHeight = maxWidth * 0.755f
+                    val sizeIcon = maxWidth * 0.16f
 
+                    // Lista de offsets de posición de los jugadores según el tipo de sitio (fut7 o futsal)
+                    val offsets = if (partido.sitio.tipo == "fut7") {
+                        listOf(
+                            Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight - sizeIcon / 2).value), // portero
+                            Offset((maxWidth * 0.75f - sizeIcon / 2).value, (realHeight * 0.70f - sizeIcon / 2).value), // dfd
+                            Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight * 0.75f - sizeIcon / 2).value), // dfc
+                            Offset((maxWidth * 0.25f - sizeIcon / 2).value, (realHeight * 0.70f - sizeIcon / 2).value), // dfi
+                            Offset((maxWidth * 0.65f - sizeIcon / 2).value, (realHeight * 0.40f - sizeIcon / 2).value), // cd
+                            Offset((maxWidth * 0.35f - sizeIcon / 2).value, (realHeight * 0.40f - sizeIcon / 2).value), // ci
+                            Offset((maxWidth * 0.5f - sizeIcon / 2).value, (realHeight * 0.18f - sizeIcon / 2).value)  // del
+                        )
+                    } else {
+                        listOf(
+                            Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight - sizeIcon / 2).value), // portero
+                            Offset((maxWidth * 0.70f - sizeIcon / 2).value, (realHeight * 0.45f - sizeIcon / 2).value), // dfd
+                            Offset((maxWidth / 2 - sizeIcon / 2).value, (realHeight * 0.70f - sizeIcon / 2).value), // dfc
+                            Offset((maxWidth * 0.30f - sizeIcon / 2).value, (realHeight * 0.45f - sizeIcon / 2).value), // dfi
+                            Offset((maxWidth * 0.5f - sizeIcon / 2).value, (realHeight * 0.20f - sizeIcon / 2).value)  // del
+                        )
+                    }
 
-        // Alerta que se muestra si el usuario ya está entre los jugadores del partido
-        if (unirsePartidoViewModel.showAlert) {
-            Alert(title = "Alerta",
-                message = "Ya estás entre los jugadores",
-                confirmText = "Aceptar",
-                onConfirmClick = { unirsePartidoViewModel.closeAlert() },
-                onDismissClick = { }) // Ninguna acción en onDismissClick para que no oculte el diálogo
+                    // Renderiza los íconos de los jugadores en las posiciones calculadas
+                    offsets.forEachIndexed { index, offset ->
+                        OffsetImage(
+                            offset = offset,
+                            sizeIcon = sizeIcon,
+                            enlace = unirsePartidoViewModel.recuperarFoto(index, unirsePartidoViewModel.equipo2),
+                            posicion = index,
+                            viewModel = unirsePartidoViewModel,
+                            navHostController = navHostController,
+                            idPartido = idPartido
+                        )
+                    }
+                }
+
+                // Título de la sección de lista de jugadores
+                Text(
+                    text = "Lista",
+                    fontSize = 20.sp,
+                    fontFamily = poppins,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp, start = 24.dp),
+                    textAlign = TextAlign.Left,
+                    color = Color.White
+                )
+
+                // Lista de jugadores que participan en el partido
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    partido.jugadores.filter { it.equipo == !unirsePartidoViewModel.equipo2 }.forEach {
+                        RowUser(
+                            username = it.username,
+                            avatar = it.avatar,
+                            onClickRow = { navHostController.navigate("${Routes.MiPerfil}${it.userId}") }
+                        )
+                    }
+                }
+
+                // Alerta que se muestra si el usuario ya está entre los jugadores del partido
+                if (unirsePartidoViewModel.showAlert) {
+                    Alert(
+                        title = "Alerta",
+                        message = "Ya estás entre los jugadores",
+                        confirmText = "Aceptar",
+                        onConfirmClick = { unirsePartidoViewModel.closeAlert() },
+                        onDismissClick = {}
+                    )
+                }
+            }
+        },
+        bottomBar = {
+            // Barra inferior personalizada
+            MyBottomBar(navHostController = navHostController)
         }
-    }, bottomBar = {
-        MyBottomBar(navHostController = navHostController)
-    })
+    )
 }
+
+/**
+ * Composable que muestra un ícono de jugador en una posición específica del campo de juego.
+ *
+ * @param offset Posición del ícono en el campo.
+ * @param sizeIcon Tamaño del ícono del jugador.
+ * @param enlace Enlace de la imagen del jugador.
+ * @param posicion Índice de posición del jugador.
+ * @param viewModel ViewModel de la pantalla de unirse a un partido.
+ * @param navHostController Controlador de navegación para gestionar las transiciones entre pantallas.
+ * @param idPartido ID único del partido al que se desea unir el usuario.
+ */
 @Composable
 fun OffsetImage(
     offset: Offset,
@@ -311,3 +354,4 @@ fun OffsetImage(
             }
     )
 }
+

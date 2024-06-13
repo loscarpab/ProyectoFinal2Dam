@@ -47,6 +47,9 @@ import com.ccormor392.pruebaproyectofinal.presentation.unirsePartido.UnirseParti
  * @param partidoViewModel ViewModel para la creación y gestión de partidos.
  * @param inicioViewModel ViewModel para la pantalla de inicio.
  * @param unirsePartidoViewModel ViewModel para la funcionalidad de unirse a un partido.
+ * @param misPartidosViewModel ViewModel para la gestión de los partidos del usuario.
+ * @param amigosViewModel ViewModel para la gestión de amigos.
+ * @param sitiosViewModel ViewModel para la gestión de sitios.
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -90,7 +93,7 @@ fun NavManager(
         composable("${Routes.MiPerfil.route}/{idUser}", enterTransition = { slideInVertically() }, exitTransition = { slideOutVertically { it } }, arguments = listOf(
             navArgument("idUser") { type = NavType.StringType }
         ) ){navBackStackEntry->
-            // Pantalla para cerrar sesión
+            // Pantalla para el perfil del usuario
             val idPartido = navBackStackEntry.arguments?.getString("idUser") ?: ""
             MiPerfil(navController, loginViewModel, idPartido, amigosViewModel)
         }
@@ -98,7 +101,7 @@ fun NavManager(
             MiPerfil(navController, loginViewModel)
         }
         composable(Routes.EditarPerfil.route) {
-            // Pantalla para cerrar sesión
+            // Pantalla para editar el perfil del usuario
             EditarPerfil(navController, loginViewModel)
         }
         composable(
@@ -111,7 +114,7 @@ fun NavManager(
             // Pantalla para unirse a un partido
             val idPartido = navBackStackEntry.arguments?.getString("idPartido") ?: ""
             val nombreCreador = navBackStackEntry.arguments?.getString("nombreCreador") ?: ""
-            UnirsePartido(unirsePartidoViewModel, sitiosViewModel,idPartido, nombreCreador, navController)
+            UnirsePartido(unirsePartidoViewModel, sitiosViewModel, idPartido, nombreCreador, navController)
         }
         composable(CrearPartido.route) {
             // Pantalla para la creación de un nuevo partido
@@ -122,20 +125,20 @@ fun NavManager(
             MisPartidos(navController, misPartidosViewModel)
         }
         composable(Routes.Amigos.route) {
-            // Pantalla para ver los partidos creados
-            Amigos(amigosViewModel,navController)
+            // Pantalla para ver los amigos del usuario
+            Amigos(amigosViewModel, navController)
         }
         composable(Routes.Sitios.route) {
-            // Pantalla para ver los partidos creados
+            // Pantalla para ver los sitios
             Sitios(navController, sitiosViewModel, loginViewModel)
         }
         composable(Routes.Sitio.route) {
-            // Pantalla para ver los partidos creados
-            Sitio(sitiosViewModel, navController,loginViewModel)
+            // Pantalla para ver el detalle de un sitio
+            Sitio(sitiosViewModel, navController, loginViewModel)
         }
         composable(Routes.Peticion.route) {
-            // Pantalla para ver los partidos creados
-            Peticion(navController,sitiosViewModel, loginViewModel)
+            // Pantalla para ver las peticiones de sitios
+            Peticion(navController, sitiosViewModel, loginViewModel)
         }
     }
 }

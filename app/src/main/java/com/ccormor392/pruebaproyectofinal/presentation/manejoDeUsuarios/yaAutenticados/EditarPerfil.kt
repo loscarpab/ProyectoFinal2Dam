@@ -1,6 +1,5 @@
 package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.yaAutenticados
 
-
 import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.launch
@@ -14,8 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Scaffold
@@ -45,26 +44,29 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 
 /**
- * Composable que representa la pantalla de cierre de sesión de usuario.
- * Muestra los datos del usuario autenticado y proporciona la opción para cerrar sesión.
+ * Composable que representa la pantalla de edición de perfil del usuario autenticado.
+ * Permite al usuario ver y editar su información personal, como imagen de perfil y nombre.
  *
  * @param navController Controlador de navegación para gestionar las transiciones entre pantallas.
- * @param loginViewModel ViewModel que gestiona la lógica de la pantalla de cierre de sesión.
+ * @param loginViewModel ViewModel que gestiona la lógica de la pantalla de edición de perfil.
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun EditarPerfil(navController: NavHostController, loginViewModel: LoginViewModel) {
+    // Lanzador para la actividad de selección de imagen desde la galería
     val galleryLauncher =
         rememberLauncherForActivityResult(PickImageFromGallery()) { imageUri ->
             imageUri?.let {
                 loginViewModel.uploadImageToStorage(imageUri)
             }
         }
-    // Efecto de lanzamiento para obtener los datos del usuario autenticado
-    LaunchedEffect(Unit) {
+
+    // Efecto de lanzamiento para cargar los datos del usuario autenticado
+    LaunchedEffect(key1 = Unit) {
         loginViewModel.conseguirDatosUsuarioAutenticado()
     }
-    // Estructura del diseño de la pantalla de cierre de sesión
+
+    // Estructura del diseño de la pantalla de edición de perfil
     Scaffold(
         topBar = {
             // Barra superior personalizada
@@ -73,34 +75,39 @@ fun EditarPerfil(navController: NavHostController, loginViewModel: LoginViewMode
         content = {
             // Contenido principal de la pantalla
             Column(
-                Modifier
-                    .padding(top = 78.dp)
+                modifier = Modifier
+                    .padding(top = 78.dp) // Añade un espacio superior
                     .fillMaxSize() // Ocupa todo el espacio disponible
-                    // Añade un espacio superior
                     .background(PurpleGrey40), // Fondo de color gris morado
                 horizontalAlignment = Alignment.CenterHorizontally // Alineación horizontal al centro
             ) {
-                // Título y subtítulo de la pantalla
+                // Título de la pantalla
                 MiTexto(
                     string = "Editar Perfil",
                     modifier = Modifier.padding(top = 24.dp),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
+
                 // Contenido central de la pantalla
                 Row(
                     modifier = Modifier
                         .height(360.dp) // Altura fija
                         .fillMaxWidth(), // Ancho completo
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically // Alineación horizontal al centro
+                    horizontalArrangement = Arrangement.Center, // Alineación horizontal al centro
+                    verticalAlignment = Alignment.CenterVertically // Alineación vertical al centro
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(), // Ocupa todo el espacio disponible
                         verticalArrangement = Arrangement.SpaceEvenly, // Espaciado vertical uniforme
                         horizontalAlignment = Alignment.CenterHorizontally // Alineación horizontal al centro
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 24.dp)) {
+                        // Row para la imagen de perfil y el botón de edición
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(bottom = 24.dp)
+                        ) {
+                            // Imagen de perfil
                             AsyncImage(
                                 model = loginViewModel.imageUri,
                                 contentDescription = null,
@@ -108,29 +115,32 @@ fun EditarPerfil(navController: NavHostController, loginViewModel: LoginViewMode
                                     .padding(4.dp)
                                     .height(120.dp)
                                     .width(120.dp)
-                                    .clip(RoundedCornerShape(12.dp)),
+                                    .clip(RoundedCornerShape(12.dp)), // Esquina redondeada
                                 contentScale = ContentScale.Crop,
                             )
+
+                            // Botón de edición de imagen
                             IconButton(
                                 onClick = { galleryLauncher.launch() },
-                                Modifier.padding(start = 8.dp)
+                                modifier = Modifier.padding(start = 8.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.Edit,
                                     contentDescription = "Edit",
-                                    tint = maincolor
+                                    tint = maincolor // Color del ícono
                                 )
                             }
                         }
 
-                        // Campo de texto para el nombre de usuario (no editable)
+                        // Campo de texto para mostrar el nombre de usuario (no editable)
                         MyTextField(
                             value = loginViewModel.usuarioAutenticado.value.username,
                             onValueChange = { },
                             string = stringResource(id = R.string.nombre_de_usuario),
                             enabled = false // No editable
                         )
-                        // Campo de texto para el correo electrónico (no editable)
+
+                        // Campo de texto para mostrar el correo electrónico (no editable)
                         MyTextField(
                             value = loginViewModel.usuarioAutenticado.value.email,
                             onValueChange = { },
@@ -140,7 +150,8 @@ fun EditarPerfil(navController: NavHostController, loginViewModel: LoginViewMode
 
                     }
                 }
-                // Botón para cerrar sesión
+
+                // Botón para cerrar sesión del usuario
                 BotonMas(
                     textButton = stringResource(R.string.cerrar_sesion),
                     property1 = Property1.Variant3, // Propiedad de estilo del botón
@@ -151,16 +162,13 @@ fun EditarPerfil(navController: NavHostController, loginViewModel: LoginViewMode
                     },
                     modifier = Modifier
                         .padding(top = 48.dp)
-                        .width(200.dp) // Añade un espacio superior y establece el ancho del botón
+                        .width(200.dp) // Ancho del botón
                 )
             }
-        }, bottomBar = {
+        },
+        bottomBar = {
+            // Barra inferior personalizada
             MyBottomBar(navHostController = navController)
         }
     )
 }
-
-
-
-
-

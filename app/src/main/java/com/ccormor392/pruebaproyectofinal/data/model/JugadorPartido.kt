@@ -6,5 +6,4 @@ data class JugadorPartido(
     val avatar: String = "",
     val posicion:Int = 0,
     val equipo:Boolean = true
-) {
-}
+)

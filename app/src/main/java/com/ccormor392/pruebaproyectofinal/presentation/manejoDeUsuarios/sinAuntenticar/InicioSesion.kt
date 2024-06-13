@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +29,7 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
+
 /**
  * Composable que representa la pantalla de inicio de sesión cuando el usuario no está autenticado.
  * Permite al usuario iniciar sesión en su cuenta proporcionando su correo electrónico y contraseña.
@@ -37,7 +37,6 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
  * @param navController Controlador de navegación para gestionar las transiciones entre pantallas.
  * @param loginViewModel ViewModel que contiene la lógica de la pantalla de inicio de sesión.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun InicioSesion(
@@ -47,6 +46,7 @@ fun InicioSesion(
     LaunchedEffect(Unit){
         loginViewModel.showLoadingtoFalse()
     }
+
     Scaffold(
         // Barra superior que muestra el logotipo de la aplicación
         topBar = {
@@ -70,6 +70,7 @@ fun InicioSesion(
                     textTitulo = stringResource(id = R.string.inicia_sesion),
                     textSubtitulo = stringResource(R.string.sub_iniciar_sesion)
                 )
+
                 // Columna que contiene campos de correo electrónico y contraseña
                 Column(
                     modifier = Modifier.height(140.dp),
@@ -82,6 +83,7 @@ fun InicioSesion(
                         keyboardType = KeyboardType.Email,
                         string = stringResource(R.string.email)
                     )
+
                     // Campo de texto para la contraseña
                     MyTextField(
                         value = loginViewModel.password,
@@ -108,13 +110,17 @@ fun InicioSesion(
 
                 // Mostrar alerta en caso de usuario/contraseña incorrectos
                 if (loginViewModel.showAlert) {
-                    Alert(title = stringResource(id = R.string.alerta),
+                    Alert(
+                        title = stringResource(id = R.string.alerta),
                         message = stringResource(R.string.alerta_user),
                         confirmText = stringResource(id = R.string.aceptar),
                         onConfirmClick = { loginViewModel.closeAlert() },
-                        onDismissClick = { }) // No realizar ninguna acción en onDismissClick para no ocultar el diálogo
+                        onDismissClick = { }
+                    ) // No realizar ninguna acción en onDismissClick para no ocultar el diálogo
                 }
-                if (loginViewModel.showLoading){
+
+                // Mostrar diálogo de carga mientras se está procesando la autenticación
+                if (loginViewModel.showLoading) {
                     Dialog(onDismissRequest = { }) {
                         CircularProgressIndicator()
                     }

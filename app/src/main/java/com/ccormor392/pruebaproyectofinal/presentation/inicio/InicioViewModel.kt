@@ -3,7 +3,6 @@ package com.ccormor392.pruebaproyectofinal.presentation.inicio
 import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import com.ccormor392.pruebaproyectofinal.data.model.Partido
 import com.ccormor392.pruebaproyectofinal.data.model.UserInicio
 import com.google.firebase.auth.ktx.auth
@@ -17,17 +16,16 @@ import kotlinx.coroutines.flow.StateFlow
  * Esta ViewModel maneja la lógica relacionada con la pantalla de inicio, incluida la obtención de la lista de partidos disponibles
  * y la asignación de nombres de usuario a cada partido.
  *
- * @property listaPartidos Lista de partidos disponibles.
- * @property listaPartidosConNombreUsuario Lista de partidos con nombre de usuario del creador.
+ * @property listaPartidos MutableStateFlow para almacenar la lista de partidos disponibles.
+ * @property listaPartidosConNombreUsuario StateFlow para almacenar la lista de partidos con el nombre de usuario del creador.
  */
-@Suppress("UNCHECKED_CAST")
 @SuppressLint("MutableCollectionMutableState")
 class InicioViewModel(application: Application) : AndroidViewModel(application) {
     // Instancia de Firestore
     private val firestore = Firebase.firestore
     private val auth = Firebase.auth
     @SuppressLint("StaticFieldLeak")
-    val context = getApplication<Application>().applicationContext
+    val context = getApplication<Application>().applicationContext!!
 
     // MutableStateFlow para la lista de partidos
     private var listaPartidos = MutableStateFlow(mutableListOf<Partido>())
@@ -69,8 +67,6 @@ class InicioViewModel(application: Application) : AndroidViewModel(application) 
                 asignarUsernameCreadorAPartido()
             }
     }
-
-
 
     /**
      * Método para obtener el nombre de usuario basado en el ID del usuario.
@@ -120,6 +116,12 @@ class InicioViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
+
+    /**
+     * Obtiene el ID del usuario actualmente autenticado.
+     *
+     * @return ID del usuario actual o una cadena vacía si no está autenticado.
+     */
     fun getUserId(): String {
         return auth.currentUser?.uid ?: ""
     }

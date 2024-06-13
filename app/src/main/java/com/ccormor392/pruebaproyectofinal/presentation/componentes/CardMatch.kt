@@ -25,7 +25,20 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ccormor392.pruebaproyectofinal.cartapartido.poppins
 
-
+/**
+ * Composable que muestra una tarjeta personalizada para mostrar detalles de un partido.
+ *
+ * @param onClick Acción a realizar cuando se hace clic en la tarjeta.
+ * @param imagenPartido URL de la imagen del partido.
+ * @param nombreLugar Nombre del lugar del partido.
+ * @param fechaPartido Fecha del partido.
+ * @param horaPartido Hora del partido.
+ * @param avatarUsuario URL del avatar del usuario organizador del partido.
+ * @param nombreUsuario Nombre del usuario organizador del partido.
+ * @param jugadoresInscritos Cantidad de jugadores inscritos al partido.
+ * @param jugadoresTotales Capacidad total de jugadores del partido.
+ * @param paddingEnd Espacio de relleno adicional al final de la tarjeta (opcional).
+ */
 @Composable
 fun CardMatch(
     onClick: () -> Unit,
@@ -35,11 +48,11 @@ fun CardMatch(
     horaPartido: String,
     avatarUsuario: String,
     nombreUsuario: String,
-    jugadoresInscritos:String,
+    jugadoresInscritos: String,
     jugadoresTotales: String,
-    paddingEnd:Dp = 0.dp
+    paddingEnd: Dp = 0.dp
 ) {
-
+    // Estructura de la tarjeta del partido
     Card(
         Modifier
             .width(180.dp)
@@ -47,7 +60,7 @@ fun CardMatch(
             .padding(end = paddingEnd),
         colors = CardDefaults.cardColors(containerColor = Color(10, 17, 26))
     ) {
-
+        // Imagen del partido con formato asíncrono
         AsyncImage(
             model = imagenPartido,
             contentDescription = "Imagen del partido",
@@ -56,10 +69,9 @@ fun CardMatch(
                 .fillMaxWidth()
                 .height(116.dp)
                 .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                .clip(
-                    RoundedCornerShape(12.dp)
-                )
+                .clip(RoundedCornerShape(12.dp))
         )
+        // Nombre del lugar del partido
         Text(
             text = nombreLugar,
             modifier = Modifier
@@ -72,26 +84,27 @@ fun CardMatch(
             color = Color.White,
             maxLines = 1
         )
+        // Fila con la fecha y hora del partido
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(top = 1.dp, start = 8.dp, end = 8.dp),
             horizontalArrangement = Arrangement.Center
         ) {
+            // Fecha del partido
             Text(
                 text = fechaPartido,
-                modifier = Modifier
-                    .padding(top = 2.dp, end = 10.dp),
+                modifier = Modifier.padding(top = 2.dp, end = 10.dp),
                 textAlign = TextAlign.Center,
                 fontFamily = poppins,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color.White
             )
+            // Hora del partido
             Text(
                 text = horaPartido,
-                modifier = Modifier
-                    .padding(top = 2.dp, start = 10.dp),
+                modifier = Modifier.padding(top = 2.dp, start = 10.dp),
                 textAlign = TextAlign.Center,
                 fontFamily = poppins,
                 fontSize = 13.sp,
@@ -99,13 +112,16 @@ fun CardMatch(
                 color = Color.White
             )
         }
-        Row (Modifier
-            .fillMaxWidth()
-            .padding(top = 1.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        // Fila con avatar del usuario organizador y nombre del usuario
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 1.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Avatar del usuario organizador del partido
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
                     model = avatarUsuario,
                     contentDescription = "Avatar del usuario",
@@ -114,10 +130,9 @@ fun CardMatch(
                         .height(28.dp)
                         .width(32.dp)
                         .padding(end = 6.dp)
-                        .clip(
-                            RoundedCornerShape(18.dp)
-                        )
+                        .clip(RoundedCornerShape(18.dp))
                 )
+                // Nombre del usuario organizador del partido
                 Text(
                     text = nombreUsuario,
                     modifier = Modifier,
@@ -128,10 +143,10 @@ fun CardMatch(
                     color = Color.White
                 )
             }
+            // Cantidad de jugadores inscritos / capacidad total
             Text(
                 text = "$jugadoresInscritos/$jugadoresTotales",
-                modifier = Modifier
-                    .padding(top = 2.dp, start = 10.dp),
+                modifier = Modifier.padding(top = 2.dp, start = 10.dp),
                 textAlign = TextAlign.Center,
                 fontFamily = poppins,
                 fontSize = 13.sp,
@@ -139,6 +154,5 @@ fun CardMatch(
                 color = Color.White
             )
         }
-
     }
 }

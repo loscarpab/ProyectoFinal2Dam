@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -134,7 +133,6 @@ fun CrearPartido(partidoViewModel: CreateMatchViewModel, navController: NavHostC
  * @param timePickerState Estado del selector de hora.
  * @param datePickerState Estado del selector de fecha.
  * @param formattedDate Fecha formateada en cadena.
- * @param galleryLauncher Lanzador de actividad para la galería.
  * @param navController Controlador de navegación para navegar entre los composables.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -189,7 +187,7 @@ fun MainContent(
             textButton = "Crea un partido", onClickButton = {
                 partidoViewModel.crearPartido {
                     navController.navigate(Routes.Inicio.route)
-                    Toast.makeText(partidoViewModel.context, "Partido creado con éxito", Toast.LENGTH_SHORT)
+                    Toast.makeText(partidoViewModel.context, "Partido creado con éxito", Toast.LENGTH_SHORT).show()
                 }
             }, modifier = Modifier.padding(top = 32.dp) // Padding superior
         )
@@ -369,7 +367,7 @@ fun InputFields(
                             partidoViewModel.setFoto(it.foto)
                         }){
                             Text(
-                                text = it.nombre.toString(),
+                                text = it.nombre,
                                 fontSize = 16.sp
                             )
                         }

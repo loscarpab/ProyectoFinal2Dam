@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,18 +30,27 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.ccormor392.pruebaproyectofinal.presentation.componentes.RowUser
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
 
+/**
+ * Pantalla de gestión de amigos.
+ *
+ * @param amigosViewModel ViewModel para la gestión de amigos.
+ * @param navController Controlador de navegación.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
-    // Observa el StateFlow _users y conviértelo en un State que puedas utilizar
+    // Convierte el StateFlow _users en un State que pueda ser observado
     val usersState = amigosViewModel.users.collectAsState()
     val isLoading = amigosViewModel.isLoading.collectAsState()
+
+    // Reinicia los datos del ViewModel al montar el Composable
     LaunchedEffect(Unit) {
         amigosViewModel.restart()
     }
+
     Scaffold(
         topBar = {
+            // Barra superior personalizada
             MyTopBar()
         },
         content = {
@@ -53,12 +61,15 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                     .background(PurpleGrey40),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Título de la pantalla
                 MiTexto(
                     string = "Amigos",
                     modifier = Modifier.padding(top = 24.dp),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
+
+                // Fila con el campo de búsqueda de amigos
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -73,33 +84,34 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                     )
                 }
 
-
+                // Sección para mostrar el estado de carga y los resultados de la búsqueda
                 Row(
                     modifier = Modifier
                         .height(300.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if(isLoading.value && usersState.value.isNotEmpty()){
+                    // Muestra un indicador de progreso mientras se cargan los datos
+                    if (isLoading.value && usersState.value.isNotEmpty()) {
                         CircularProgressIndicator()
                     }
-                    else if(!isLoading.value && usersState.value.isEmpty()){
+                    // Muestra un mensaje cuando no se encuentran resultados
+                    else if (!isLoading.value && usersState.value.isEmpty()) {
                         MiTexto(string = "No se encontraron resultados", modifier = Modifier.padding(top = 16.dp))
                     }
-                    else{
-                        // Aquí accedes a la lista de usuarios desde el State
+                    // Muestra la lista de amigos
+                    else {
                         LazyColumn(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.Start
                         ) {
+                            // Itera sobre la lista de usuarios y crea un RowUser para cada uno
                             usersState.value.forEach { (user, bool) ->
                                 item {
-                                    val lambda =
-                                    if (bool){
+                                    val lambda = if (bool) {
                                         { amigosViewModel.desagregarUsuario(user.userId) }
-                                    }
-                                    else{
-                                        {amigosViewModel.agregarUsuario(user.userId)}
+                                    } else {
+                                        { amigosViewModel.agregarUsuario(user.userId) }
                                     }
                                     RowUser(
                                         username = user.username,
@@ -113,6 +125,8 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                         }
                     }
                 }
+
+                // Botón para realizar la búsqueda de amigos
                 BotonMas(
                     textButton = "Buscar",
                     onClickButton = {
@@ -122,6 +136,7 @@ fun Amigos(amigosViewModel: AmigosViewModel, navController: NavHostController) {
                 )
             }
         },
+        // Barra inferior personalizada
         bottomBar = {
             MyBottomBar(navHostController = navController)
         }

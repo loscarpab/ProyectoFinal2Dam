@@ -15,8 +15,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 
+/**
+ * Composable que muestra un botón personalizado para el perfil.
+ *
+ * @param onClickButton Acción a realizar cuando se hace clic en el botón.
+ * @param texto Texto que se muestra dentro del botón.
+ */
 @Composable
-fun MiButtonPerfil(onClickButton:()->Unit, texto:String){
+fun MiButtonPerfil(
+    onClickButton: () -> Unit,
+    texto: String
+) {
+    // Contenedor con fondo redondeado y color de fondo principal, con clic habilitado
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -26,11 +36,11 @@ fun MiButtonPerfil(onClickButton:()->Unit, texto:String){
             .clickable { onClickButton() },
         contentAlignment = Alignment.Center
     ) {
+        // Texto dentro del botón, con fuente en negrita y tamaño específico
         MiTexto(
             string = texto,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp
         )
-
     }
 }

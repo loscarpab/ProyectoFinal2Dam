@@ -72,7 +72,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
-
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
 @Composable
@@ -81,43 +80,53 @@ fun Peticion(
     sitiosViewModel: SitiosViewModel,
     loginViewModel: LoginViewModel
 ) {
+    // Launcher para seleccionar imagen de la galería
     val galleryLauncher =
         rememberLauncherForActivityResult(PickImageFromGallery()) { imageUri ->
             imageUri?.let {
                 sitiosViewModel.changeImageUri(imageUri)
             }
         }
+
+    // Estado de los permisos de ubicación
     val permissionState = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
     )
+
+    // Marcador inicial en Madrid
     val mark = LatLng(40.420730042432076, -3.6901972115238824)
-    var markState = rememberMarkerState(position = mark)
+    val markState = rememberMarkerState(position = mark)
+
+    // Estado de la posición de la cámara en el mapa
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(mark, 10f)
     }
+
+    // Estado de la ubicación actual del usuario
     var location by remember { mutableStateOf<Location?>(null) }
+
     LaunchedEffect(Unit) {
+        // Iniciar la lógica cuando se lanza la composición
         sitiosViewModel.randomId()
         sitiosViewModel.restartFields()
     }
-    // Use LaunchedEffect to handle permissions logic when the composition is launched.
+
     LaunchedEffect(key1 = permissionState) {
-        // Check if all previously granted permissions are revoked.
+        // Manejar lógica de permisos cuando se lanza la composición
         val allPermissionsRevoked =
             permissionState.permissions.size == permissionState.revokedPermissions.size
 
-        // Filter permissions that need to be requested.
         val permissionsToRequest = permissionState.permissions.filter {
             !it.status.isGranted
         }
 
-        // If there are permissions to request, launch the permission request.
+        // Si se necesitan permisos, solicitarlos
         if (permissionsToRequest.isNotEmpty()) permissionState.launchMultiplePermissionRequest()
 
-        // Execute callbacks based on permission status.
+        // Manejar casos según el estado de los permisos
         if (allPermissionsRevoked) {
             Toast.makeText(
                 sitiosViewModel.context,
@@ -126,39 +135,41 @@ fun Peticion(
             ).show()
         } else {
             if (permissionState.allPermissionsGranted) {
+                // Acceder al proveedor de ubicación para obtener la ubicación actual
                 val fusedLocationProviderClient =
                     LocationServices.getFusedLocationProviderClient(sitiosViewModel.context)
-                // Determine the accuracy priority based on the 'priority' parameter
                 val accuracy = Priority.PRIORITY_HIGH_ACCURACY
-                // Retrieve the current location asynchronously
                 fusedLocationProviderClient.getCurrentLocation(
                     accuracy, CancellationTokenSource().token,
                 ).addOnSuccessListener { loc ->
                     location = loc
                     loc?.let {
+                        // Actualizar posición de cámara y marcador en el mapa
                         cameraPositionState.position =
                             CameraPosition.fromLatLngZoom(LatLng(it.latitude, it.longitude), 14f)
                         markState.position = LatLng(it.latitude, it.longitude)
                     }
-                }.addOnFailureListener { exception ->
-                    // If an error occurs, invoke the failure callback with the exception
+                }.addOnFailureListener { _ ->
+                    // Manejar errores al obtener la ubicación
                     Toast.makeText(
                         sitiosViewModel.context,
                         "No se ha podido conseguir la ubicación",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            } else {
             }
         }
     }
+
+    // Scaffold que contiene la estructura de la pantalla
     Scaffold(
-        // Barra superior
+        // Barra superior personalizada
         topBar = { MyTopBar() },
-        // Contenido principal
+        // Contenido principal de la pantalla
         content = {
             LazyColumn(Modifier.padding(top = 80.dp, bottom = 100.dp)) {
                 item {
+                    // Box con imagen editable desde la galería
                     Box(
                         Modifier
                             .wrapContentSize()
@@ -173,7 +184,6 @@ fun Peticion(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(224.dp)
-
                         )
                         Image(
                             painter = painterResource(id = R.drawable.icon_add_photo),
@@ -183,10 +193,9 @@ fun Peticion(
                                 .size(50.dp)
                         )
                     }
-                    // Componentes de texto para el título y el subtítulo
-
                 }
                 item {
+                    // Título y descripción de la pantalla
                     Column(horizontalAlignment = Alignment.Start) {
                         MiTexto(
                             string = "Envianos un sitio",
@@ -195,7 +204,7 @@ fun Peticion(
                             modifier = Modifier.padding(top = 8.dp, start = 16.dp)
                         )
                         MiTexto(
-                            string = "Rellena los campos para enviar una peticion para añadir un nuevo sitio",
+                            string = "Rellena los campos para enviar una petición para añadir un nuevo sitio",
                             fontWeight = FontWeight.Medium,
                             fontSize = 12.sp,
                             modifier = Modifier.padding(top = 8.dp, start = 16.dp)
@@ -208,6 +217,7 @@ fun Peticion(
                     }
                 }
                 item {
+                    // Campos de texto para nombre y tipo de sitio
                     Column(
                         Modifier
                             .fillMaxWidth()
@@ -226,6 +236,7 @@ fun Peticion(
                             string = "Nombre completo",
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
+                        // Dropdown para seleccionar el tipo de sitio
                         ExposedDropdownMenuBox(
                             expanded = sitiosViewModel.expandedMenuTextField,
                             onExpandedChange = { sitiosViewModel.changeExpanded() }) {
@@ -256,9 +267,9 @@ fun Peticion(
                             }
                         }
                     }
-
                 }
                 item {
+                    // Sección para seleccionar ubicación en el mapa
                     Column(Modifier.padding(top = 16.dp)) {
                         MiTexto(
                             string = "Seleccionar ubicación",
@@ -266,6 +277,7 @@ fun Peticion(
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
+                        // Mapa de Google para seleccionar la ubicación del sitio
                         GoogleMap(
                             modifier = Modifier
                                 .height(260.dp)
@@ -277,6 +289,7 @@ fun Peticion(
                                 sitiosViewModel.changeLocation(latLng)
                             }
                         ) {
+                            // Marcador en la ubicación actual y marcador nuevo si se selecciona una ubicación
                             Marker(
                                 state = markState,
                                 title = "Tu ubicación",
@@ -292,10 +305,11 @@ fun Peticion(
                     }
                 }
                 item {
+                    // Botón para enviar la petición de nuevo sitio
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        // Botón para crear un nuevo partido
                         BotonMas(
-                            textButton = "Crea una peticion", onClickButton = {
+                            textButton = "Crea una petición",
+                            onClickButton = {
                                 sitiosViewModel.crearPeticion(
                                     isAdmin = loginViewModel.isAdmin(),
                                     onSuccess = {
@@ -306,30 +320,34 @@ fun Peticion(
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     })
-                            }, modifier = Modifier.padding(top = 32.dp) // Padding superior
+                            },
+                            modifier = Modifier.padding(top = 32.dp)
                         )
                     }
                 }
                 item {
+                    // Alerta si se muestra un mensaje
                     if (sitiosViewModel.showAlert) {
-                        Alert(title = stringResource(R.string.alerta),
+                        Alert(
+                            title = stringResource(R.string.alerta),
                             message = stringResource(R.string.alert_crear_partido),
                             confirmText = stringResource(R.string.aceptar),
                             onConfirmClick = { sitiosViewModel.closeAlert() },
-                            onDismissClick = { })
+                            onDismissClick = { }
+                        )
                     }
                 }
                 item {
+                    // Diálogo de carga mientras se procesa la petición
                     if (sitiosViewModel.showLoading) {
                         Dialog(onDismissRequest = { }) {
                             CircularProgressIndicator()
                         }
                     }
-
                 }
             }
-
         },
-        // Barra inferior
-        bottomBar = { MyBottomBar(navHostController = navController) })
+        // Barra inferior personalizada
+        bottomBar = { MyBottomBar(navHostController = navController) }
+    )
 }

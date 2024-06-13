@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +29,7 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTextField
 import com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios.LoginViewModel
 import com.ccormor392.pruebaproyectofinal.textotopscreenlogs.TextoTopScreenLogs
 import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
+
 /**
  * Composable que representa la pantalla de registro de usuario.
  * Permite al usuario completar un formulario con sus datos para crear una cuenta.
@@ -37,7 +37,6 @@ import com.ccormor392.pruebaproyectofinal.ui.theme.PurpleGrey40
  * @param navController Controlador de navegación para gestionar las transiciones entre pantallas.
  * @param loginViewModel ViewModel que gestiona la lógica de la pantalla de registro.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Registro(

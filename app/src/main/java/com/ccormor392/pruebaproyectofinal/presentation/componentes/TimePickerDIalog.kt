@@ -27,6 +27,16 @@ import androidx.compose.ui.window.DialogProperties
 import com.ccormor392.pruebaproyectofinal.ui.theme.maincolor
 import com.ccormor392.pruebaproyectofinal.ui.theme.xdark
 
+/**
+ * Composable que muestra un diálogo con un TimePicker para elegir la hora.
+ *
+ * @param title Título del diálogo.
+ * @param onDismissRequest Acción a realizar cuando se cierra el diálogo.
+ * @param confirmButton Composable para el botón de confirmar.
+ * @param dismissButton Composable opcional para el botón de descartar (cerrar el diálogo).
+ * @param containerColor Color de fondo del diálogo.
+ * @param timePickerState Estado del TimePicker.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialogs(
@@ -35,13 +45,16 @@ fun TimePickerDialogs(
     confirmButton: @Composable (() -> Unit),
     dismissButton: @Composable (() -> Unit)? = null,
     containerColor: Color = Color(10, 17, 26),
-    timePickerState: TimePickerState) {
+    timePickerState: TimePickerState
+) {
+    // Diálogo modal
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(
             usePlatformDefaultWidth = false
         ),
     ) {
+        // Superficie con sombra y forma extra grande
         Surface(
             shape = MaterialTheme.shapes.extraLarge,
             tonalElevation = 6.dp,
@@ -54,10 +67,12 @@ fun TimePickerDialogs(
                 ),
             color = containerColor
         ) {
+            // Columna principal del diálogo
             Column(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Título del diálogo
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -65,28 +80,38 @@ fun TimePickerDialogs(
                     text = title,
                     color = Color.White
                 )
-                if (timePickerState != null){
-                    TimePicker(timePickerState, colors = colorsTimePickerDialog())
+                // TimePicker para seleccionar la hora
+                if (timePickerState != null) {
+                    TimePicker(
+                        timePickerState,
+                        colors = colorsTimePickerDialog()
+                    )
                 }
 
-
-
+                // Fila para los botones de acción (confirmar y descartar)
                 Row(
                     modifier = Modifier
                         .height(40.dp)
                         .fillMaxWidth()
                 ) {
+                    // Espaciador para alinear los botones a los extremos
                     Spacer(modifier = Modifier.weight(1f))
+                    // Botón de descartar si está definido
                     dismissButton?.invoke()
+                    // Botón de confirmar
                     confirmButton()
                 }
             }
         }
     }
 }
+
+/**
+ * Definición de colores personalizados para el TimePicker en el diálogo.
+ */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun colorsTimePickerDialog():TimePickerColors{
+fun colorsTimePickerDialog(): TimePickerColors {
     return TimePickerDefaults.colors(
         clockDialColor = Color.White,
         selectorColor = maincolor,

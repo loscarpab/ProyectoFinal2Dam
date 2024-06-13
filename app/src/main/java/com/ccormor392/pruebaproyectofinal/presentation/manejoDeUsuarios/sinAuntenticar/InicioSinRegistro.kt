@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,14 +27,12 @@ import com.ccormor392.pruebaproyectofinal.navigation.Routes.InicioSesion
 import com.ccormor392.pruebaproyectofinal.navigation.Routes.Registro
 import com.ccormor392.pruebaproyectofinal.xxlargexbold.poppins
 
-
 /**
  * Composable que representa la pantalla de inicio cuando el usuario no está registrado.
  * Proporciona opciones para registrarse e iniciar sesión.
  *
  * @param navController Controlador de navegación para gestionar las transiciones entre pantallas.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun InicioSinRegistro(navController: NavHostController) {
@@ -92,4 +89,3 @@ fun InicioSinRegistro(navController: NavHostController) {
     )
 
 }
-

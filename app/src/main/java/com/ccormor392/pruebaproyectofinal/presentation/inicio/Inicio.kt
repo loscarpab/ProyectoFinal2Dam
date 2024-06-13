@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.location.Location
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,12 +17,9 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -55,12 +50,11 @@ import com.ccormor392.pruebaproyectofinal.presentation.componentes.MyTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.firestore.GeoPoint
 import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
 /**
  * Composable para la pantalla de inicio.
@@ -71,31 +65,46 @@ import java.util.Date
  */
 @Composable
 fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
+    // Recolectar la lista de partidos con nombres de usuario como estado actual
     val lista = inicioViewModel.listaPartidosConNombreUsuario.collectAsState()
+
+    // Estado de permiso para la ubicación actual del usuario
     val locationPermissionState = rememberPermissionState(
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
-    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(inicioViewModel.context) }
+
+    // Cliente para obtener la ubicación actual
+    val fusedLocationClient = remember {
+        LocationServices.getFusedLocationProviderClient(inicioViewModel.context)
+    }
+
+    // Estado mutable para almacenar la ubicación actual del usuario
     var location by remember { mutableStateOf<Location?>(null) }
 
     LaunchedEffect(Unit) {
-        if (!locationPermissionState.status.isGranted){
+        // Solicitar permiso de ubicación si aún no está concedido
+        if (!locationPermissionState.status.isGranted) {
             locationPermissionState.launchPermissionRequest()
-        }else{
+        } else {
+            // Obtener la última ubicación conocida del usuario si el permiso está concedido
             fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
                 location = loc
             }
         }
+
+        // Cargar todos los partidos al iniciar la pantalla
         inicioViewModel.pedirTodosLosPartidos()
     }
+
+    // Estructura principal de la pantalla utilizando Scaffold
     Scaffold(
         topBar = {
             MyTopBar()
         },
         content = {
-            // Contenido principal de la pantalla
+            // Contenido principal de la pantalla dentro de MyScaffoldContent
             MyScaffoldContent {
-                // Botón para crear un nuevo partido
+                // Row que contiene el botón para crear un nuevo partido
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -104,99 +113,131 @@ fun Inicio(navController: NavHostController, inicioViewModel: InicioViewModel) {
                         textButton = stringResource(id = R.string.crear_partido),
                         onClickButton = { navController.navigate(Routes.CrearPartido.route) }
                     )
-
                 }
+
+                // Verificar si la lista de partidos no está vacía antes de mostrarla
                 if (lista.value.isNotEmpty()) {
-                    LazyColumn(modifier = Modifier.padding(bottom = 88.dp, top = 16.dp)){
-                        if (locationPermissionState.status.isGranted && location != null){
+                    LazyColumn(modifier = Modifier.padding(bottom = 88.dp, top = 16.dp)) {
+                        // Mostrar la fila de partidos más cercanos si se concede el permiso de ubicación
+                        if (locationPermissionState.status.isGranted && location != null) {
                             item {
                                 FilaInicio(
                                     lista = compareDistances(location!!, lista.value.distinct()),
                                     navController = navController,
-                                    Icons.Outlined.Place,
-                                    "Más cercanos",
-                                    4.dp
+                                    icono = Icons.Outlined.Place,
+                                    textoTitulo = "Más cercanos",
+                                    paddingTop = 4.dp
                                 )
                             }
                         }
+
+                        // Mostrar la fila de partidos próximos en el tiempo
                         item {
                             FilaInicio(
-                                lista = lista.value.distinct().filter { it.first.timestamp > Date(System.currentTimeMillis()) }.sortedBy { it.first.timestamp },
+                                lista = lista.value.distinct()
+                                    .filter { it.first.timestamp > Date(System.currentTimeMillis()) }
+                                    .sortedBy { it.first.timestamp },
                                 navController = navController,
-                                Icons.Outlined.DateRange,
-                                "Proximamente"
+                                icono = Icons.Outlined.DateRange,
+                                textoTitulo = "Próximamente"
                             )
                         }
+
+                        // Mostrar la fila de partidos con pocos huecos disponibles
                         item {
                             FilaInicio(
                                 lista = lista.value.distinct().sortedByDescending { it.first.jugadores.size },
                                 navController = navController,
-                                Icons.Outlined.Warning,
-                                "Pocos huecos"
+                                icono = Icons.Outlined.Warning,
+                                textoTitulo = "Pocos huecos"
                             )
                         }
+
+                        // Mostrar la fila de partidos en los que el usuario participa
                         item {
                             FilaInicio(
-                                lista = lista.value.distinct().filter { equipo -> equipo.first.jugadores.any { it.userId == inicioViewModel.getUserId() } },
+                                lista = lista.value.distinct()
+                                    .filter { equipo ->
+                                        equipo.first.jugadores.any { it.userId == inicioViewModel.getUserId() }
+                                    },
                                 navController = navController,
-                                Icons.Outlined.AccountCircle,
-                                "Participando"
+                                icono = Icons.Outlined.AccountCircle,
+                                textoTitulo = "Participando"
                             )
                         }
                     }
-
-
-
                 } else {
+                    // Mostrar un indicador de carga si la lista está vacía
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(modifier = Modifier.size(100.dp))
                     }
                 }
-
-
             }
         },
         bottomBar = {
-            // Barra de la parte inferior con opciones de navegación
+            // Barra inferior de navegación
             MyBottomBar(navHostController = navController)
         }
     )
 }
 
+/**
+ * Composable para mostrar una fila de inicio con una lista de partidos.
+ *
+ * @param lista Lista de pares de Partido y UserInicio para mostrar en la fila.
+ * @param navController Controlador de navegación para la navegación entre pantallas.
+ * @param icono Icono a mostrar al inicio de la fila.
+ * @param textoTitulo Texto del título que describe el contenido de la fila.
+ * @param paddingTop Espacio de relleno en la parte superior de la fila.
+ */
 @Composable
-fun FilaInicio(lista: List<Pair<Partido, UserInicio>>, navController: NavHostController,icono:ImageVector, textoTitulo:String, paddingTop: Dp = 20.dp) {
+fun FilaInicio(
+    lista: List<Pair<Partido, UserInicio>>,
+    navController: NavHostController,
+    icono: ImageVector,
+    textoTitulo: String,
+    paddingTop: Dp = 20.dp
+) {
     Row(
         Modifier
             .fillMaxWidth()
             .padding(start = 8.dp, end = 16.dp, top = paddingTop, bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Icono que representa el tipo de información mostrada en la fila
         Icon(
             icono,
             contentDescription = "fecha",
             tint = Color.White,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
+        // Texto que describe el contenido o propósito de la fila
         MiTexto(string = textoTitulo, fontSize = 16.sp, fontWeight = FontWeight.Medium)
     }
-    // Lista de partidos disponibles
+
+    // LazyRow que muestra tarjetas individuales para cada partido en la lista
     LazyRow(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp)
     ) {
-        // Itera sobre los elementos de la lista de partidos y muestra una tarjeta para cada uno
+        // Iterar sobre los elementos de la lista y mostrar una tarjeta para cada partido
         items(lista) { partidoConNombreUsuario ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp), contentAlignment = Alignment.Center
+                    .padding(horizontal = 8.dp),
+                contentAlignment = Alignment.Center
             ) {
+                // Tarjeta personalizada que muestra detalles del partido y permite navegar a él
                 CardMatch(
-                    onClick = { navController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second.username}") },
+                    onClick = {
+                        navController.navigate("${Routes.UnirsePartido.route}/${partidoConNombreUsuario.first.idPartido}/${partidoConNombreUsuario.second.username}")
+                    },
                     imagenPartido = partidoConNombreUsuario.first.sitio.foto,
-                    nombreLugar = partidoConNombreUsuario.first.sitio.nombre,
+                    nombreLugar = partidoConNombreUsuario
+                        .first.sitio.nombre,
                     fechaPartido = partidoConNombreUsuario.first.fecha,
                     horaPartido = partidoConNombreUsuario.first.hora,
                     avatarUsuario = partidoConNombreUsuario.second.avatar,
@@ -205,21 +246,31 @@ fun FilaInicio(lista: List<Pair<Partido, UserInicio>>, navController: NavHostCon
                     jugadoresTotales = if (partidoConNombreUsuario.first.sitio.tipo == "fut7") "14" else "10"
                 )
             }
-
         }
-
-
-
     }
 }
 
+/**
+ * Convierte una GeoPoint en una Location.
+ *
+ * @param myLocation GeoPoint que representa la ubicación.
+ * @return Location equivalente a la ubicación dada.
+ */
 fun getLocationFromMyLocation(myLocation: GeoPoint): Location {
     return Location("").apply {
         latitude = myLocation.latitude
         longitude = myLocation.longitude
     }
 }
-// Calcular distancias y ordenar la lista
+
+/**
+ * Compara distancias entre una ubicación de referencia y una lista de partidos.
+ * Ordena la lista de partidos por distancia desde la ubicación de referencia.
+ *
+ * @param referenceLocation Ubicación de referencia para calcular distancias.
+ * @param partidos Lista de pares de Partido y UserInicio para ordenar por distancia.
+ * @return Lista ordenada de pares de Partido y UserInicio por distancia ascendente.
+ */
 fun compareDistances(
     referenceLocation: Location,
     partidos: List<Pair<Partido, UserInicio>>
@@ -230,9 +281,8 @@ fun compareDistances(
             val distance = referenceLocation.distanceTo(partidoLocation)
             Triple(partido, userInicio, distance)
         }
-        .sortedBy { it.third } // Ordenar por distancia
+        .sortedBy { it.third } // Ordenar por distancia ascendente
         .map { (partido, userInicio, _) ->
             partido to userInicio
         }
 }
-

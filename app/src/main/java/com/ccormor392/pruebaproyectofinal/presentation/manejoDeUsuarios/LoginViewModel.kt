@@ -1,6 +1,5 @@
 package com.ccormor392.pruebaproyectofinal.presentation.manejoDeUsuarios
 
-
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -31,12 +30,19 @@ import java.util.Locale
  *
  * @property auth Instancia de FirebaseAuth utilizada para las operaciones de autenticación.
  * @property showAlert Estado que determina si se debe mostrar una alerta de error en la UI.
+ * @property showLoading Estado que determina si se debe mostrar un indicador de carga en la UI.
  * @property email Email del usuario, utilizado para el inicio de sesión y registro.
  * @property password Contraseña del usuario, utilizada para el inicio de sesión y registro.
  * @property userName Nombre de usuario, utilizado solo en el proceso de registro.
+ * @property imageUri URI de la imagen seleccionada por el usuario para su avatar.
+ * @property segmentedButton Estado del botón segmentado para alternar entre partidos creados y próximos.
+ * @property seguidores Flujo de estado que contiene el número de seguidores del usuario autenticado.
+ * @property listaPartidosPasados Flujo de estado que contiene la lista de partidos pasados del usuario autenticado.
+ * @property listaPartidosProximamente Flujo de estado que contiene la lista de partidos próximos del usuario autenticado.
+ * @property soySeguidor Estado que indica si el usuario autenticado sigue al usuario visitado.
+ * @property usuarioAutenticado Flujo de estado que contiene la información del usuario autenticado.
  */
 class LoginViewModel : ViewModel() {
-    //Definición de variables y funciones para manejar el inicio de sesión y registro de usuarios.
 
     private val auth: FirebaseAuth = Firebase.auth
     private val firestore = Firebase.firestore
@@ -54,7 +60,7 @@ class LoginViewModel : ViewModel() {
         private set
     var imageUri by mutableStateOf<Uri?>(null)
         private set
-    var segmentedButton by mutableStateOf<Boolean>(true)
+    var segmentedButton by mutableStateOf(true)
         private set
 
     private val _seguidores = MutableStateFlow(0)
@@ -65,12 +71,11 @@ class LoginViewModel : ViewModel() {
 
     private val _listaPartidosProximamente = MutableStateFlow(mutableListOf<Partido>())
     val listaPartidosProximamente: StateFlow<MutableList<Partido>> = _listaPartidosProximamente
-    var soySeguidor by mutableStateOf(false)
-        private set
+
+    private var soySeguidor by mutableStateOf(false)
 
     private val _usuarioAutenticado = MutableStateFlow(User("", "", ""))
     val usuarioAutenticado: StateFlow<User> = _usuarioAutenticado
-
 
     /**
      * Intenta iniciar sesión con el email y la contraseña proporcionados.
@@ -83,13 +88,12 @@ class LoginViewModel : ViewModel() {
         showLoading = true
         viewModelScope.launch {
             try {
-                // Utiliza el servicio de autenticación de Firebase para validar al usuario por email y contraseña
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             onSuccess()
                         } else {
-                            Log.d("ERROR EN FIREBASE", "Usuario y/o contrasena incorrectos")
+                            Log.d("ERROR EN FIREBASE", "Usuario y/o contraseña incorrectos")
                             showLoading = false
                             showAlert = true
                         }
@@ -112,11 +116,9 @@ class LoginViewModel : ViewModel() {
         showLoading = true
         viewModelScope.launch {
             try {
-                //Utiliza el servicio de autenticación de Firebase para registrar al usuario por email y contraseña
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            //Si se realiza con éxito, almacenamos el usuario en la colección "Users"
                             saveUser(userName.lowercase(Locale.ROOT))
                             showLoading = false
                             onSuccess()
@@ -150,29 +152,36 @@ class LoginViewModel : ViewModel() {
                 amigos = mutableListOf(),
                 avatar = "https://firebasestorage.googleapis.com/v0/b/proyectofinal-f110d.appspot.com/o/images%2FdefaultAvatar.png?alt=media&token=36c16579-0a2e-4f75-a75b-1b2a37e6f732"
             )
-            //Añade el usuario a la colección "Users" en la base de datos Firestore
+
             firestore.collection("Users")
                 .add(user)
                 .addOnSuccessListener {
-                    Log.d(
-                        "GUARDAR OK",
-                        "Se guardó el usuario correctamente en Firestore"
-                    )
+                    Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore")
                 }
                 .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
         }
     }
-    fun isAdmin():Boolean{
+
+    /**
+     * Verifica si el usuario actual es un administrador.
+     *
+     * @return true si el usuario es administrador, false de lo contrario.
+     */
+    fun isAdmin(): Boolean {
         val email = auth.currentUser?.email
         return email == "admin@admin.com"
     }
 
-
+    /**
+     * Sube la imagen seleccionada por el usuario al almacenamiento de Firebase y actualiza el avatar del usuario en Firestore.
+     *
+     * @param filename URI de la imagen seleccionada por el usuario.
+     */
     fun uploadImageToStorage(filename: Uri?) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (filename != null) {
-                    var uri = storageRef.child("images").child(auth.uid.toString())
+                    val uri = storageRef.child("images").child(auth.uid.toString())
                         .child("${auth.uid.toString()}foto").putFile(filename)
                         .await().storage.downloadUrl.await()
                     imageUri = uri
@@ -186,17 +195,14 @@ class LoginViewModel : ViewModel() {
                                 }
                                 if (querySnapshot != null) {
                                     for (document in querySnapshot) {
-                                        // El usuario no está en la lista de jugadores, se puede unir al partido
                                         val partidoRef =
                                             firestore.collection("Users").document(document.id)
                                         partidoRef.update("avatar", imageUri)
                                             .addOnSuccessListener {
-                                                // El usuario se ha cambiado el avatar exitosamente
-                                                //onSuccess()
+                                                // El avatar del usuario se ha actualizado exitosamente
                                             }
                                             .addOnFailureListener { exception ->
-                                                // Manejar errores al cambiar el partido
-                                                println("Error al cambiar el partido: $exception")
+                                                Log.e("ERROR", "Error al actualizar el avatar del usuario: $exception")
                                             }
 
                                     }
@@ -206,9 +212,9 @@ class LoginViewModel : ViewModel() {
                 }
 
             } catch (e: Exception) {
+                Log.e("ERROR", "Error al subir imagen al almacenamiento: $e")
             }
         }
-
     }
 
     /**
@@ -245,14 +251,23 @@ class LoginViewModel : ViewModel() {
         this.userName = userName
     }
 
+
     /**
      * Cierra la sesión del usuario actual en Firebase Auth.
+     *
+     * @param onSuccess Acción a ejecutar si el cierre de sesión es exitoso.
      */
     fun signOut(onSuccess: () -> Unit) {
         auth.signOut()
         onSuccess()
     }
 
+    /**
+     * Obtiene los datos del usuario autenticado desde Firestore.
+     * Si se proporciona un ID específico, busca los datos de ese usuario; de lo contrario, obtiene los datos del usuario actualmente autenticado.
+     *
+     * @param idparam ID del usuario a buscar (opcional).
+     */
     fun conseguirDatosUsuarioAutenticado(idparam: String? = null) {
         val idAbuscar = idparam ?: auth.currentUser?.uid
         firestore.collection("Users").whereEqualTo("userId", idAbuscar)
@@ -262,7 +277,7 @@ class LoginViewModel : ViewModel() {
                     val id = document.getString("userId")!!
                     val email = document.getString("email")!!
                     val username = document.getString("username")!!
-                    val partidosCreados = document.getLong("partidosCreados")!!
+                    val partidosCreados = document.getLong("partidosCreados") ?: 0
                     val avatar = document.getString("avatar") ?: ""
                     val amigos = document.get("amigos") as? List<String> ?: mutableListOf()
 
@@ -273,6 +288,13 @@ class LoginViewModel : ViewModel() {
                 }
             }
     }
+
+    /**
+     * Recupera los partidos creados por el usuario autenticado desde Firestore.
+     * Si se proporciona un ID específico, recupera los partidos creados por ese usuario; de lo contrario, recupera los partidos del usuario actualmente autenticado.
+     *
+     * @param idparam ID del usuario a buscar (opcional).
+     */
     fun recuperarPartidos(idparam: String? = null){
         val idAbuscar = idparam ?: auth.currentUser?.uid
         _listaPartidosPasados.value = mutableListOf()
@@ -292,20 +314,34 @@ class LoginViewModel : ViewModel() {
                             }
                         }
                     }
-            }catch (_:Exception){
-
+            }catch (e:Exception){
+                Log.e("ERROR", "Error al recuperar partidos: ${e.message}")
             }
         }
 
     }
+
+    /**
+     * Busca y cuenta los seguidores de un usuario específico en Firestore.
+     *
+     * @param idparam ID del usuario del cual se van a contar los seguidores.
+     */
     private fun buscarSeguidores(idparam: String) {
         firestore.collection("Users").whereArrayContains("amigos", idparam)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 _seguidores.value = querySnapshot?.count() ?: 0
             }
+            .addOnFailureListener { e ->
+                Log.e("ERROR", "Error al buscar seguidores: $e")
+            }
     }
 
+    /**
+     * Verifica si el usuario autenticado sigue a otro usuario específico en Firestore.
+     *
+     * @param idparam ID del usuario que se desea verificar si es seguido por el usuario autenticado.
+     */
     private fun soySeguidor(idparam: String) {
         firestore.collection("Users").whereEqualTo("userId", auth.currentUser?.uid)
             .whereArrayContains("amigos", idparam)
@@ -313,15 +349,31 @@ class LoginViewModel : ViewModel() {
             .addOnSuccessListener { querySnapshot ->
                 soySeguidor = !querySnapshot.isEmpty
             }
+            .addOnFailureListener { e ->
+                Log.e("ERROR", "Error al verificar si soy seguidor: $e")
+            }
     }
 
+    /**
+     * Alterna el estado del botón segmentado entre los partidos creados y los próximos.
+     */
     fun changeSegmentedButton(){
         segmentedButton = !segmentedButton
     }
 
+    /**
+     * Verifica si el perfil actualmente visualizado es el perfil del usuario autenticado.
+     *
+     * @return true si es el perfil del usuario autenticado, false de lo contrario.
+     */
     fun esMiPerfil(): Boolean {
         return auth.currentUser?.uid == usuarioAutenticado.value.userId
     }
+
+    /**
+     * Establece el estado de carga en falso.
+     * Se utiliza para ocultar el indicador de carga cuando no es necesario mostrarlo.
+     */
     fun showLoadingtoFalse(){
         showLoading = false
     }

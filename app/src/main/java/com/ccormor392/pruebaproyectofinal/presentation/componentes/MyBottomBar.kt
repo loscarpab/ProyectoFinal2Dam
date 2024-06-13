@@ -7,14 +7,18 @@ import androidx.navigation.NavHostController
 import com.ccormor392.pruebaproyectofinal.bottombar.BottomBar
 import com.ccormor392.pruebaproyectofinal.navigation.Routes
 
+/**
+ * Composable que muestra la barra de navegación inferior de la aplicación.
+ *
+ * @param navHostController Controlador de navegación para manejar las transiciones entre destinos.
+ */
 @Composable
 fun MyBottomBar(navHostController: NavHostController) {
     BottomBar(
         modifier = Modifier.fillMaxWidth(),
-        onClickUsuario = {navHostController.navigate(Routes.MiPerfil.route)  },
-        onClickInicio ={navHostController.navigate(Routes.Inicio.route)},
-        onClickExplorar = {navHostController.navigate(Routes.Sitios.route)},
-        onClickAmigos = { navHostController.navigate(Routes.Amigos.route)}
+        onClickUsuario = { navHostController.navigate(Routes.MiPerfil.route) },
+        onClickInicio = { navHostController.navigate(Routes.Inicio.route) },
+        onClickExplorar = { navHostController.navigate(Routes.Sitios.route) },
+        onClickAmigos = { navHostController.navigate(Routes.Amigos.route) }
     )
 }
-
