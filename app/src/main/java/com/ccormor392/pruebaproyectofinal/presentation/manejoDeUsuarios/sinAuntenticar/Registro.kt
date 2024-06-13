@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,6 +44,9 @@ fun Registro(
     navController: NavHostController,
     loginViewModel: LoginViewModel
 ) {
+    LaunchedEffect(Unit){
+        loginViewModel.showLoadingtoFalse()
+    }
     // Estructura del diseño de la pantalla de registro
     Scaffold(
         topBar = {

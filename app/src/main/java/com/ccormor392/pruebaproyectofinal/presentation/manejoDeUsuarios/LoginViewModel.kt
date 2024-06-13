@@ -322,4 +322,7 @@ class LoginViewModel : ViewModel() {
     fun esMiPerfil(): Boolean {
         return auth.currentUser?.uid == usuarioAutenticado.value.userId
     }
+    fun showLoadingtoFalse(){
+        showLoading = false
+    }
 }

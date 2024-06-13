@@ -101,6 +101,7 @@ fun Peticion(
     var location by remember { mutableStateOf<Location?>(null) }
     LaunchedEffect(Unit) {
         sitiosViewModel.randomId()
+        sitiosViewModel.restartFields()
     }
     // Use LaunchedEffect to handle permissions logic when the composition is launched.
     LaunchedEffect(key1 = permissionState) {
@@ -301,7 +302,7 @@ fun Peticion(
                                         navController.navigate(Routes.Sitios.route)
                                         Toast.makeText(
                                             sitiosViewModel.context,
-                                            "Petición creada, muchas gracias",
+                                            "Petición creada",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     })

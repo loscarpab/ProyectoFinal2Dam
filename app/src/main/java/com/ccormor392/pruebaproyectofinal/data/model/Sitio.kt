@@ -10,4 +10,14 @@ data class Sitio(
     val tipo: String ="",
     val peticion:Boolean = true
 ) {
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            "foto" to foto,
+            "nombre" to nombre,
+            "nombreLargo" to nombreLargo,
+            "ubicacion" to ubicacion,
+            "tipo" to tipo,
+            "peticion" to peticion
+        )
+    }
 }

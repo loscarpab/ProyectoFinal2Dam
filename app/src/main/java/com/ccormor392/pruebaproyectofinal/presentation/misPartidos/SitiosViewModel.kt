@@ -2,6 +2,7 @@ package com.ccormor392.pruebaproyectofinal.presentation.misPartidos
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ContentValues
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -77,15 +79,21 @@ class SitiosViewModel(application: Application) : AndroidViewModel(application) 
     var segmentedButton by mutableStateOf<Boolean>(true)
         private set
 
-
+    fun restartFields(){
+        imageUri = null
+        namePeticion = ""
+        nombreCompletoPeticion = ""
+        tipo = ""
+        newMarkerPosition = null
+    }
     /**
      * Función para obtener todos los partidos del usuario desde Firestore.
      * Consulta Firestore para obtener la lista de partidos del usuario actual y actualiza [_listaMisPartidos].
      */
-    fun pedirTodosLosSitios(esAdmin:Boolean) {
+    fun pedirTodosLosSitios(esAdmin: Boolean) {
         // Consulta a Firestore para obtener los sitios
         var collection = firestore.collection("Sitios").whereEqualTo("peticion", false)
-        if (esAdmin){
+        if (esAdmin) {
             collection = firestore.collection("Sitios")
         }
         collection.get()
@@ -202,7 +210,7 @@ class SitiosViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun crearPeticion(onSuccess: () -> Unit, isAdmin:Boolean) {
+    fun crearPeticion(onSuccess: () -> Unit, isAdmin: Boolean) {
         showLoading = true
         viewModelScope.launch {
             val userId = auth.currentUser?.uid
@@ -240,6 +248,81 @@ class SitiosViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun borrarSitio(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            showLoading = true
+            // Consulta a Firestore para obtener el partido que se va a borrar
+            firestore.collection("Sitios")
+                .addSnapshotListener { querySnapshot, error ->
+                    if (error != null) {
+                        showLoading = false
+                        // Si hay un error en la consulta, se registra en el log y se ignora
+                        Log.e(ContentValues.TAG, "Error al obtener el partido a borrar: $error")
+                        return@addSnapshotListener
+                    }
+                    querySnapshot?.let { snapshot ->
+                        // Bucle sobre los documentos obtenidos en la consulta
+                        for (document in snapshot.documents) {
+                            val sitio = document.toObject(Sitio::class.java)
+                            if (sitio != null) {
+                                if (sitio.peticion == _selectedSitio.value.peticion && sitio.tipo == _selectedSitio.value.tipo && sitio.nombre == _selectedSitio.value.nombre && sitio.foto == _selectedSitio.value.foto && sitio.ubicacion == _selectedSitio.value.ubicacion && sitio.nombreLargo == _selectedSitio.value.nombreLargo) {
+                                    // Borrado del documento de Firebase
+                                    document.reference.delete()
+                                        .addOnSuccessListener {
+                                            showLoading = false
+                                            onSuccess()
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            showLoading = false
+                                            // Manejo del fallo al borrar el partido de Firebase, se registra en el log
+                                            Log.e(
+                                                ContentValues.TAG,
+                                                "Error al borrar el partido de Firebase: $exception"
+                                            )
+                                        }
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+        }
+
+    }
+
+    fun confirmarPeticion(onSuccess: () -> Unit) {
+        showLoading = true
+        viewModelScope.launch {
+            firestore.collection("Sitios")
+                .whereEqualTo("ubicacion", _selectedSitio.value.ubicacion)
+                .get().addOnSuccessListener {
+                        querySnapshot ->
+                    if (querySnapshot != null) {
+                        for (document in querySnapshot) {
+                            val peticion = document.toObject(Sitio::class.java)
+                            if (peticion.peticion == _selectedSitio.value.peticion && peticion.tipo == _selectedSitio.value.tipo && peticion.foto == _selectedSitio.value.foto && peticion.nombre == _selectedSitio.value.nombre && peticion.nombreLargo == _selectedSitio.value.nombreLargo) {
+                                val peticionAceptada = _selectedSitio.value.copy(peticion = false).toMap()
+                                firestore.collection("Sitios").document(document.id).update(peticionAceptada)
+                                    .addOnSuccessListener {
+                                        showLoading = false
+                                        onSuccess()
+                                    }
+                                    .addOnFailureListener {
+                                        showLoading = false
+                                        Log.d("fallo", "falló")
+                                    }
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    showLoading = false
+                    Log.d("fallo", "falló")
+                }
+        }
+    }
+
     fun randomId() {
         val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         idFoto = (1..12)
@@ -274,21 +357,25 @@ class SitiosViewModel(application: Application) : AndroidViewModel(application) 
     fun closeAlert() {
         showAlert = false
     }
-    fun changeSegmentedButton(esAdmin: Boolean){
+
+    fun changeSegmentedButton(esAdmin: Boolean) {
         segmentedButton = !segmentedButton
         devolverLista(esAdmin)
     }
-    fun devolverLista(esAdmin: Boolean){
-        _sitios.value = if (esAdmin){
+
+    fun devolverLista(esAdmin: Boolean) {
+        _sitios.value = if (esAdmin) {
             _listaSitios.value.filter { it.peticion == !segmentedButton }.filter { sitio2 ->
-            sitio2.nombre.trim().removeAccents().contains(
-                nombre.trim().removeAccents(),
-                ignoreCase = true)
-        }
-        }else{
+                sitio2.nombre.trim().removeAccents().contains(
+                    nombre.trim().removeAccents(),
+                    ignoreCase = true
+                )
+            }
+        } else {
             _listaSitios.value.filter { sitio2 ->
                 sitio2.nombre.trim().removeAccents().contains(
-                    nombre.trim().removeAccents(), ignoreCase = true)
+                    nombre.trim().removeAccents(), ignoreCase = true
+                )
             }
         }
     }

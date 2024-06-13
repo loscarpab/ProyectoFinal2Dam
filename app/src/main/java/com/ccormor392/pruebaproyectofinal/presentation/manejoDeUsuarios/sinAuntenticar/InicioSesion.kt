@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,6 +44,9 @@ fun InicioSesion(
     navController: NavHostController, // Controlador de navegación
     loginViewModel: LoginViewModel // ViewModel para la pantalla de inicio de sesión
 ) {
+    LaunchedEffect(Unit){
+        loginViewModel.showLoadingtoFalse()
+    }
     Scaffold(
         // Barra superior que muestra el logotipo de la aplicación
         topBar = {

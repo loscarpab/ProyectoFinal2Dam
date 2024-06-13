@@ -131,7 +131,7 @@ fun NavManager(
         }
         composable(Routes.Sitio.route) {
             // Pantalla para ver los partidos creados
-            Sitio(sitiosViewModel, navController )
+            Sitio(sitiosViewModel, navController,loginViewModel)
         }
         composable(Routes.Peticion.route) {
             // Pantalla para ver los partidos creados
